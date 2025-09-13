@@ -1,0 +1,1920 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAOH - Centre d'Affaires et d'Orientation HOSSOBE</title>
+    <meta name="description" content="Votre partenaire de voyage, de formation et d'orientation au Burkina Faso">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1a365d',
+                        secondary: '#d4af37',
+                        accent: '#2d3748',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                        'slide-up': 'slideUp 0.7s ease-out forwards',
+                        'scale-up': 'scaleUp 0.7s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(100px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        scaleUp: {
+                            '0%': { transform: 'scale(0.9)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' },
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Anime.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    
+    <style>
+        /* Styles personnalisés */
+        :root {
+            --primary: #1a365d;
+            --secondary: #d4af37;
+            --accent: #2d3748;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #333;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
+        h1, h2, h3, h4, h5 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+        
+        /* Animation d'ouverture */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a365d 0%, #2d3748 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease-out;
+        }
+        
+        .splash-logo {
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .splash-slogan {
+            color: #d4af37;
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .skip-btn {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .skip-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .header.scrolled {
+            padding: 0.7rem 2rem;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+        }
+        
+        .logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--secondary);
+        }
+        
+        .cta-button {
+            background: var(--secondary);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background: #c19a2d;
+            transform: translateY(-2px);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary);
+            cursor: pointer;
+        }
+        
+        .whatsapp-float {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 990;
+            transition: all 0.3s ease;
+        }
+        
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1548&q=80') no-repeat center center/cover;
+            color: white;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .hero h3 {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .search-bar {
+            background: white;
+            padding: 1rem;
+            border-radius: 50px;
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 0 1rem;
+            font-size: 1rem;
+        }
+        
+        .search-button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 0.7rem 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .search-button:hover {
+            background: #c19a2d;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .scroll-down {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-20px) translateX(-50%);
+            }
+            60% {
+                transform: translateY(-10px) translateX(-50%);
+            }
+        }
+        
+        /* Sections générales */
+        .section {
+            padding: 5rem 2rem;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--primary);
+        }
+        
+        /* Services Section */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .service-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .service-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .service-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .service-content {
+            padding: 1.5rem;
+        }
+        
+        .service-icon {
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .service-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .service-description {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+        
+        .other-services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .other-service {
+            text-align: center;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .other-service.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .other-service:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .other-service-icon {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .other-service-title {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+        
+        /* Why Choose Us Section */
+        .why-choose-us {
+            background: linear-gradient(rgba(26, 54, 93, 0.9), rgba(26, 54, 93, 0.9)), url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') no-repeat center center/cover;
+            color: white;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .feature.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .about-text {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s ease;
+        }
+        
+        .about-text.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .about-image {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .about-image.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .timeline.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: var(--secondary);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+        
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+        
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+        
+        .timeline-item:nth-child(even) {
+            left: 50%;
+        }
+        
+        .timeline-content {
+            padding: 20px;
+            background-color: white;
+            position: relative;
+            border-radius: 6px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .timeline-date {
+            font-weight: bold;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-icon {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            z-index: 1;
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-icon {
+            right: -25px;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-icon {
+            left: -25px;
+        }
+        
+        .quote {
+            text-align: center;
+            font-style: italic;
+            font-size: 1.2rem;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: #f9f9f9;
+            border-left: 4px solid var(--secondary);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .quote.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Success Section */
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .gallery-item {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 250px;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.8s ease;
+        }
+        
+        .gallery-item.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .gallery-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .gallery-item:hover .gallery-image {
+            transform: scale(1.1);
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 1rem;
+            text-align: center;
+            color: white;
+        }
+        
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+        
+        .counters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .counter {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .counter.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .counter-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .counter-text {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+        
+        /* Testimonials Section */
+        .testimonials-slider {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        
+        .testimonials {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        
+        .testimonial {
+            min-width: 100%;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .testimonial.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .testimonial-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1rem;
+            border: 4px solid var(--secondary);
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+            color: #555;
+        }
+        
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .testimonial-role {
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        .slider-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .slider-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .slider-btn:hover {
+            background: var(--secondary);
+        }
+        
+        /* CTA Section */
+        .cta-banner {
+            background: linear-gradient(135deg, var(--primary) 0%, #2d3748 100%);
+            color: white;
+            text-align: center;
+            padding: 4rem 2rem;
+            border-radius: 10px;
+            margin: 0 auto;
+            max-width: 1200px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .cta-banner.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .cta-banner h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        /* Chatbot */
+        .chatbot {
+            position: fixed;
+            bottom: 7rem;
+            right: 2rem;
+            width: 300px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            z-index: 980;
+            overflow: hidden;
+            transform: translateY(20px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .chatbot.active {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .chatbot-header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        
+        .chatbot-body {
+            padding: 1rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .chatbot-message {
+            background: #f1f1f1;
+            padding: 0.7rem 1rem;
+            border-radius: 18px 18px 18px 0;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .chatbot-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+        }
+        
+        .chatbot-option {
+            padding: 0.7rem 1rem;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .chatbot-option:hover {
+            background: #c19a2d;
+        }
+        
+        /* Contact Section */
+        .contact-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .contact-info {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s ease;
+        }
+        
+        .contact-info.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            margin-right: 1rem;
+        }
+        
+        .contact-text {
+            color: #555;
+        }
+        
+        .contact-form {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .contact-form.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            border-color: var(--secondary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+        }
+        
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .map {
+            height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .map.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .map iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--accent);
+            color: white;
+            padding: 4rem 2rem 2rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-slogan {
+            color: #ccc;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-link {
+            margin-bottom: 0.7rem;
+        }
+        
+        .footer-link a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-link a:hover {
+            color: var(--secondary);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero h3 {
+                font-size: 1.2rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background: white;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: right 0.3s ease;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+                z-index: 999;
+            }
+            
+            .nav-menu.active {
+                right: 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                z-index: 1000;
+            }
+            
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+            
+            .timeline-item:nth-child(odd) .timeline-icon {
+                left: 15px;
+                right: auto;
+            }
+            
+            .timeline-item:nth-child(even) .timeline-icon {
+                left: 15px;
+            }
+            
+            .chatbot {
+                width: calc(100% - 4rem);
+                right: 2rem;
+                left: 2rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+            }
+        }
+        
+        /* Accessibilité */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        
+        /* Focus visible pour l'accessibilité */
+        button:focus,
+        a:focus,
+        input:focus,
+        textarea:focus {
+            outline: 2px solid var(--secondary);
+            outline-offset: 2px;
+        }
+        
+        /* Animation des éléments au scroll */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- 0. OPENING (Splash Screen) -->
+    <div class="splash-screen" id="splash">
+        <div class="splash-logo">CENTRE D'AFFAIRES ET D'ORIENTATION HOSSOBE</div>
+        <div class="splash-slogan">Votre avenir professionnel commence ici !</div>
+        <div class="skip-btn" id="skipSplash">Skip</div>
+    </div>
+
+    <!-- 1. HEADER -->
+    <header class="header" id="header">
+        <a href="#" class="logo"><img src="logoprof.png" width="45px" height="35px" alt=""></a>
+        
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <nav class="nav-menu" id="navMenu">
+            <a href="#" class="nav-link">Accueil</a>
+            <a href="#services" class="nav-link">Services</a>
+            <a href="#about" class="nav-link">À propos</a>
+            <a href="#success" class="nav-link">Réussites</a>
+            <a href="#testimonials" class="nav-link">Témoignages</a>
+            <a href="#contact" class="nav-link">Contact</a>
+        </nav>
+        <a href="#contact" class="cta-button">Réserver maintenant</a>
+    </header>
+
+    <a href="https://wa.me/22604127172" class="whatsapp-float" aria-label="Contactez-nous sur WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- 2. HERO SECTION -->
+    <section class="hero" id="home">
+        <h1>Votre partenaire de voyage, de formation et d'orientation</h1>
+        <h3>Voyages, visas, études, transferts, services financiers</h3>
+        <div class="search-bar">
+            <input type="text" class="search-input" placeholder="Où voulez-vous aller ?">
+            <button class="search-button">Rechercher</button>
+        </div>
+        <div class="hero-buttons">
+            <a href="#contact" class="cta-button">Réserver maintenant</a>
+            <a href="#services" class="cta-button" style="background: transparent; border: 2px solid white;">Découvrir nos services</a>
+        </div>
+        <div class="scroll-down">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- 3. SECTION : SERVICES PHARES -->
+    <section class="section" id="services">
+        <h2 class="section-title">Nos services principaux</h2>
+        <div class="services-grid">
+            <div class="service-card animate-on-scroll">
+                <div class="service-image" style="background-image: url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1548&q=80');"></div>
+                <div class="service-content">
+                    <div class="service-icon"><i class="fas fa-plane"></i></div>
+                    <h3 class="service-title">Réservation de billets</h3>
+                    <p class="service-description">Billets d'avion et réservations d'hôtels aux meilleurs prix garantis.</p>
+                    <a href="#contact" class="cta-button" style="padding: 0.5rem 1rem; font-size: 0.9rem;">En savoir plus</a>
+                </div>
+            </div>
+            
+            <div class="service-card animate-on-scroll">
+                <div class="service-image" style="background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
+                <div class="service-content">
+                    <div class="service-icon"><i class="fas fa-globe"></i></div>
+                    <h3 class="service-title">Assistance visa & placement étudiant</h3>
+                    <p class="service-description">Accompagnement complet pour vos démarches de visa et études à l'étranger.</p>
+                    <a href="#contact" class="cta-button" style="padding: 0.5rem 1rem; font-size: 0.9rem;">En savoir plus</a>
+                </div>
+            </div>
+            
+            <div class="service-card animate-on-scroll">
+                <div class="service-image" style="background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80');"></div>
+                <div class="service-content">
+                    <div class="service-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <h3 class="service-title">Formations en langues & informatique</h3>
+                    <p class="service-description">Formations certifiantes pour développer vos compétences linguistiques et digitales.</p>
+                    <a href="#contact" class="cta-button" style="padding: 0.5rem 1rem; font-size: 0.9rem;">En savoir plus</a>
+                </div>
+            </div>
+        </div>
+        
+        <h3 style="text-align: center; margin-bottom: 2rem; color: var(--primary);">Autres services</h3>
+        <div class="other-services">
+            <div class="other-service animate-on-scroll">
+                <div class="other-service-icon"><i class="fas fa-car"></i></div>
+                <h4 class="other-service-title">Location de voiture</h4>
+            </div>
+            
+            <div class="other-service animate-on-scroll">
+                <div class="other-service-icon"><i class="fas fa-money-bill-wave"></i></div>
+                <h4 class="other-service-title">Mobile Money & change</h4>
+            </div>
+            
+            <div class="other-service animate-on-scroll">
+                <div class="other-service-icon"><i class="fas fa-box"></i></div>
+                <h4 class="other-service-title">Envoi de colis</h4>
+            </div>
+            
+            <div class="other-service animate-on-scroll">
+                <div class="other-service-icon"><i class="fas fa-print"></i></div>
+                <h4 class="other-service-title">Impression / photocopie</h4>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="#contact" class="cta-button">Explorer tous nos services</a>
+        </div>
+    </section>
+
+    <!-- 4. SECTION : POURQUOI NOUS CHOISIR ? -->
+    <section class="section why-choose-us">
+        <h2 class="section-title">Pourquoi nous faire confiance ?</h2>
+        <div class="features-grid">
+            <div class="feature animate-on-scroll">
+                <div class="feature-icon"><i class="fas fa-star"></i></div>
+                <h3 class="feature-title">Expertise locale & internationale</h3>
+                <p>Notre équipe combine connaissance du terrain et expertise internationale.</p>
+            </div>
+            
+            <div class="feature animate-on-scroll">
+                <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                <h3 class="feature-title">Rapidité et fiabilité</h3>
+                <p>Des services rapides et fiables pour répondre à vos urgences.</p>
+            </div>
+            
+            <div class="feature animate-on-scroll">
+                <div class="feature-icon"><i class="fas fa-handshake"></i></div>
+                <h3 class="feature-title">Accompagnement personnalisé</h3>
+                <p>Un suivi individualisé pour chaque client selon ses besoins spécifiques.</p>
+            </div>
+            
+            <div class="feature animate-on-scroll">
+                <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                <h3 class="feature-title">Sécurité garantie</h3>
+                <p>Vos transactions et données sont sécurisées avec les meilleurs standards.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. SECTION : À PROPOS -->
+    <section class="section" id="about">
+        <h2 class="section-title">Notre histoire</h2>
+        <div class="about-content">
+            <div class="about-text animate-on-scroll">
+                <p>Fondé en 2025, le Centre d'Affaires et d'Orientation HOSSOBE est né de la volonté d'accompagner les Burkinabè dans la réalisation de leurs projets à l'international.</p>
+                <p>Notre mission est de faciliter l'accès aux opportunités éducatives, professionnelles et entrepreneuriales à travers le monde, en offrant des services complets et personnalisés.</p>
+                <p>Nos valeurs : intégrité, excellence, innovation et service client. Nous croyons en la puissance de l'éducation et de la mobilité internationale pour transformer des vies et construire un avenir meilleur.</p>
+            </div>
+            <div class="about-image animate-on-scroll">
+                <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Équipe CAOH">
+            </div>
+        </div>
+        
+        <div class="timeline animate-on-scroll">
+            <div class="timeline-item">
+                <div class="timeline-icon"><i class="fas fa-rocket"></i></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">2025</div>
+                    <p>Création de l'agence avec pour mission d'accompagner les étudiants</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-icon"><i class="fas fa-graduation-cap"></i></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">2026</div>
+                    <p>Premiers étudiants orientés avec succès vers des universités internationales</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-icon"><i class="fas fa-money-bill-wave"></i></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">2027</div>
+                    <p>Extension des services avec l'ajout des services financiers et de transfert</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-icon"><i class="fas fa-handshake"></i></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">2028</div>
+                    <p>Partenariats conclus avec plus de 50 institutions éducatives à travers le monde</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="quote animate-on-scroll">
+            "Nous accompagnons les Burkinabè vers leur réussite, quels que soient leurs projets et ambitions."
+        </div>
+    </section>
+
+    <!-- 6. SECTION : RÉUSSITES / PORTFOLIO -->
+    <section class="section" id="success">
+        <h2 class="section-title">Nos réussites</h2>
+        
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">Tous</button>
+            <button class="filter-btn" data-filter="travel">Voyages</button>
+            <button class="filter-btn" data-filter="students">Étudiants placés</button>
+            <button class="filter-btn" data-filter="partnerships">Partenariats</button>
+        </div>
+        
+        <div class="gallery">
+            <div class="gallery-item animate-on-scroll" data-category="travel">
+                <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1500&q=80" alt="Voyage réussi" class="gallery-image">
+                <div class="gallery-overlay">
+                    <h3>Voyage d'affaires à Paris</h3>
+                    <p>Organisation complète pour une délégation d'entrepreneurs</p>
+                </div>
+            </div>
+            
+            <div class="gallery-item animate-on-scroll" data-category="students">
+                <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Étudiant placé" class="gallery-image">
+                <div class="gallery-overlay">
+                    <h3>Placement universitaire au Canada</h3>
+                    <p>Admission et obtention de visa pour étudiant en informatique</p>
+                </div>
+            </div>
+            
+            <div class="gallery-item animate-on-scroll" data-category="partnerships">
+                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Partenariat" class="gallery-image">
+                <div class="gallery-overlay">
+                    <h3>Partenariat avec l'Université de Montréal</h3>
+                    <p>Accord de collaboration pour faciliter les admissions</p>
+                </div>
+            </div>
+            
+            <div class="gallery-item animate-on-scroll" data-category="travel">
+                <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1548&q=80" alt="Voyage réussi" class="gallery-image">
+                <div class="gallery-overlay">
+                    <h3>Voyage de groupe vers Dubaï</h3>
+                    <p>Organisation logistique pour 25 participants</p>
+                </div>
+            </div>
+            
+            <div class="gallery-item animate-on-scroll" data-category="students">
+                <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Étudiant placé" class="gallery-image">
+                <div class="gallery-overlay">
+                    <h3>Bourse d'études en France</h3>
+                    <p>Obtention d'une bourse complète pour études en ingénierie</p>
+                </div>
+            </div>
+            
+            <div class="gallery-item animate-on-scroll" data-category="partnerships">
+                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Partenariat" class="gallery-image">
+                <div class="gallery-overlay">
+                    <h3>Collaboration avec Campus France</h3>
+                    <p>Partenaire privilégié pour les études en France</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="counters">
+            <div class="counter animate-on-scroll">
+                <div class="counter-number" data-target="500">0</div>
+                <div class="counter-text">Étudiants orientés</div>
+            </div>
+            
+            <div class="counter animate-on-scroll">
+                <div class="counter-number" data-target="1000">0</div>
+                <div class="counter-text">Billets réservés</div>
+            </div>
+            
+            <div class="counter animate-on-scroll">
+                <div class="counter-number" data-target="50">0</div>
+                <div class="counter-text">Partenariats internationaux</div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="#contact" class="cta-button">Découvrir plus de réussites</a>
+        </div>
+    </section>
+
+    <!-- 7. SECTION : TÉMOIGNAGES -->
+    <section class="section" id="testimonials">
+        <h2 class="section-title">Ils témoignent</h2>
+        
+        <div class="testimonials-slider">
+            <div class="testimonials" id="testimonialsContainer">
+                <div class="testimonial animate-on-scroll">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Client" class="testimonial-image">
+                    <p class="testimonial-text">"Grâce à CAOH, j'ai obtenu mon visa étudiant pour le Canada en seulement 3 semaines ! Leur accompagnement personnalisé a fait toute la différence."</p>
+                    <div class="testimonial-author">Amadou S.</div>
+                    <div class="testimonial-role">Étudiant en informatique</div>
+                </div>
+                
+                <div class="testimonial animate-on-scroll">
+                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80" alt="Client" class="testimonial-image">
+                    <p class="testimonial-text">"J'ai pu réaliser mon rêve d'étudier en France grâce à l'expertise de l'équipe CAOH. Ils m'ont guidé à chaque étape, du choix de l'université à l'obtention du visa."</p>
+                    <div class="testimonial-author">Fatou K.</div>
+                    <div class="testimonial-role">Étudiante en médecine</div>
+                </div>
+                
+                <div class="testimonial animate-on-scroll">
+                    <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80" alt="Client" class="testimonial-image">
+                    <p class="testimonial-text">"Service rapide et professionnel pour mes réservations de vol urgentes. Je recommande vivement leurs services à tous les voyageurs."</p>
+                    <div class="testimonial-author">Jean B.</div>
+                    <div class="testimonial-role">Homme d'affaires</div>
+                </div>
+            </div>
+            
+            <div class="slider-controls">
+                <div class="slider-btn prev-btn" id="prevTestimonial"><i class="fas fa-chevron-left"></i></div>
+                <div class="slider-btn next-btn" id="nextTestimonial"><i class="fas fa-chevron-right"></i></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. SECTION : CALL TO ACTION -->
+    <section class="section">
+        <div class="cta-banner animate-on-scroll">
+            <h2>Prêt à voyager, étudier ou réussir vos projets ?</h2>
+            <div class="cta-buttons">
+                <a href="#contact" class="cta-button">Réservez en ligne</a>
+                <a href="https://wa.me/22604127172" class="cta-button" style="background: #25D366;">Contactez-nous sur WhatsApp</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. SECTION : CHATBOT / ASSISTANT -->
+    <div class="chatbot" id="chatbot">
+        <div class="chatbot-header">
+            <div>Assistant CAOH</div>
+            <button class="chatbot-close" id="closeChatbot"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="chatbot-body">
+            <div class="chatbot-message">Bonjour 👋 Besoin d'aide pour réserver ou demander un visa ?</div>
+            <div class="chatbot-options">
+                <button class="chatbot-option">Réserver un billet</button>
+                <button class="chatbot-option">Assistance visa</button>
+                <button class="chatbot-option">Formation</button>
+                <button class="chatbot-option">Autre question</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 10. SECTION : CONTACT -->
+    <section class="section" id="contact">
+        <h2 class="section-title">Restons en contact</h2>
+        
+        <div class="contact-content">
+            <div class="contact-info animate-on-scroll">
+                <div class="contact-item">
+                    <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                    <div class="contact-text">+226 04 12 71 72</div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="contact-text">caohbfagencedevoyage@gmail.com</div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="contact-text">Ouagadougou, Burkina Faso</div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon"><i class="fas fa-share-alt"></i></div>
+                    <div class="contact-text">
+                        <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
+                            <a href="#" class="social-link" style="width: 40px; height: 40px;"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://wa.me/22604127172" class="social-link" style="width: 40px; height: 40px;"><i class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <form class="contact-form animate-on-scroll" id="contactForm">
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="Votre nom" required>
+                </div>
+                
+                <div class="form-group">
+                    <input type="email" class="form-input" placeholder="Votre email ou téléphone" required>
+                </div>
+                
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="Sujet" required>
+                </div>
+                
+                <div class="form-group">
+                    <textarea class="form-input form-textarea" placeholder="Votre message" required></textarea>
+                </div>
+                
+                <button type="submit" class="cta-button" style="width: 100%;">Envoyer</button>
+            </form>
+        </div>
+        
+        <div class="map animate-on-scroll">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15584.344452422422!2d-1.55482372233712!3d12.371225399999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xe2eb58a3e143c0b%3A0xd9510a39a48bda31!2sOuagadougou%2C%20Burkina%20Faso!5e0!3m2!1sen!2sus!4v1685360383011!5m2!1sen!2sus" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </section>
+
+    <!-- 11. FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div>
+                <div class="footer-logo">CAOH</div>
+                <div class="footer-slogan">Votre partenaire de voyage, de formation et d'orientation</div>
+            </div>
+            
+            <div>
+                <h3 style="margin-bottom: 1rem; color: white;">Liens rapides</h3>
+                <ul class="footer-links">
+                    <li class="footer-link"><a href="#">Accueil</a></li>
+                    <li class="footer-link"><a href="#services">Services</a></li>
+                    <li class="footer-link"><a href="#about">À propos</a></li>
+                    <li class="footer-link"><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h3 style="margin-bottom: 1rem; color: white;">Suivez-nous</h3>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://wa.me/22604127172" class="social-link"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2025 – CAOH Burkina Faso. Tous droits réservés.</p>
+            <p><a href="#" style="color: #ccc; text-decoration: underline;">Mentions légales</a> | <a href="#" style="color: #ccc; text-decoration: underline;">Politique de confidentialité</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Animation de la splash screen
+        document.addEventListener('DOMContentLoaded', function() {
+            const splash = document.getElementById('splash');
+            const skipBtn = document.getElementById('skipSplash');
+            
+            // Animation d'entrée
+            anime({
+                targets: '.splash-logo',
+                opacity: 1,
+                translateY: 0,
+                duration: 1500,
+                easing: 'easeOutQuad'
+            });
+            
+            anime({
+                targets: '.splash-slogan',
+                opacity: 1,
+                translateY: 0,
+                delay: 500,
+                duration: 1500,
+                easing: 'easeOutQuad'
+            });
+            
+            // Fermeture automatique après 3 secondes
+            const autoClose = setTimeout(() => {
+                closeSplash();
+            }, 3000);
+            
+            // Fermeture manuelle
+            skipBtn.addEventListener('click', () => {
+                clearTimeout(autoClose);
+                closeSplash();
+            });
+            
+            function closeSplash() {
+                anime({
+                    targets: splash,
+                    opacity: 0,
+                    duration: 800,
+                    easing: 'easeInOutQuad',
+                    complete: function() {
+                        splash.style.display = 'none';
+                    }
+                });
+            }
+            
+            // Header scroll effect
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+            
+            // Menu mobile
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navMenu = document.getElementById('navMenu');
+            
+            if (mobileMenuBtn && navMenu) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                    mobileMenuBtn.innerHTML = navMenu.classList.contains('active') 
+                        ? '<i class="fas fa-times"></i>' 
+                        : '<i class="fas fa-bars"></i>';
+                });
+            }
+            
+            // Animation hero section
+            anime({
+                targets: '.hero h1',
+                opacity: 1,
+                translateY: 0,
+                delay: 300,
+                duration: 1200,
+                easing: 'easeOutQuad'
+            });
+            
+            anime({
+                targets: '.hero h3',
+                opacity: 1,
+                translateY: 0,
+                delay: 600,
+                duration: 1200,
+                easing: 'easeOutQuad'
+            });
+            
+            anime({
+                targets: '.search-bar',
+                opacity: 1,
+                translateY: 0,
+                delay: 900,
+                duration: 1200,
+                easing: 'easeOutQuad'
+            });
+            
+            anime({
+                targets: '.hero-buttons',
+                opacity: 1,
+                translateY: 0,
+                delay: 1200,
+                duration: 1200,
+                easing: 'easeOutQuad'
+            });
+            
+            // Animation au scroll
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+            
+            function checkScroll() {
+                animatedElements.forEach(element => {
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.3;
+                    
+                    if (elementPosition < screenPosition) {
+                        element.classList.add('visible');
+                    }
+                });
+                
+                // Vérifier aussi les sections principales
+                document.querySelectorAll('.section').forEach(section => {
+                    const sectionPosition = section.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.3;
+                    
+                    if (sectionPosition < screenPosition) {
+                        section.classList.add('visible');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', checkScroll);
+            checkScroll(); // Vérifier au chargement initial
+            
+            // Compteurs animés
+            const counters = document.querySelectorAll('.counter-number');
+            let counted = false;
+            
+            function animateCounters() {
+                const countersSection = document.querySelector('.counters');
+                if (!countersSection) return;
+                
+                const sectionPosition = countersSection.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if (sectionPosition < screenPosition && !counted) {
+                    counted = true;
+                    
+                    counters.forEach(counter => {
+                        const target = +counter.getAttribute('data-target');
+                        const count = +counter.innerText;
+                        const duration = 2000; // en ms
+                        const frameDuration = 1000 / 60; // ~60 fps
+                        const totalFrames = Math.round(duration / frameDuration);
+                        const easeOutQuad = t => t * (2 - t);
+                        
+                        let frame = 0;
+                        const counterInterval = setInterval(() => {
+                            frame++;
+                            const progress = easeOutQuad(frame / totalFrames);
+                            const currentCount = Math.round(target * progress);
+                            
+                            if (parseInt(counter.innerText) !== currentCount) {
+                                counter.innerText = currentCount;
+                            }
+                            
+                            if (frame === totalFrames) {
+                                clearInterval(counterInterval);
+                            }
+                        }, frameDuration);
+                    });
+                }
+            }
+            
+            window.addEventListener('scroll', animateCounters);
+            animateCounters(); // Vérifier au chargement initial
+            
+            // Slider témoignages
+            const testimonialsContainer = document.getElementById('testimonialsContainer');
+            const testimonialItems = document.querySelectorAll('.testimonial');
+            const prevBtn = document.getElementById('prevTestimonial');
+            const nextBtn = document.getElementById('nextTestimonial');
+            let currentIndex = 0;
+            
+            function showTestimonial(index) {
+                if (!testimonialsContainer) return;
+                
+                // Ajuster l'index si hors limites
+                if (index < 0) index = testimonialItems.length - 1;
+                if (index >= testimonialItems.length) index = 0;
+                
+                currentIndex = index;
+                
+                anime({
+                    targets: testimonialsContainer,
+                    translateX: `${-index * 100}%`,
+                    duration: 600,
+                    easing: 'easeInOutQuad'
+                });
+            }
+            
+            if (prevBtn && nextBtn) {
+                prevBtn.addEventListener('click', () => {
+                    showTestimonial(currentIndex - 1);
+                });
+                
+                nextBtn.addEventListener('click', () => {
+                    showTestimonial(currentIndex + 1);
+                });
+            }
+            
+            // Chatbot
+            const chatbot = document.getElementById('chatbot');
+            const whatsappFloat = document.querySelector('.whatsapp-float');
+            const closeChatbot = document.getElementById('closeChatbot');
+            
+            if (whatsappFloat && chatbot) {
+                whatsappFloat.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    chatbot.classList.toggle('active');
+                });
+            }
+            
+            if (closeChatbot) {
+                closeChatbot.addEventListener('click', () => {
+                    chatbot.classList.remove('active');
+                });
+            }
+            
+            // Filtrage galerie
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Retirer la classe active de tous les boutons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    // Ajouter la classe active au bouton cliqué
+                    button.classList.add('active');
+                    
+                    const filter = button.getAttribute('data-filter');
+                    
+                    galleryItems.forEach(item => {
+                        if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                            item.style.display = 'block';
+                            // Réanimer les éléments qui sont filtrés
+                            setTimeout(() => {
+                                item.classList.add('visible');
+                            }, 50);
+                        } else {
+                            item.classList.remove('visible');
+                            setTimeout(() => {
+                                item.style.display = 'none';
+                            }, 300);
+                        }
+                    });
+                });
+            });
+            
+            // Formulaire de contact
+            const contactForm = document.getElementById('contactForm');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Simulation d'envoi réussi
+                    alert('Merci pour votre message ! Nous vous répondrons très rapidement.');
+                    contactForm.reset();
+                });
+            }
+            
+            // Navigation smooth scroll
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        // Fermer le menu mobile si ouvert
+                        if (navMenu.classList.contains('active')) {
+                            navMenu.classList.remove('active');
+                            mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                        }
+                        
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Scroll down button
+            const scrollDownBtn = document.querySelector('.scroll-down');
+            if (scrollDownBtn) {
+                scrollDownBtn.addEventListener('click', () => {
+                    window.scrollTo({
+                        top: document.getElementById('services').offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
