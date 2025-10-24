@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fiche Individuelle de Renseignement</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+  <!-- Anime.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom right, #f9fafb, #e5e7eb);
+      min-height: 100vh;
+    }
+
+    .form-container {
+      animation: fadeIn 1s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    label {
+      font-weight: 600;
+      color: #374151;
+    }
+
+    input, textarea, select {
+      background-color: #fff !important;
+    }
+
+  </style>
+</head>
+<body class="flex flex-col items-center p-6">
+
+  <div class="max-w-4xl w-full bg-white shadow-xl rounded-lg p-8 form-container">
+    <h1 class="text-3xl font-bold mb-6 text-center text-blue-600">
+      <i class="fas fa-user-circle"></i> Fiche Individuelle de Renseignement
+    </h1>
+
+    <form action="https://formspree.io/f/xxxxxx" method="POST" class="space-y-6">
+
+      <!-- ETAT CIVIL -->
+      <h2 class="text-xl font-semibold border-b pb-2 mb-4">État Civil</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label>Prénom</label>
+          <input type="text" name="prenom" class="w-full border p-2 rounded" required>
+        </div>
+        <div>
+          <label>Nom</label>
+          <input type="text" name="nom" class="w-full border p-2 rounded" required>
+        </div>
+        <div>
+          <label>Date et lieu de naissance</label>
+          <input type="text" name="naissance" class="w-full border p-2 rounded">
+        </div>
+        <div>
+          <label>Nationalité</label>
+          <input type="text" name="nationalite" class="w-full border p-2 rounded">
+        </div>
+        <div>
+          <label>Sexe</label>
+          <select name="sexe" class="w-full border p-2 rounded">
+            <option>Masculin</option>
+            <option>Féminin</option>
+          </select>
+        </div>
+        <div>
+          <label>Situation Familiale</label>
+          <select name="situation" class="w-full border p-2 rounded">
+            <option>Célibataire</option>
+            <option>Marié(e)</option>
+            <option>Divorcé(e)</option>
+            <option>Veuf / Veuve</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label>Téléphone</label>
+          <input type="tel" name="telephone" class="w-full border p-2 rounded">
+        </div>
+        <div>
+          <label>Email</label>
+          <input type="email" name="email" class="w-full border p-2 rounded">
+        </div>
+      </div>
+
+      <div>
+        <label>Adresse</label>
+        <input type="text" name="adresse" class="w-full border p-2 rounded">
+      </div>
+
+      <!-- ETUDES -->
+      <h2 class="text-xl font-semibold border-b pb-2 mb-4">Études Académiques</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label>Niveau / Diplôme actuel</label>
+          <input type="text" name="diplome" class="w-full border p-2 rounded">
+        </div>
+        <div>
+          <label>Année d’obtention</label>
+          <input type="text" name="annee" class="w-full border p-2 rounded">
+        </div>
+      </div>
+
+      <!-- PROJET -->
+      <h2 class="text-xl font-semibold border-b pb-2 mb-4">Projet</h2>
+      <textarea name="projet" class="w-full border p-2 rounded" rows="4" placeholder="Décrivez votre projet (études, voyage, etc.)..."></textarea>
+
+      <!-- PAIEMENT -->
+      <h2 class="text-xl font-semibold border-b pb-2 mb-4">Moyens de Paiement</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <label><input type="checkbox" name="paiement" value="virement"> Virement bancaire</label>
+        <label><input type="checkbox" name="paiement" value="orange"> Orange Money</label>
+        <label><input type="checkbox" name="paiement" value="moov"> Moov Money</label>
+        <label><input type="checkbox" name="paiement" value="western"> Western Union</label>
+        <label><input type="checkbox" name="paiement" value="cheque"> Chèque</label>
+        <label><input type="checkbox" name="paiement" value="cash"> Espèces</label>
+      </div>
+
+      <!-- SOUMISSION -->
+      <div class="text-center mt-6">
+        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-all">
+          <i class="fas fa-paper-plane"></i> Envoyer le formulaire
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+  <script>
+    // Animation d'apparition du formulaire
+    anime({
+      targets: '.form-container',
+      opacity: [0, 1],
+      translateY: [50, 0],
+      duration: 1500,
+      easing: 'easeOutExpo'
+    });
+
+    // Animation du bouton au survol
+    const btn = document.querySelector('button');
+    btn.addEventListener('mouseenter', () => {
+      anime({
+        targets: btn,
+        scale: 1.1,
+        duration: 300
+      });
+    });
+    btn.addEventListener('mouseleave', () => {
+      anime({
+        targets: btn,
+        scale: 1.0,
+        duration: 300
+      });
+    });
+  </script>
+</body>
+</html>
