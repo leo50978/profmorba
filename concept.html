@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Concept - Dédicace - Des mots qui restent</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-rose: #F6C1C7;
+            --color-bleu: #4B4E6D;
+            --color-or: #F3CE6F;
+            --color-gris: #6F6F6F;
+            --color-bg: #FFF9F0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--color-bg);
+            color: #2C2C2C;
+            scroll-behavior: smooth;
+        }
+
+        .handwritten {
+            font-family: 'Parisienne', cursive;
+        }
+
+        .text-rose { color: var(--color-rose); }
+        .bg-rose { background-color: var(--color-rose); }
+        .text-bleu { color: var(--color-bleu); }
+        .bg-bleu { background-color: var(--color-bleu); }
+        .text-or { color: var(--color-or); }
+        .bg-or { background-color: var(--color-or); }
+        .text-gris { color: var(--color-gris); }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #FFF9F0 0%, #FEF4E8 100%);
+        }
+
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .quote-mark {
+            font-size: 5rem;
+            opacity: 0.1;
+            position: absolute;
+        }
+
+        .feature-icon {
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+            color: var(--color-rose);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeInUp {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        /* Styles pour le bouton audio */
+        #musicToggle {
+            box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        #musicToggle:hover {
+            transform: scale(1.1);
+        }
+
+        #musicToggle.playing {
+            background-color: var(--color-bleu);
+        }
+    </style>
+</head>
+<body class="antialiased gradient-bg">
+    <!-- Modal de suggestion musicale -->
+<div id="dedicaceMusicModal" 
+     class="fixed inset-0 z-60 hidden overflow-y-auto" 
+     aria-labelledby="music-modal-title" 
+     aria-hidden="true">
+    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Overlay -->
+        <div class="fixed inset-0 transition-opacity bg-bleu bg-opacity-80 backdrop-blur-sm"
+             aria-hidden="true"></div>
+
+        <!-- Espace pour centrer la modal -->
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+        <!-- Contenu de la modal -->
+        <div class="inline-block w-full max-w-md p-8 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl sm:align-middle">
+            <!-- Icone musicale -->
+            <div class="flex items-center justify-center w-16 h-16 mx-auto mb-6 bg-rose/20 rounded-full">
+                <i class="text-3xl text-bleu fas fa-music"></i>
+            </div>
+
+            <!-- Titre -->
+            <h3 id="dedicace-modal-title" class="mb-4 text-2xl font-bold text-center text-bleu">
+                Immersion complète
+            </h3>
+
+            <!-- Message -->
+            <div class="mb-8">
+                <p class="text-center text-gray-700">
+                    Pour une expérience encore plus immersive, activez la musique d'ambiance en cliquant sur le bouton 
+                    <span class="inline-flex items-center px-2 py-1 mx-1 text-sm bg-rose/20 text-rose rounded">
+                        <i class="mr-1 fas fa-play"></i> Play
+                    </span> 
+                    en bas à droite.
+                </p>
+                <p class="mt-4 text-sm text-center text-gray-500">
+                    Vous pourrez la contrôler à tout moment.
+                </p>
+            </div>
+
+            <!-- Boutons -->
+            <div class="flex flex-col gap-3 sm:flex-row sm:justify-center">
+                <!-- Bouton OK -->
+                <button type="button"
+                        id="dedicace-modal-ok"
+                        class="inline-flex justify-center w-full px-6 py-3 text-base font-medium text-white bg-rose border border-transparent rounded-full shadow-sm hover:bg-bleu focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose transition-all duration-300">
+                    <i class="mr-2 fas fa-check"></i> J'ai compris
+                </button>
+
+                <!-- Bouton pour activer directement -->
+                <button type="button"
+                        id="dedicace-modal-activate"
+                        class="inline-flex justify-center w-full px-6 py-3 text-base font-medium text-bleu bg-white border-2 border-bleu rounded-full shadow-sm hover:bg-bleu hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-bleu transition-all duration-300">
+                    <i class="mr-2 fas fa-play-circle"></i> Activer maintenant
+                </button>
+            </div>
+
+            <!-- Option "Ne plus afficher" -->
+            <div class="mt-6 text-center">
+                <label class="inline-flex items-center cursor-pointer">
+                    <input type="checkbox" 
+                           id="dedicace-modal-dont-show"
+                           class="w-4 h-4 text-rose border-gray-300 rounded focus:ring-rose">
+                    <span class="ml-2 text-sm text-gray-600">Ne plus afficher ce message</span>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Fonctions et variables uniques pour la modal musicale
+(function() {
+    // Configuration unique
+    const DEDICACE_MODAL_CONFIG = {
+        modalId: 'dedicaceMusicModal',
+        storageKey: 'dedicace_music_modal_seen',
+        musicButtonId: 'musicToggle',
+        showDelay: 1000 // 1 seconde après le chargement
+    };
+
+    // Initialiser la modal
+    function initDedicaceMusicModal() {
+        const modal = document.getElementById(DEDICACE_MODAL_CONFIG.modalId);
+        const okButton = document.getElementById('dedicace-modal-ok');
+        const activateButton = document.getElementById('dedicace-modal-activate');
+        const dontShowCheckbox = document.getElementById('dedicace-modal-dont-show');
+        
+        // Vérifier si l'utilisateur a déjà vu la modal
+        const hasSeenModal = localStorage.getItem(DEDICACE_MODAL_CONFIG.storageKey) === 'true';
+        
+        // Si l'utilisateur n'a pas encore vu la modal, l'afficher après délai
+        if (!hasSeenModal) {
+            setTimeout(() => {
+                modal.classList.remove('hidden');
+                modal.setAttribute('aria-hidden', 'false');
+                // Empêcher le scroll du body
+                document.body.style.overflow = 'hidden';
+            }, DEDICACE_MODAL_CONFIG.showDelay);
+        }
+
+        // Gérer le bouton OK
+        okButton.addEventListener('click', function() {
+            closeDedicaceModal();
+        });
+
+        // Gérer le bouton Activer
+        activateButton.addEventListener('click', function() {
+            // Simuler un clic sur le bouton de musique
+            const musicButton = document.getElementById(DEDICACE_MODAL_CONFIG.musicButtonId);
+            if (musicButton) {
+                musicButton.click();
+            }
+            closeDedicaceModal();
+        });
+
+        // Gérer la fermeture en cliquant en dehors
+        modal.addEventListener('click', function(event) {
+            if (event.target === modal || event.target.classList.contains('bg-bleu')) {
+                closeDedicaceModal();
+            }
+        });
+
+        // Gérer la touche Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeDedicaceModal();
+            }
+        });
+
+        function closeDedicaceModal() {
+            // Sauvegarder la préférence si cochée
+            if (dontShowCheckbox.checked) {
+                localStorage.setItem(DEDICACE_MODAL_CONFIG.storageKey, 'true');
+            }
+            
+            // Fermer la modal avec animation
+            modal.classList.add('hidden');
+            modal.setAttribute('aria-hidden', 'true');
+            
+            // Restaurer le scroll
+            document.body.style.overflow = '';
+            
+            // Animation de sortie
+            const modalContent = modal.querySelector('.inline-block');
+            if (modalContent) {
+                modalContent.style.transform = 'scale(0.95)';
+                modalContent.style.opacity = '0';
+                setTimeout(() => {
+                    modalContent.style.transform = '';
+                    modalContent.style.opacity = '';
+                }, 300);
+            }
+        }
+
+        // Vérifier si l'utilisateur a déjà interagi avec la musique
+        // Si oui, ne pas afficher la modal
+        const hasInteractedWithMusic = localStorage.getItem('musicPlaying') === 'true';
+        if (hasInteractedWithMusic) {
+            localStorage.setItem(DEDICACE_MODAL_CONFIG.storageKey, 'true');
+        }
+    }
+
+    // S'assurer que le DOM est chargé
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initDedicaceMusicModal);
+    } else {
+        initDedicaceMusicModal();
+    }
+
+    // Exposer une fonction pour réinitialiser les préférences (pour le débogage)
+    window.resetDedicaceModalPrefs = function() {
+        localStorage.removeItem(DEDICACE_MODAL_CONFIG.storageKey);
+        console.log('Préférences de modal réinitialisées');
+    };
+})();
+</script>
+
+<style>
+/* Animations spécifiques pour la modal */
+#dedicaceMusicModal .inline-block {
+    animation: dedicaceModalAppear 0.4s ease-out;
+}
+
+@keyframes dedicaceModalAppear {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Override pour le z-index */
+.z-60 {
+    z-index: 60;
+}
+</style>
+    <!-- Élément audio caché -->
+    <audio id="backgroundMusic" loop preload="auto" volume="0.5">
+        <source src="relaxing-sleep-music-with-soft-ambient-rain-369762.mp3" type="audio/mpeg">
+        Votre navigateur ne supporte pas l'élément audio.
+    </audio>
+
+    <!-- Bouton de contrôle audio -->
+    <button
+        id="musicToggle"
+        class="fixed z-50 bg-rose text-white p-4 rounded-full shadow-lg hover:bg-bleu transition-all
+               bottom-4 right-4 sm:bottom-6 sm:right-6 md:top-24 md:right-6"
+        aria-label="Contrôle de la musique"
+    >
+        <svg id="playIcon" class="w-5 h-5 hidden sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+        </svg>
+        <svg id="pauseIcon" class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+        </svg>
+    </button>
+
+    <!-- Header -->
+    <header class="fixed w-full bg-white bg-opacity-95 shadow-sm z-50 backdrop-blur-sm">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="dedicace.html" class="handwritten text-3xl text-bleu font-medium tracking-tight hover:text-rose transition-colors duration-300">
+                    Dédicace
+                </a>
+                <span class="hidden md:block ml-4 border-l border-gray-200 h-6"></span>
+            </div>
+
+            <nav class="hidden md:block">
+                <ul class="flex items-center space-x-8">
+                    <li><a href="dedicace.html" class="text-gris hover:text-bleu transition-colors duration-200 font-medium text-sm">Accueil</a></li>
+                    <li><a href="concept.html" class="text-bleu font-semibold border-b-2 border-rose text-sm">Concept</a></li>
+                    <li><a href="https://toussaintleovitch.dev/alie" class="text-gris hover:text-bleu transition-colors duration-200 font-medium text-sm">Exemples</a></li>
+                    <li><a href="dedicace.html#offres" class="text-gris hover:text-bleu transition-colors duration-200 font-medium text-sm">Offres</a></li>
+                    <li><a href="command.html" class="bg-rose hover:bg-bleu text-white px-4 py-2 rounded-full transition-all duration-200 shadow-sm hover:shadow-md font-medium text-sm">Commander</a></li>
+                </ul>
+            </nav>
+
+            <button id="menu-toggle" class="md:hidden text-bleu focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Le reste du code HTML reste identique -->
+    <!-- Hero Section Concept -->
+    <section class="pt-32 pb-20 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-16 animate-fadeInUp">
+                <h1 class="text-4xl md:text-6xl font-bold text-bleu mb-6 leading-tight">
+                    Qu'est-ce que <span class="text-rose">Dédicace</span> ?
+                </h1>
+                <p class="text-xl md:text-2xl text-gris max-w-3xl mx-auto">
+                    Plus qu'un simple message, une expérience émotionnelle qui traverse le temps.
+                </p>
+            </div>
+
+            <!-- Introduction -->
+            <div class="bg-white rounded-3xl shadow-xl p-8 md:p-12 mb-16 card-hover">
+                <div class="flex flex-col lg:flex-row items-center gap-8">
+                    <div class="lg:w-2/3">
+                        <h2 class="text-3xl font-bold text-bleu mb-6">
+                            <i class="fas fa-heart text-rose mr-3"></i>
+                            Quand les mots ne suffisent plus
+                        </h2>
+                        <div class="text-lg text-gris space-y-4">
+                            <p>Combien de fois avez-vous ressenti une émotion si forte, si profonde, que les mots semblaient insignifiants ?</p>
+                            <p>Comment dire "merci", "je t'aime" ou "tu me manques" sans tomber dans la banalité ?</p>
+                            <p class="text-bleu font-semibold italic">
+                                Dédicace est née de cette simple constatation : parfois, un SMS, un email ou même une lettre ne suffisent pas à exprimer ce que l'on ressent vraiment.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="lg:w-1/3 flex justify-center">
+                        <div class="relative">
+                            <div class="w-64 h-64 bg-gradient-to-br from-rose/20 to-bleu/20 rounded-full flex items-center justify-center">
+                                <i class="fas fa-comment-alt text-6xl text-bleu"></i>
+                            </div>
+                            <div class="absolute -bottom-4 -right-4 w-32 h-32 bg-or/20 rounded-full"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pourquoi Dédicace ? -->
+    <section class="py-16 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-bleu mb-16">
+                <i class="fas fa-question-circle text-rose mr-3"></i>
+                Pourquoi choisir Dédicace ?
+            </h2>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                <div class="bg-white rounded-2xl p-6 card-hover feature-card">
+                    <div class="text-center mb-6">
+                        <div class="w-16 h-16 bg-rose/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-user-secret text-3xl text-bleu feature-icon"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-bleu mb-3">Anonymat préservé</h3>
+                        <p class="text-gris">Exprimez-vous librement, sans crainte du jugement. Votre secret est entre vous et nous.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 card-hover feature-card">
+                    <div class="text-center mb-6">
+                        <div class="w-16 h-16 bg-or/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-pen-nib text-3xl text-bleu feature-icon"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-bleu mb-3">Mots sur mesure</h3>
+                        <p class="text-gris">Nous écrivons pour vous, avec vos émotions, votre style, votre authenticité.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 card-hover feature-card">
+                    <div class="text-center mb-6">
+                        <div class="w-16 h-16 bg-bleu/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-magic text-3xl text-bleu feature-icon"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-bleu mb-3">Expérience immersive</h3>
+                        <p class="text-gris">Musique, animations, design : une dédicace qui se vit autant qu'elle se lit.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Témoignage -->
+            <div class="bg-gradient-to-r from-rose/10 to-bleu/10 rounded-3xl p-8 md:p-12 relative overflow-hidden">
+                <i class="fas fa-quote-left quote-mark text-bleu top-4 left-4"></i>
+                <div class="relative z-10">
+                    <p class="text-2xl italic text-bleu mb-6 text-center">
+                        "J'ai toujours voulu dire à mon père combien il compte pour moi, mais je ne trouvais jamais les mots. Avec Dédicace, ils les ont trouvés pour moi. Il a pleuré en lisant la page."
+                    </p>
+                    <div class="text-center">
+                        <p class="font-semibold text-bleu">Marie, 28 ans</p>
+                        <p class="text-gris text-sm">Dédicace pour l'anniversaire de son père</p>
+                    </div>
+                </div>
+                <i class="fas fa-quote-right quote-mark text-bleu bottom-4 right-4"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pour qui ? -->
+    <section class="py-16 px-4 bg-white">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-bleu mb-16">
+                <i class="fas fa-users text-rose mr-3"></i>
+                Pour qui est fait Dédicace ?
+            </h2>
+
+            <div class="space-y-12">
+                <!-- Persona 1 -->
+                <div class="flex flex-col lg:flex-row items-center gap-8">
+                    <div class="lg:w-1/3">
+                        <div class="w-48 h-48 bg-gradient-to-br from-rose/30 to-or/30 rounded-full flex items-center justify-center mx-auto">
+                            <i class="fas fa-heart-broken text-6xl text-bleu"></i>
+                        </div>
+                    </div>
+                    <div class="lg:w-2/3">
+                        <h3 class="text-2xl font-bold text-bleu mb-4">Pour les timides et les romantiques secrets</h3>
+                        <div class="text-gris space-y-3">
+                            <p><i class="fas fa-check text-rose mr-2"></i> Vous aimez quelqu'un mais n'osez pas le lui dire</p>
+                            <p><i class="fas fa-check text-rose mr-2"></i> Vous voulez remercier sans paraître trop formel</p>
+                            <p><i class="fas fa-check text-rose mr-2"></i> Vous cherchez une manière originale de déclarer vos sentiments</p>
+                            <p><i class="fas fa-check text-rose mr-2"></i> Vous voulez laisser une trace numérique de votre affection</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Persona 2 -->
+                <div class="flex flex-col lg:flex-row items-center gap-8">
+                    <div class="lg:w-2/3 order-2 lg:order-1">
+                        <h3 class="text-2xl font-bold text-bleu mb-4">Pour les familles et les amis proches</h3>
+                        <div class="text-gris space-y-3">
+                            <p><i class="fas fa-check text-or mr-2"></i> Un anniversaire, un mariage, une naissance spéciale</p>
+                            <p><i class="fas fa-check text-or mr-2"></i> Remercier un parent pour son soutien indéfectible</p>
+                            <p><i class="fas fa-check text-or mr-2"></i> Féliciter un ami pour une réussite importante</p>
+                            <p><i class="fas fa-check text-or mr-2"></i> Créer un souvenir numérique pour les générations futures</p>
+                        </div>
+                    </div>
+                    <div class="lg:w-1/3 order-1 lg:order-2">
+                        <div class="w-48 h-48 bg-gradient-to-br from-or/30 to-bleu/30 rounded-full flex items-center justify-center mx-auto">
+                            <i class="fas fa-home text-6xl text-bleu"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Les avantages -->
+    <section class="py-16 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-bleu mb-16">
+                <i class="fas fa-star text-rose mr-3"></i>
+                Les avantages uniques de Dédicace
+            </h2>
+
+            <div class="grid md:grid-cols-2 gap-8 mb-16">
+                <div class="bg-white rounded-2xl p-8">
+                    <div class="flex items-start mb-6">
+                        <div class="w-12 h-12 bg-rose/20 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-infinity text-xl text-rose"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-bleu mb-2">Permanence numérique</h3>
+                            <p class="text-gris">Votre dédicace reste accessible à vie, n'importe où dans le monde.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-8">
+                    <div class="flex items-start mb-6">
+                        <div class="w-12 h-12 bg-or/20 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-share-alt text-xl text-or"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-bleu mb-2">Partage facile</h3>
+                            <p class="text-gris">Un simple lien à envoyer par message, email ou réseaux sociaux.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-8">
+                    <div class="flex items-start mb-6">
+                        <div class="w-12 h-12 bg-bleu/20 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-qrcode text-xl text-bleu"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-bleu mb-2">QR Code personnalisé</h3>
+                            <p class="text-gris">Transformez votre dédicace en cadeau physique avec un QR code élégant.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-8">
+                    <div class="flex items-start mb-6">
+                        <div class="w-12 h-12 bg-rose/20 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-headphones text-xl text-rose"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-bleu mb-2">Ambiance sonore</h3>
+                            <p class="text-gris">Une musique qui accompagne et amplifie l'émotion du message.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 px-4 bg-gradient-to-br from-bleu/5 to-rose/5">
+        <div class="container mx-auto max-w-4xl text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-bleu mb-8">
+                Prêt à exprimer ce que vous ressentez vraiment ?
+            </h2>
+            
+            <div class="bg-white rounded-3xl p-8 md:p-12 shadow-xl mb-12">
+                <div class="max-w-2xl mx-auto">
+                    <p class="text-2xl text-gris mb-6">
+                        <i class="fas fa-quote-left text-rose mr-2"></i>
+                        La plus grande tristesse n'est pas de ne pas avoir de mots, mais d'avoir des mots qu'on n'arrive pas à dire.
+                        <i class="fas fa-quote-right text-rose ml-2"></i>
+                    </p>
+                    <p class="text-lg text-bleu font-semibold">
+                        Ne laissez pas vos émotions rester silencieuses.
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-6">
+                <a href="command.html" class="group bg-bleu text-white px-8 py-4 rounded-full 
+                                           hover:bg-rose transition-all duration-300 
+                                           shadow-lg hover:shadow-xl hover:-translate-y-1 transform">
+                    <i class="fas fa-magic mr-3 group-hover:rotate-12 transition-transform"></i>
+                    <span class="text-lg font-semibold">Créer ma première dédicace</span>
+                </a>
+                
+                <a href="dedicace.html#exemple" class="group bg-white text-bleu border-2 border-bleu px-8 py-4 rounded-full 
+                                             hover:bg-bleu hover:text-white transition-all duration-300 
+                                             shadow-lg hover:shadow-xl hover:-translate-y-1 transform">
+                    <i class="fas fa-eye mr-3 group-hover:scale-110 transition-transform"></i>
+                    <span class="text-lg font-semibold">Voir des exemples</span>
+                </a>
+            </div>
+
+            <p class="text-gris mt-8 text-sm">
+                <i class="fas fa-lock mr-2"></i>
+                Confidentialité garantie • Paiement sécurisé • Satisfait ou remboursé
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-bleu text-white pt-12 pb-6">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-10">
+                <p class="text-lg mb-6">
+                    <i class="fas fa-heart text-rose mr-2"></i>
+                    Parce que chaque émotion mérite d'être exprimée
+                </p>
+                <div class="flex justify-center gap-6 mb-8">
+                    <a href="#" class="hover:text-rose transition-colors duration-300">
+                        <i class="fab fa-instagram text-2xl"></i>
+                    </a>
+                    <a href="#" class="hover:text-rose transition-colors duration-300">
+                        <i class="fab fa-tiktok text-2xl"></i>
+                    </a>
+                    <a href="mailto:contact@dedicace.com" class="hover:text-rose transition-colors duration-300">
+                        <i class="fas fa-envelope text-2xl"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="border-t border-white/20 pt-6">
+                <div class="flex flex-col items-center gap-4 md:flex-row md:justify-between">
+                    <h2 class="handwritten text-2xl">
+                        <i class="fas fa-heart mr-2 text-rose"></i>Dédicace
+                    </h2>
+                    <div class="text-sm text-white/70 flex flex-col gap-2 md:flex-row md:gap-4">
+                        <a href="#" class="hover:text-white transition-colors duration-300">
+                            <i class="fas fa-file-alt mr-1"></i>Mentions légales
+                        </a>
+                        <a href="#" class="hover:text-white transition-colors duration-300">
+                            <i class="fas fa-info-circle mr-1"></i>À propos
+                        </a>
+                        <a href="#" class="hover:text-white transition-colors duration-300">
+                            <i class="fas fa-question-circle mr-1"></i>FAQ
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Gestion de la musique de fond
+        const music = document.getElementById('backgroundMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        const playIcon = document.getElementById('playIcon');
+        const pauseIcon = document.getElementById('pauseIcon');
+
+        // État de la musique (localStorage pour conserver le choix)
+        let isMusicPlaying = localStorage.getItem('musicPlaying') === 'true';
+
+        // Initialiser l'état des icônes
+        function updateMusicIcons() {
+            if (!music.paused && music.currentTime > 0 && !music.ended) {
+                playIcon.classList.add('hidden');
+                pauseIcon.classList.remove('hidden');
+                musicToggle.classList.add('playing');
+            } else {
+                playIcon.classList.remove('hidden');
+                pauseIcon.classList.add('hidden');
+                musicToggle.classList.remove('playing');
+            }
+        }
+
+        // Basculer la musique
+        function toggleMusic() {
+            if (music.paused) {
+                music.play().then(() => {
+                    isMusicPlaying = true;
+                    localStorage.setItem('musicPlaying', 'true');
+                    updateMusicIcons();
+                }).catch(error => {
+                    console.error("Erreur de lecture:", error);
+                });
+            } else {
+                music.pause();
+                isMusicPlaying = false;
+                localStorage.setItem('musicPlaying', 'false');
+                updateMusicIcons();
+            }
+        }
+
+        // Gérer la visibilité de la page
+        function handleVisibilityChange() {
+            if (document.hidden) {
+                // Page cachée : on sauvegarde la position et on pause
+                localStorage.setItem('musicTime', music.currentTime);
+                if (!music.paused) {
+                    music.pause();
+                }
+            } else {
+                // Page visible à nouveau
+                if (isMusicPlaying) {
+                    // Récupérer la position sauvegardée
+                    const savedTime = parseFloat(localStorage.getItem('musicTime')) || 0;
+                    music.currentTime = savedTime;
+                    
+                    // Redémarrer la musique
+                    music.play().then(() => {
+                        updateMusicIcons();
+                    }).catch(error => {
+                        console.log("Lecture automatique bloquée");
+                    });
+                }
+            }
+        }
+
+        // Gérer l'événement beforeunload (quand l'utilisateur quitte)
+        function handleBeforeUnload() {
+            localStorage.setItem('musicTime', music.currentTime);
+            if (music.pause) {
+                music.pause();
+            }
+        }
+
+        // Initialisation au chargement
+        document.addEventListener('DOMContentLoaded', function() {
+            // Restaurer l'état de la musique
+            if (isMusicPlaying) {
+                const savedTime = parseFloat(localStorage.getItem('musicTime')) || 0;
+                music.currentTime = savedTime;
+                
+                // Tentative de lecture automatique avec interaction utilisateur
+                musicToggle.addEventListener('click', function initMusic() {
+                    if (isMusicPlaying) {
+                        music.play().then(() => {
+                            updateMusicIcons();
+                        }).catch(error => {
+                            console.log("Lecture nécessite une interaction utilisateur");
+                            isMusicPlaying = false;
+                        });
+                    }
+                    musicToggle.removeEventListener('click', initMusic);
+                }, { once: true });
+            }
+            
+            updateMusicIcons();
+        });
+
+        // Écouteurs d'événements
+        musicToggle.addEventListener('click', toggleMusic);
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        window.addEventListener('pagehide', handleBeforeUnload);
+
+        // Gestion des erreurs audio
+        music.addEventListener('error', function(e) {
+            console.error('Erreur audio:', e);
+            musicToggle.style.display = 'none'; // Cacher le bouton si erreur
+        });
+
+        // Animation au scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fadeInUp');
+                }
+            });
+        }, observerOptions);
+
+        // Observer les sections
+        document.querySelectorAll('section > div').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Menu mobile
+        const menuToggle = document.getElementById('menu-toggle');
+        const nav = document.querySelector('nav');
+        
+        menuToggle.addEventListener('click', () => {
+            nav.classList.toggle('hidden');
+            nav.classList.toggle('absolute');
+            nav.classList.toggle('top-16');
+            nav.classList.toggle('left-0');
+            nav.classList.toggle('right-0');
+            nav.classList.toggle('bg-white');
+            nav.classList.toggle('p-4');
+            nav.classList.toggle('shadow-lg');
+        });
+
+        // Mettre à jour les icônes quand la musique change d'état
+        music.addEventListener('play', updateMusicIcons);
+        music.addEventListener('pause', updateMusicIcons);
+        music.addEventListener('ended', () => {
+            music.currentTime = 0;
+            updateMusicIcons();
+        });
+    </script>
+</body>
+</html>

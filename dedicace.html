@@ -87,6 +87,205 @@
     </style>
 </head>
 <body class="antialiased">
+    <!-- Modal de suggestion musicale -->
+<div id="dedicaceMusicModal" 
+     class="fixed inset-0 z-60 hidden overflow-y-auto" 
+     aria-labelledby="music-modal-title" 
+     aria-hidden="true">
+    <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+        <!-- Overlay -->
+        <div class="fixed inset-0 transition-opacity bg-bleu bg-opacity-80 backdrop-blur-sm"
+             aria-hidden="true"></div>
+
+        <!-- Espace pour centrer la modal -->
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+        <!-- Contenu de la modal -->
+        <div class="inline-block w-full max-w-md p-8 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl sm:align-middle">
+            <!-- Icone musicale -->
+            <div class="flex items-center justify-center w-16 h-16 mx-auto mb-6 bg-rose/20 rounded-full">
+                <i class="text-3xl text-bleu fas fa-music"></i>
+            </div>
+
+            <!-- Titre -->
+            <h3 id="dedicace-modal-title" class="mb-4 text-2xl font-bold text-center text-bleu">
+                Immersion complète
+            </h3>
+
+            <!-- Message -->
+            <div class="mb-8">
+                <p class="text-center text-gray-700">
+                    Pour une expérience encore plus immersive, activez la musique d'ambiance en cliquant sur le bouton 
+                    <span class="inline-flex items-center px-2 py-1 mx-1 text-sm bg-rose/20 text-rose rounded">
+                        <i class="mr-1 fas fa-play"></i> Play
+                    </span> 
+                    en bas à droite.
+                </p>
+                <p class="mt-4 text-sm text-center text-gray-500">
+                    Vous pourrez la contrôler à tout moment.
+                </p>
+            </div>
+
+            <!-- Boutons -->
+            <div class="flex flex-col gap-3 sm:flex-row sm:justify-center">
+                <!-- Bouton OK -->
+                <button type="button"
+                        id="dedicace-modal-ok"
+                        class="inline-flex justify-center w-full px-6 py-3 text-base font-medium text-white bg-rose border border-transparent rounded-full shadow-sm hover:bg-bleu focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose transition-all duration-300">
+                    <i class="mr-2 fas fa-check"></i> J'ai compris
+                </button>
+
+                <!-- Bouton pour activer directement -->
+                <button type="button"
+                        id="dedicace-modal-activate"
+                        class="inline-flex justify-center w-full px-6 py-3 text-base font-medium text-bleu bg-white border-2 border-bleu rounded-full shadow-sm hover:bg-bleu hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-bleu transition-all duration-300">
+                    <i class="mr-2 fas fa-play-circle"></i> Activer maintenant
+                </button>
+            </div>
+
+            <!-- Option "Ne plus afficher" -->
+            <div class="mt-6 text-center">
+                <label class="inline-flex items-center cursor-pointer">
+                    <input type="checkbox" 
+                           id="dedicace-modal-dont-show"
+                           class="w-4 h-4 text-rose border-gray-300 rounded focus:ring-rose">
+                    <span class="ml-2 text-sm text-gray-600">Ne plus afficher ce message</span>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Fonctions et variables uniques pour la modal musicale
+(function() {
+    // Configuration unique
+    const DEDICACE_MODAL_CONFIG = {
+        modalId: 'dedicaceMusicModal',
+        storageKey: 'dedicace_music_modal_seen',
+        musicButtonId: 'musicToggle',
+        showDelay: 1000 // 1 seconde après le chargement
+    };
+
+    // Initialiser la modal
+    function initDedicaceMusicModal() {
+        const modal = document.getElementById(DEDICACE_MODAL_CONFIG.modalId);
+        const okButton = document.getElementById('dedicace-modal-ok');
+        const activateButton = document.getElementById('dedicace-modal-activate');
+        const dontShowCheckbox = document.getElementById('dedicace-modal-dont-show');
+        
+        // Vérifier si l'utilisateur a déjà vu la modal
+        const hasSeenModal = localStorage.getItem(DEDICACE_MODAL_CONFIG.storageKey) === 'true';
+        
+        // Si l'utilisateur n'a pas encore vu la modal, l'afficher après délai
+        if (!hasSeenModal) {
+            setTimeout(() => {
+                modal.classList.remove('hidden');
+                modal.setAttribute('aria-hidden', 'false');
+                // Empêcher le scroll du body
+                document.body.style.overflow = 'hidden';
+            }, DEDICACE_MODAL_CONFIG.showDelay);
+        }
+
+        // Gérer le bouton OK
+        okButton.addEventListener('click', function() {
+            closeDedicaceModal();
+        });
+
+        // Gérer le bouton Activer
+        activateButton.addEventListener('click', function() {
+            // Simuler un clic sur le bouton de musique
+            const musicButton = document.getElementById(DEDICACE_MODAL_CONFIG.musicButtonId);
+            if (musicButton) {
+                musicButton.click();
+            }
+            closeDedicaceModal();
+        });
+
+        // Gérer la fermeture en cliquant en dehors
+        modal.addEventListener('click', function(event) {
+            if (event.target === modal || event.target.classList.contains('bg-bleu')) {
+                closeDedicaceModal();
+            }
+        });
+
+        // Gérer la touche Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeDedicaceModal();
+            }
+        });
+
+        function closeDedicaceModal() {
+            // Sauvegarder la préférence si cochée
+            if (dontShowCheckbox.checked) {
+                localStorage.setItem(DEDICACE_MODAL_CONFIG.storageKey, 'true');
+            }
+            
+            // Fermer la modal avec animation
+            modal.classList.add('hidden');
+            modal.setAttribute('aria-hidden', 'true');
+            
+            // Restaurer le scroll
+            document.body.style.overflow = '';
+            
+            // Animation de sortie
+            const modalContent = modal.querySelector('.inline-block');
+            if (modalContent) {
+                modalContent.style.transform = 'scale(0.95)';
+                modalContent.style.opacity = '0';
+                setTimeout(() => {
+                    modalContent.style.transform = '';
+                    modalContent.style.opacity = '';
+                }, 300);
+            }
+        }
+
+        // Vérifier si l'utilisateur a déjà interagi avec la musique
+        // Si oui, ne pas afficher la modal
+        const hasInteractedWithMusic = localStorage.getItem('musicPlaying') === 'true';
+        if (hasInteractedWithMusic) {
+            localStorage.setItem(DEDICACE_MODAL_CONFIG.storageKey, 'true');
+        }
+    }
+
+    // S'assurer que le DOM est chargé
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initDedicaceMusicModal);
+    } else {
+        initDedicaceMusicModal();
+    }
+
+    // Exposer une fonction pour réinitialiser les préférences (pour le débogage)
+    window.resetDedicaceModalPrefs = function() {
+        localStorage.removeItem(DEDICACE_MODAL_CONFIG.storageKey);
+        console.log('Préférences de modal réinitialisées');
+    };
+})();
+</script>
+
+<style>
+/* Animations spécifiques pour la modal */
+#dedicaceMusicModal .inline-block {
+    animation: dedicaceModalAppear 0.4s ease-out;
+}
+
+@keyframes dedicaceModalAppear {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Override pour le z-index */
+.z-60 {
+    z-index: 60;
+}
+</style>
     <audio id="backgroundMusic" loop>
     <source src="relaxing-sleep-music-with-soft-ambient-rain-369762.mp3" type="audio/mpeg">
     Votre navigateur ne supporte pas l'élément audio.
@@ -150,13 +349,13 @@
                            absolute md:static right-0 top-full w-full md:w-auto py-3 md:py-0 
                            shadow-lg md:shadow-none z-40 transition-all duration-300 ease-in-out">
                     <li>
-                        <a href="#concept" class="block px-6 py-3 md:py-1 text-gris hover:text-bleu 
+                        <a href="concept.html" class="block px-6 py-3 md:py-1 text-gris hover:text-bleu 
                                                   transition-colors duration-200 font-medium text-sm">
                             <span class="md:hidden mr-2"><i class="fas fa-lightbulb"></i></span> concept
                         </a>
                     </li>
                     <li>
-                        <a href="#exemple" class="block px-6 py-3 md:py-1 text-gris hover:text-bleu 
+                        <a href="https://toussaintleovitch.dev/alie" class="block px-6 py-3 md:py-1 text-gris hover:text-bleu 
                                                   transition-colors duration-200 font-medium text-sm">
                             <span class="md:hidden mr-2"><i class="fas fa-envelope-open-text"></i></span>Exemples
                         </a>
@@ -217,7 +416,7 @@
 
                 <!-- CTA Buttons -->
                 <div class="flex flex-col sm:flex-row justify-center gap-6 opacity-0" id="cta-buttons">
-                    <a href="#exemple" class="group bg-bleu text-white px-8 py-4 rounded-full 
+                    <a href="https://toussaintleovitch.dev/alie" class="group bg-bleu text-white px-8 py-4 rounded-full 
                                              hover:bg-opacity-90 transition-all duration-300 
                                              shadow-lg hover:shadow-xl hover:-translate-y-1 transform">
                         <i class="fas fa-eye mr-3 group-hover:scale-110 transition-transform"></i>
@@ -287,7 +486,7 @@
                             Visiter
                         </button>
                     </a>
-                    <a href="#">
+                    <a href="command.html">
                         <button class="border-2 border-or text-or px-8 py-3 rounded-full 
                                       hover:bg-or hover:text-white transition-all duration-300">
                             Commander
