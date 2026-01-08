@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dédicace - Des mots qui restent</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        #musicToggle {
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+}
+
+#musicToggle:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s ease;
+}
+        /* Variables CSS et styles globaux */
+        :root {
+            --color-rose: #F6C1C7;
+            --color-bleu: #4B4E6D;
+            --color-or: #F3CE6F;
+            --color-gris: #6F6F6F;
+            --color-bg: #FFF9F0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--color-bg);
+            color: #2C2C2C;
+            scroll-behavior: smooth;
+        }
+
+        .handwritten {
+            font-family: 'Parisienne', cursive;
+        }
+
+        .text-rose { color: var(--color-rose); }
+        .bg-rose { background-color: var(--color-rose); }
+        .text-bleu { color: var(--color-bleu); }
+        .bg-bleu { background-color: var(--color-bleu); }
+        .text-or { color: var(--color-or); }
+        .bg-or { background-color: var(--color-or); }
+        .text-gris { color: var(--color-gris); }
+
+        .dedicace-letter {
+            background: linear-gradient(to bottom, #f3ce97, var(--color-rose));
+            box-shadow: 0 10px 30px rgba(75, 78, 109, 0.2);
+        }
+
+        .menu-open { transform: translateX(0); }
+        .menu-closed { transform: translateX(100%); }
+
+        /* Animation du scroll indicator */
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .animate-bounce {
+            animation: bounce 2s infinite;
+        }
+
+        /* Transitions globales */
+        .transition-all { transition: all 0.3s ease; }
+        
+        /* Styles pour les cartes */
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-min-height {
+                min-height: 90vh;
+            }
+        }
+
+       
+    </style>
+</head>
+<body class="antialiased">
+    <audio id="backgroundMusic" loop>
+    <source src="relaxing-sleep-music-with-soft-ambient-rain-369762.mp3" type="audio/mpeg">
+    Votre navigateur ne supporte pas l'élément audio.
+</audio>
+<!-- Bouton de contrôle audio -->
+<button
+  id="musicToggle"
+  class="
+    fixed 
+    bottom-4 right-4            /* Mobile : bouton en bas à droite */
+    z-50
+    bg-purple-600 text-white
+    p-3                         /* Mobile : taille compacte */
+    rounded-full
+    shadow-lg
+    hover:bg-purple-700
+    transition-all
+
+    sm:bottom-6 sm:right-6      /* Tablette */
+    sm:p-4
+
+    md:top-64 md:bottom-auto    /* Desktop : position originale */
+    md:right-6
+    md:p-4
+
+    lg:p-5                      /* Grand écran */
+  "
+>
+  <svg id="playIcon" class="w-5 h-5 hidden sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
+    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+  </svg>
+
+  <svg id="pauseIcon" class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
+    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+  </svg>
+</button>
+
+
+    
+    <!-- Header -->
+    <header class="fixed w-full bg-white bg-opacity-95 shadow-sm z-50 backdrop-blur-sm">
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <!-- Logo & Baseline -->
+            <div class="flex items-center">
+                <h1 class="handwritten text-3xl text-bleu font-medium tracking-tight">Dédicace</h1>
+                <span class="hidden md:block ml-4 border-l border-gray-200 h-6"></span>
+            
+            </div>
+
+            <!-- Menu Burger (mobile) -->
+            <button id="menu-toggle" class="md:hidden text-bleu focus:outline-none transition-transform hover:scale-110" 
+                    aria-label="Menu" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+
+            <!-- Navigation principale -->
+            <nav id="main-menu" class="hidden md:block">
+                <ul class="flex flex-col md:flex-row md:space-x-8 items-center bg-white md:bg-transparent 
+                           absolute md:static right-0 top-full w-full md:w-auto py-3 md:py-0 
+                           shadow-lg md:shadow-none z-40 transition-all duration-300 ease-in-out">
+                    <li>
+                        <a href="#concept" class="block px-6 py-3 md:py-1 text-gris hover:text-bleu 
+                                                  transition-colors duration-200 font-medium text-sm">
+                            <span class="md:hidden mr-2"><i class="fas fa-lightbulb"></i></span> concept
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#exemple" class="block px-6 py-3 md:py-1 text-gris hover:text-bleu 
+                                                  transition-colors duration-200 font-medium text-sm">
+                            <span class="md:hidden mr-2"><i class="fas fa-envelope-open-text"></i></span>Exemples
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#offres" class="block px-6 py-3 md:py-1 text-gris hover:text-bleu 
+                                                  transition-colors duration-200 font-medium text-sm">
+                            <span class="md:hidden mr-2"><i class="fas fa-tags"></i></span>Offres
+                        </a>
+                    </li>
+                    <li class="mt-2 md:mt-0 md:ml-4">
+                        <a href="command.html" class="inline-block bg-rose-500 hover:bg-bleu text-white px-4 py-2 
+                                                 rounded-full transition-all duration-200 shadow-sm hover:shadow-md font-medium text-sm">
+                            <span class="md:hidden mr-2"><i class="fas fa-magic"></i></span>Commander
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden hero-min-height" >
+        <!-- Background avec animation subtile -->
+        <div class="absolute inset-0 bg-gradient-to-br from-bleu/5 via-white to-rose/5">
+            <div class="absolute inset-0 opacity-30">
+                <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-bleu rounded-full mix-blend-multiply 
+                            filter blur-3xl animate-pulse"></div>
+                <div class="absolute bottom-1/4 right-1/4 w-64 h-64 bg-rose rounded-full mix-blend-multiply 
+                            filter blur-3xl animate-pulse" style="animation-delay: 1s"></div>
+            </div>
+        </div>
+
+        <!-- Particules flottantes -->
+        <div class="absolute inset-0" id="particles"></div>
+
+        <div class="container mx-auto px-4 relative z-10"style="margin-top: 50px;">
+            <div class="max-w-4xl mx-auto text-center">
+                <!-- Conteneur pour l'animation de texte -->
+                <div class="min-h-[200px] md:min-h-[280px] flex items-center justify-center mb-8">
+                    <div class="relative" id="text-animation-container">
+                        <h2 class="text-4xl md:text-7xl font-bold mb-6 leading-tight">
+                            <span class="block text-gris">Un lien.</span>
+                            <span class="block text-gris">Un message.</span>
+                            <span class="block text-rose relative">
+                                <span id="changing-text" class="inline-block min-w-[300px]">Un cœur touché.</span>
+                                <span class="absolute -bottom-2 left-0 w-full h-1 bg-rose/30 transform scale-x-0" 
+                                      id="underline"></span>
+                            </span>
+                        </h2>
+                    </div>
+                </div>
+
+                <!-- Sous-titre -->
+                <p class="text-xl md:text-2xl text-gris mb-12 opacity-0" id="subtitle">
+                    Créez une page web personnalisée pour exprimer vos émotions de manière unique et mémorable.
+                </p>
+
+                <!-- CTA Buttons -->
+                <div class="flex flex-col sm:flex-row justify-center gap-6 opacity-0" id="cta-buttons">
+                    <a href="#exemple" class="group bg-bleu text-white px-8 py-4 rounded-full 
+                                             hover:bg-opacity-90 transition-all duration-300 
+                                             shadow-lg hover:shadow-xl hover:-translate-y-1 transform">
+                        <i class="fas fa-eye mr-3 group-hover:scale-110 transition-transform"></i>
+                        <span class="text-lg">Découvrir un exemple</span>
+                    </a>
+                    <a href="command.html" class="group bg-white text-rose border-2 border-rose px-8 py-4 rounded-full 
+                                           hover:bg-rose hover:text-white transition-all duration-300 
+                                           shadow-lg hover:shadow-xl hover:-translate-y-1 transform">
+                        <i class="fas fa-magic mr-3 group-hover:rotate-12 transition-transform"></i>
+                        <span class="text-lg">Créer votre page</span>
+                    </a>
+                </div>
+
+                <!-- Élément décoratif -->
+                <div class="mt-16 opacity-0" id="scroll-indicator">
+                    <div class="w-6 h-10 border-2 border-bleu/30 rounded-full mx-auto relative">
+                        <div class="w-1 h-3 bg-bleu rounded-full absolute top-2 left-1/2 
+                                   transform -translate-x-1/2 animate-bounce"></div>
+                    </div>
+                    <p class="text-gris mt-2 text-sm">Scroll pour explorer</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Courbes décoratives -->
+        <svg class="absolute bottom-0 left-0 w-full h-24" viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" 
+                  class="fill-bleu/10" opacity="1"></path>
+        </svg>
+    </section>
+
+    <!-- Interactive Example Section -->
+   <section id="exemple" class="py-20 bg-[#faf9f7]">
+    <div class="container mx-auto px-4">
+        <h2 class="text-4xl font-serif text-bleu mb-16 text-center">
+            Découvrez une dédicace
+        </h2>
+
+        <div class="grid md:grid-cols-2 gap-16 items-center max-w-5xl mx-auto">
+            
+            <!-- IMAGE / SLIDER -->
+            <div class="relative w-[340px] h-[460px] mx-auto 
+                        flex items-center justify-center 
+                        bg-white rounded-2xl shadow-xl">
+
+                <!-- Ombre douce -->
+                <div class="absolute inset-0 bg-black/10 rounded-2xl blur-xl translate-y-6"></div>
+
+                <!-- Image FULL (jamais coupée) -->
+                <img id="slider-image"
+                     src="dedicace1.png"
+                     alt="Dédicace"
+                     class="relative max-w-full max-h-full object-contain 
+                            transition-all duration-700" />
+            </div>
+
+            <!-- CONTENU -->
+            <div class="text-center md:text-left space-y-8">
+                <p id="slider-text" class="font-serif text-xl text-gray-700 transition-opacity duration-500">
+                    Une dédicace écrite avec le cœur…
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                    <a id="visit-link" href="lettre1.html">
+                        <button class="bg-or text-white px-8 py-3 rounded-full shadow-lg 
+                                       hover:scale-105 transition-all duration-300">
+                            Visiter
+                        </button>
+                    </a>
+                    <a href="#">
+                        <button class="border-2 border-or text-or px-8 py-3 rounded-full 
+                                      hover:bg-or hover:text-white transition-all duration-300">
+                            Commander
+                        </button>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+    <!-- Concept Section -->
+    <section id="concept" class="py-16 bg-opacity-5">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto text-center mb-12">
+                <h2 class="text-3xl text-bleu mb-6">
+                    <i class="fas fa-lightbulb mr-2"></i>Imagine pouvoir dire ce que tu ressens… sans les mots.
+                </h2>
+                <p class="text-xl text-gris">
+                    Nous transformons vos émotions en expériences numériques inoubliables.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md text-center card-hover">
+                    <div class="text-rose text-4xl mb-4"><i class="fas fa-comment-dots"></i></div>
+                    <h3 class="text-xl text-bleu mb-3">
+                        Tu veux dire merci à ta mère mais tu ne sais pas comment ?
+                    </h3>
+                    <p class="text-gris">Nous trouvons les mots justes pour toi.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md text-center card-hover">
+                    <div class="text-rose text-4xl mb-4"><i class="fas fa-heart"></i></div>
+                    <h3 class="text-xl text-bleu mb-3">
+                        Tu penses à quelqu'un chaque jour sans jamais lui dire ?
+                    </h3>
+                    <p class="text-gris">Créez un lien unique pour partager vos sentiments.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md text-center card-hover">
+                    <div class="text-rose text-4xl mb-4"><i class="fas fa-dove"></i></div>
+                    <h3 class="text-xl text-bleu mb-3">
+                        Tu veux rendre hommage à une personne qui t'a marqué ?
+                    </h3>
+                    <p class="text-gris">Nous créons un espace numérique empreint d'émotion.</p>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <a href="#process" class="inline-block bg-bleu text-white px-6 py-3 rounded-full 
+                                         hover:bg-opacity-90 transition-all duration-300 shadow-md">
+                    <i class="fas fa-arrow-down mr-2"></i> Voir comment ça marche
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="process" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl text-center text-bleu mb-12">
+                <i class="fas fa-cogs mr-2"></i>Comment ça marche ?
+            </h2>
+            
+            <div class="max-w-3xl mx-auto space-y-12">
+                <!-- Step 1 -->
+                <div class="flex flex-col md:flex-row items-center gap-6 process-step opacity-0 translate-y-10">
+                    <div class="bg-rose text-white text-2xl w-16 h-16 rounded-full 
+                                flex items-center justify-center shrink-0">
+                        <i class="fas fa-pen"></i>
+                    </div>
+                    <div class="text-center md:text-left">
+                        <h3 class="text-xl text-bleu mb-2">Tu nous racontes ton intention</h3>
+                        <p class="text-gris">"Je veux dire merci à mon grand-père qui m'a tout appris."</p>
+                    </div>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="flex flex-col md:flex-row items-center gap-6 process-step opacity-0 translate-y-10">
+                    <div class="bg-rose text-white text-2xl w-16 h-16 rounded-full 
+                                flex items-center justify-center shrink-0">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <div class="text-center md:text-left">
+                        <h3 class="text-xl text-bleu mb-2">On crée une page pleine de sens</h3>
+                        <p class="text-gris">Design, musique, animation… Tout est fait sur mesure.</p>
+                    </div>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="flex flex-col md:flex-row items-center gap-6 process-step opacity-0 translate-y-10">
+                    <div class="bg-rose text-white text-2xl w-16 h-16 rounded-full 
+                                flex items-center justify-center shrink-0">
+                        <i class="fas fa-paper-plane"></i>
+                    </div>
+                    <div class="text-center md:text-left">
+                        <h3 class="text-xl text-bleu mb-2">Tu reçois un lien magique</h3>
+                        <p class="text-gris">À envoyer, à imprimer, à garder à vie.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Examples Section -->
+    <section class="py-16 hidden bg-opacity-5">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl text-center text-bleu mb-12">
+                <i class="fas fa-images mr-2"></i>Exemples de dédicaces
+            </h2>
+            
+            <div class="flex flex-wrap justify-center gap-4 mb-8">
+                <button class="filter-btn bg-rose text-white px-4 py-2 rounded-full text-sm" 
+                        data-filter="all">
+                    <i class="fas fa-layer-group mr-1"></i> Tous
+                </button>
+                <button class="filter-btn bg-white text-bleu px-4 py-2 rounded-full text-sm" 
+                        data-filter="romantique">
+                    <i class="fas fa-heart mr-1"></i> Romantique
+                </button>
+                <button class="filter-btn bg-white text-bleu px-4 py-2 rounded-full text-sm" 
+                        data-filter="familial">
+                    <i class="fas fa-home mr-1"></i> Familial
+                </button>
+                <button class="filter-btn bg-white text-bleu px-4 py-2 rounded-full text-sm" 
+                        data-filter="mystere">
+                    <i class="fas fa-user-secret mr-1"></i> Mystérieux
+                </button>
+            </div>
+            
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Example 1 -->
+                <div class="example-card bg-white rounded-lg overflow-hidden shadow-md card-hover" 
+                     data-category="romantique">
+                    <div class="h-48 bg-rose bg-opacity-20 flex items-center justify-center">
+                        <i class="fas fa-heart text-6xl text-rose"></i>
+                    </div>
+                    <div class="p-4">
+                        <h3 class="text-bleu mb-2">Pour l'amour</h3>
+                        <p class="text-gris text-sm">"5 ans et mon cœur bat toujours pour toi..."</p>
+                    </div>
+                </div>
+                
+                <!-- Example 2 -->
+                <a href="lfamiy.html">
+                    <div class="example-card bg-white rounded-lg overflow-hidden shadow-md card-hover" 
+                         data-category="familial">
+                        <div class="h-48 bg-or bg-opacity-20 flex items-center justify-center">
+                            <!-- Image removed for clarity -->
+                        </div>
+                        <div class="p-4">
+                            <h3 class="text-bleu mb-2">Merci maman</h3>
+                            <p class="text-gris text-sm">"Pour tout ce que tu as sacrifié pour nous..."</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="offres" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center text-bleu mb-16 tracking-wide">
+                <i class="fas fa-tags mr-2 text-rose"></i> Nos Offres Premium
+            </h2>
+
+            <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-10">
+                <!-- Offre Essentiel -->
+                <div class="relative bg-white rounded-2xl shadow-xl border-4 border-dashed border-rose 
+                           hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300">
+                    <div class="absolute -top-4 -right-4 bg-rose text-white text-xs px-3 py-1 
+                                rounded-full shadow-md uppercase font-semibold tracking-wider">
+                        Anonyme
+                    </div>
+
+                    <div class="bg-rose/10 p-8 text-center rounded-t-2xl">
+                        <h3 class="text-2xl font-semibold text-bleu mb-3 flex items-center justify-center">
+                            <i class="fas fa-seedling mr-2 text-rose"></i> Essentiel
+                        </h3>
+                        <p class="text-5xl text-rose font-light mb-2">250 Gdes</p>
+                        <p class="text-gris text-sm">Simple, discret, et touchant</p>
+                    </div>
+                    <div class="p-8">
+                        <ul class="space-y-4 text-base">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-rose mr-2 mt-1"></i> Une image
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-rose mr-2 mt-1"></i> Message personnalisé
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-rose mr-2 mt-1"></i> Lien permanent
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-rose mr-2 mt-1"></i> Dédicace anonyme
+                            </li>
+                        </ul>
+                        <p class="text-sm text-gray-500 italic mt-6 mb-6">
+                            Parfait pour les messages discrets et sincères.
+                        </p>
+                        <a href="command.html" class="block text-center bg-rose text-white py-3 rounded-full 
+                                               hover:bg-opacity-90 transition-all duration-300 
+                                               shadow-md font-medium">
+                            Commander
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Offre Créatif -->
+                <div class="bg-white rounded-2xl shadow-xl border border-or/30 
+                           hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300">
+                    <div class="bg-or/10 p-8 text-center rounded-t-2xl">
+                        <h3 class="text-2xl font-semibold text-bleu mb-3 flex items-center justify-center">
+                            <i class="fas fa-palette mr-2 text-or"></i> Créatif
+                        </h3>
+                        <p class="text-5xl text-or font-light mb-2">1000 Gdes</p>
+                        <p class="text-gris text-sm">Design complet et vivant</p>
+                    </div>
+                    <div class="p-8">
+                        <ul class="space-y-4 text-base">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-or mr-2 mt-1"></i> Design personnalisé
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-or mr-2 mt-1"></i> Musique d'ambiance
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-or mr-2 mt-1"></i> Effets animés
+                            </li>
+                        </ul>
+                        <p class="text-sm text-gray-500 italic mt-6 mb-6">
+                            Pour dire un vrai je t'aime, merci ou tu me manques.
+                        </p>
+                        <a href="command.html" class="block text-center bg-or text-white py-3 rounded-full 
+                                               hover:bg-opacity-90 transition-all duration-300 
+                                               shadow-md font-medium">
+                            Commander
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Offre Inoubliable -->
+                <div class="bg-white rounded-2xl shadow-xl border border-bleu/30 
+                           hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300">
+                    <div class="bg-bleu/10 p-8 text-center rounded-t-2xl">
+                        <h3 class="text-2xl font-semibold text-bleu mb-3 flex items-center justify-center">
+                            <i class="fas fa-crown mr-2 text-bleu"></i> Inoubliable
+                        </h3>
+                        <p class="text-5xl text-bleu font-light mb-2">2500 Gdes</p>
+                        <p class="text-gris text-sm">Expérience premium</p>
+                    </div>
+                    <div class="p-8">
+                        <ul class="space-y-4 text-base">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-bleu mr-2 mt-1"></i> Vidéo personnalisée
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-bleu mr-2 mt-1"></i> Animation sur mesure
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-bleu mr-2 mt-1"></i> QR code à offrir
+                            </li>
+                        </ul>
+                        <p class="text-sm text-gray-500 italic mt-6 mb-6">
+                            Un souvenir qui reste pour toute une vie.
+                        </p>
+                        <a href="command.html" class="block text-center bg-bleu text-white py-3 rounded-full 
+                                               hover:bg-opacity-90 transition-all duration-300 
+                                               shadow-md font-medium">
+                            Commander
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-16">
+                <p class="text-gray-500 mb-5">
+                    <i class="fas fa-gift mr-2"></i>
+                    <strong>Plan secret</strong> : Une surprise spéciale vous attend... (sur demande)
+                </p>
+                <a href="command.html" class="inline-block bg-rose text-white px-8 py-4 rounded-full 
+                                       hover:bg-opacity-90 transition-all duration-300 
+                                       shadow-lg text-lg font-medium">
+                    <i class="fas fa-shopping-cart mr-2"></i> Choisir une offre
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl font-bold text-center text-bleu mb-16">
+                <i class="fas fa-comment-alt mr-2 text-rose"></i> Ils ont essayé
+            </h2>
+
+            <div class="max-w-5xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-8 mb-16">
+                    <!-- Témoignage Amélie -->
+                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-full bg-rose text-white 
+                                        flex items-center justify-center text-lg mr-4 shadow">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-bleu">Amélie</h4>
+                                <p class="text-sm text-gray-500">Anniversaire de mariage</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-800 italic leading-relaxed">
+                            <i class="fas fa-quote-left text-rose mr-2"></i>
+                            Il a pleuré en lisant la dédicace. C'était exactement ce que je voulais exprimer mais que je n'arrivais pas à mettre en mots.
+                            <i class="fas fa-quote-right text-rose ml-2"></i>
+                        </p>
+                    </div>
+
+                    <!-- Témoignage Thomas -->
+                    <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
+                        <div class="flex items-center mb-4">
+                            <div class="w-12 h-12 rounded-full bg-or text-white 
+                                        flex items-center justify-center text-lg mr-4 shadow">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-bleu">Thomas</h4>
+                                <p class="text-sm text-gray-500">Remerciement à un mentor</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-800 italic leading-relaxed">
+                            <i class="fas fa-quote-left text-or mr-2"></i>
+                            La musique et l'animation ont rendu le message encore plus fort. Mon mentor a été profondément touché.
+                            <i class="fas fa-quote-right text-or ml-2"></i>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Statistique + citation -->
+                <div class="text-center">
+                    <div class="inline-block bg-bleu text-white px-6 py-3 rounded-full 
+                               mb-6 shadow-md text-sm font-medium tracking-wide">
+                        <i class="fas fa-chart-line mr-2"></i> +500 pages créées depuis le lancement
+                    </div>
+                    <p class="text-xl text-gray-700 italic font-light">
+                        <i class="fas fa-quote-left text-rose mr-2"></i>
+                        Elle a pleuré en lisant. Merci pour ce moment.
+                        <i class="fas fa-quote-right text-rose ml-2"></i>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-16 bg-opacity-5">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl text-center text-bleu mb-12">
+                <i class="fas fa-question-circle mr-2"></i>Questions fréquentes
+            </h2>
+            
+            <div class="max-w-3xl mx-auto space-y-4">
+                <div class="faq-item bg-white rounded-lg shadow-sm overflow-hidden">
+                    <button class="faq-question w-full text-left p-4 flex justify-between 
+                                   items-center focus:outline-none">
+                        <span class="text-lg text-bleu">
+                            <i class="fas fa-user-secret mr-2"></i>Est-ce vraiment anonyme ?
+                        </span>
+                        <i class="fas fa-chevron-down text-rose transform transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer hidden px-4 pb-4 text-gris">
+                        <p>Si tu veux. Même nous on fermera les yeux. Personne ne saura que c'est toi, pas même le destinataire.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-white rounded-lg shadow-sm overflow-hidden">
+                    <button class="faq-question w-full text-left p-4 flex justify-between 
+                                   items-center focus:outline-none">
+                        <span class="text-lg text-bleu">
+                            <i class="fas fa-comment-slash mr-2"></i>Et si je suis nul·le en messages ?
+                        </span>
+                        <i class="fas fa-chevron-down text-rose transform transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer hidden px-4 pb-4 text-gris">
+                        <p>T'inquiète. Donne-nous le contexte. On écrit à ta place, avec tes mots et ton émotion.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-white rounded-lg shadow-sm overflow-hidden">
+                    <button class="faq-question w-full text-left p-4 flex justify-between 
+                                   items-center focus:outline-none">
+                        <span class="text-lg text-bleu">
+                            <i class="fas fa-clock mr-2"></i>Combien de temps pour recevoir ma dédicace ?
+                        </span>
+                        <i class="fas fa-chevron-down text-rose transform transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer hidden px-4 pb-4 text-gris">
+                        <p>Entre 24h pour l'offre Essentiel et 72h pour l'offre Inoubliable. On prend le temps qu'il faut pour que ce soit parfait.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-white rounded-lg shadow-sm overflow-hidden">
+                    <button class="faq-question w-full text-left p-4 flex justify-between 
+                                   items-center focus:outline-none">
+                        <span class="text-lg text-bleu">
+                            <i class="fas fa-print mr-2"></i>Puis-je imprimer la dédicace ?
+                        </span>
+                        <i class="fas fa-chevron-down text-rose transform transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer hidden px-4 pb-4 text-gris">
+                        <p>Absolument ! Toutes nos dédicaces sont conçues pour être belles à l'écran comme sur papier.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item bg-white rounded-lg shadow-sm overflow-hidden">
+                    <button class="faq-question w-full text-left p-4 flex justify-between 
+                                   items-center focus:outline-none">
+                        <span class="text-lg text-bleu">
+                            <i class="fas fa-question mr-2"></i>Que se passe-t-il si le destinataire ne comprend pas ?
+                        </span>
+                        <i class="fas fa-chevron-down text-rose transform transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-answer hidden px-4 pb-4 text-gris">
+                        <p>On a prévu un petit mode d'emploi discret avec chaque dédicace. Et si vraiment il bloque, tu peux nous contacter pour qu'on l'aide à comprendre.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact & Footer -->
+    <footer class="bg-bleu text-white pt-12 pb-6">
+    <div class="container mx-auto px-4">
+        
+        <!-- Citation -->
+        <div class="text-center mb-10">
+            <p class="text-lg md:text-xl mb-6 leading-relaxed">
+                <i class="fas fa-quote-left mr-2"></i>
+                Parce que parfois, les mots comptent plus que les cadeaux.
+                <i class="fas fa-quote-right ml-2"></i>
+            </p>
+
+            <!-- Réseaux sociaux -->
+            <div class="flex justify-center gap-6 mb-8">
+                <a href="#" class="hover:text-rose transition-colors duration-300">
+                    <i class="fab fa-instagram text-2xl"></i>
+                </a>
+                <a href="#" class="hover:text-rose transition-colors duration-300">
+                    <i class="fab fa-tiktok text-2xl"></i>
+                </a>
+                <a href="#" class="hover:text-rose transition-colors duration-300">
+                    <i class="fas fa-envelope text-2xl"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Bas de footer -->
+        <div class="border-t border-white/20 pt-6">
+            <div class="flex flex-col items-center gap-4 md:flex-row md:justify-between">
+                
+                <!-- Logo / Nom -->
+                <h2 class="handwritten text-2xl flex items-center">
+                    <i class="fas fa-heart mr-2"></i>Dédicace
+                </h2>
+
+                <!-- Liens -->
+                <div class="text-sm text-white/70 flex flex-col gap-2 md:flex-row md:gap-4">
+                    <a href="#" class="hover:text-white transition-colors duration-300">
+                        <i class="fas fa-file-alt mr-1"></i>Mentions légales
+                    </a>
+                    <a href="#" class="hover:text-white transition-colors duration-300">
+                        <i class="fas fa-info-circle mr-1"></i>À propos
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+  </footer>
+ 
+
+
+
+    <!-- JavaScript Consolidé -->
+    <script>
+        // Gestion de la musique de fond
+const music = document.getElementById('backgroundMusic');
+const musicToggle = document.getElementById('musicToggle');
+const playIcon = document.getElementById('playIcon');
+const pauseIcon = document.getElementById('pauseIcon');
+
+// Fonction pour basculer entre lecture et pause de la musique
+function toggleMusic() {
+    if (music.paused) {
+        music.play().then(() => {
+            playIcon.classList.add('hidden');
+            pauseIcon.classList.remove('hidden');
+        }).catch(error => {
+            console.error("Erreur de lecture:", error);
+        });
+    } else {
+        music.pause();
+        playIcon.classList.remove('hidden');
+        pauseIcon.classList.add('hidden');
+    }
+}
+
+// Arrêter la musique quand l'utilisateur quitte la page
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        music.pause();
+    }
+});
+
+// Ajouter un écouteur pour le bouton de musique
+musicToggle.addEventListener('click', toggleMusic);
+
+// Tentative de lecture automatique (optionnel)
+document.addEventListener('DOMContentLoaded', () => {
+    music.play().then(() => {
+        playIcon.classList.add('hidden');
+        pauseIcon.classList.remove('hidden');
+    }).catch(error => {
+        console.log("Lecture automatique bloquée");
+        playIcon.classList.remove('hidden');
+        pauseIcon.classList.add('hidden');
+    });
+});
+        // Menu mobile
+        const toggleButton = document.getElementById('menu-toggle');
+        const menu = document.getElementById('main-menu');
+
+        toggleButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isExpanded = toggleButton.getAttribute('aria-expanded') === 'true';
+            toggleButton.setAttribute('aria-expanded', !isExpanded);
+            menu.classList.toggle('hidden');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!menu.contains(e.target) && !toggleButton.contains(e.target) && !menu.classList.contains('hidden')) {
+                menu.classList.add('hidden');
+                toggleButton.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        document.querySelectorAll('#main-menu a').forEach(item => {
+            item.addEventListener('click', () => {
+                menu.classList.add('hidden');
+                toggleButton.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        // Hero animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const texts = [
+                "Un cœur touché.",
+                "Une émotion partagée.",
+                "Un moment unique.",
+                "Un souvenir précieux.",
+                "Une connexion spéciale."
+            ];
+
+            let currentIndex = 0;
+            const textElement = document.getElementById('changing-text');
+            const underline = document.getElementById('underline');
+
+            // Création des particules
+            function createParticles() {
+                const container = document.getElementById('particles');
+                const particleCount = 30;
+                
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'absolute rounded-full bg-bleu/10';
+                    
+                    const size = Math.random() * 20 + 5;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.top = `${Math.random() * 100}%`;
+                    
+                    container.appendChild(particle);
+                    
+                    anime({
+                        targets: particle,
+                        translateX: () => anime.random(-50, 50),
+                        translateY: () => anime.random(-50, 50),
+                        duration: () => anime.random(3000, 5000),
+                        easing: 'easeInOutSine',
+                        direction: 'alternate',
+                        loop: true,
+                        delay: () => anime.random(0, 2000)
+                    });
+                }
+            }
+
+            // Animation du changement de texte
+            function changeText() {
+                anime({
+                    targets: textElement,
+                    opacity: [1, 0],
+                    translateY: [0, -20],
+                    duration: 500,
+                    easing: 'easeInOutSine',
+                    complete: function() {
+                        currentIndex = (currentIndex + 1) % texts.length;
+                        textElement.textContent = texts[currentIndex];
+                        
+                        anime({
+                            targets: textElement,
+                            opacity: [0, 1],
+                            translateY: [20, 0],
+                            duration: 500,
+                            easing: 'easeOutSine'
+                        });
+                        
+                        anime({
+                            targets: underline,
+                            scaleX: [0, 1],
+                            duration: 800,
+                            easing: 'easeOutElastic(1, .6)'
+                        });
+                    }
+                });
+            }
+
+            // Animation d'entrée
+            function initAnimations() {
+                anime({
+                    targets: '#changing-text',
+                    opacity: [0, 1],
+                    translateY: [30, 0],
+                    duration: 1200,
+                    easing: 'easeOutElastic(1, .8)',
+                    delay: 300
+                });
+
+                anime({
+                    targets: '#underline',
+                    scaleX: [0, 1],
+                    duration: 1000,
+                    easing: 'easeOutElastic(1, .6)',
+                    delay: 800
+                });
+
+                anime({
+                    targets: '#subtitle',
+                    opacity: [0, 1],
+                    translateY: [20, 0],
+                    duration: 800,
+                    easing: 'easeOutCubic',
+                    delay: 1200
+                });
+
+                anime({
+                    targets: '#cta-buttons',
+                    opacity: [0, 1],
+                    translateY: [30, 0],
+                    duration: 800,
+                    easing: 'easeOutCubic',
+                    delay: 1600
+                });
+
+                anime({
+                    targets: '#scroll-indicator',
+                    opacity: [0, 1],
+                    duration: 600,
+                    delay: 2000
+                });
+            }
+
+            // Slider d'exemple
+            const slides = [
+                { image: "dedicace1.png", text: "Une dédicace écrite avec le cœur…", link: "lettre1.html" },
+                { image: "dedicace2.png", text: "Des mots uniques pour un moment précieux", link: "lfamiy.html" },
+                { image: "dedicace3.png", text: "Une attention qui marque à jamais", link: "https://toussaintleovitch.dev/alie" }
+            ];
+
+            let currentSlide = 0;
+            const img = document.getElementById("slider-image");
+            const text = document.getElementById("slider-text");
+            const link = document.getElementById("visit-link");
+
+            function changeSlide() {
+                img.classList.add("opacity-0");
+                text.classList.add("opacity-0");
+
+                setTimeout(() => {
+                    currentSlide = (currentSlide + 1) % slides.length;
+                    img.src = slides[currentSlide].image;
+                    text.textContent = slides[currentSlide].text;
+                    link.href = slides[currentSlide].link;
+
+                    img.classList.remove("opacity-0");
+                    text.classList.remove("opacity-0");
+                }, 400);
+            }
+
+            // Initialisation
+            createParticles();
+            initAnimations();
+            setInterval(changeText, 3000);
+            setInterval(changeSlide, 4000);
+
+            // Animation des boutons CTA
+            document.querySelectorAll('#cta-buttons a').forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    anime({ targets: this, scale: 1.05, duration: 200, easing: 'easeOutSine' });
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    anime({ targets: this, scale: 1, duration: 200, easing: 'easeOutSine' });
+                });
+            });
+        });
+
+        // Animations au scroll
+        const processSteps = document.querySelectorAll('.process-step');
+        
+        function animateOnScroll() {
+            processSteps.forEach((step, index) => {
+                const stepPosition = step.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if (stepPosition < screenPosition) {
+                    setTimeout(() => {
+                        anime({
+                            targets: step,
+                            opacity: 1,
+                            translateY: 0,
+                            duration: 800,
+                            easing: 'easeOutQuad',
+                            delay: index * 200
+                        });
+                    }, 100);
+                }
+            });
+        }
+        
+        window.addEventListener('scroll', animateOnScroll);
+        animateOnScroll();
+
+        // FAQ Accordion
+        const faqQuestions = document.querySelectorAll('.faq-question');
+        
+        faqQuestions.forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const icon = question.querySelector('i.fa-chevron-down');
+                
+                answer.classList.toggle('hidden');
+                icon.classList.toggle('rotate-180');
+                
+                faqQuestions.forEach(otherQuestion => {
+                    if (otherQuestion !== question) {
+                        otherQuestion.nextElementSibling.classList.add('hidden');
+                        otherQuestion.querySelector('i.fa-chevron-down').classList.remove('rotate-180');
+                    }
+                });
+            });
+        });
+
+        // Example Filter
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const exampleCards = document.querySelectorAll('.example-card');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const filter = button.getAttribute('data-filter');
+                
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('bg-rose', 'text-white');
+                    btn.classList.add('bg-white', 'text-bleu');
+                });
+                
+                if (filter !== 'all') {
+                    button.classList.add('bg-rose', 'text-white');
+                    button.classList.remove('bg-white', 'text-bleu');
+                }
+                
+                exampleCards.forEach(card => {
+                    if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

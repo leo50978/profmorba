@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Lettre Numérique - Créez votre lettre personnalisée</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Anime.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+    
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Style personnalisé -->
+    <style>
+        :root {
+            --primary: #8B5CF6;
+            --primary-light: #A78BFA;
+            --secondary: #10B981;
+            --background: #FDFBFB;
+            --text: #334155;
+            --text-light: #64748B;
+            --border: #E2E8F0;
+            --shadow: rgba(0, 0, 0, 0.05);
+        }
+        
+        * {
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .handwriting {
+            font-family: 'Dancing Script', cursive;
+        }
+        
+        /* Animations personnalisées */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        
+        .btn-pulse:hover {
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        
+        .progress-bar {
+            height: 4px;
+            background-color: var(--primary-light);
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+        
+        /* Style pour les champs de saisie */
+        input:focus, textarea:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+        }
+        
+        /* Style pour les boutons radio personnalisés */
+        .radio-input:checked + .radio-label {
+            background-color: rgba(139, 92, 246, 0.1);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        
+        /* Pour les plans spécifiques */
+        #planEssentiel:checked + .radio-label {
+            border-color: #4F46E5;
+            background-color: rgba(79, 70, 229, 0.05);
+        }
+        
+        #planCreatif:checked + .radio-label {
+            border-color: #8B5CF6;
+            background-color: rgba(139, 92, 246, 0.05);
+        }
+        
+        #planInoubliable:checked + .radio-label {
+            border-color: #F59E0B;
+            background-color: rgba(245, 158, 11, 0.05);
+        }
+        
+        /* Masquer le contrôle audio par défaut */
+        audio {
+            display: none;
+        }
+        
+        /* Design du bouton son */
+        .sound-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .sound-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Animation pour la transition des questions */
+        .question-transition {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+        }
+        
+        /* Style pour le placeholder */
+        ::placeholder {
+            color: var(--text-light);
+            opacity: 0.6;
+        }
+        
+        /* Adaptation mobile stricte */
+        @media (max-width: 320px) {
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .text-mobile-sm {
+                font-size: 0.875rem;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-start p-4">
+    
+  <!-- Image de fond -->
+    <div class="fixed inset-0 z-0">
+        <img src="bg.jpeg" alt="Background" class="w-full h-full object-cover ">
+        <!-- Overlay pour améliorer la lisibilité -->
+    </div>
+    
+    <audio id="backgroundMusic" loop>
+        <source src="olympus-mons-road-119585.mp3" type="audio/mpeg">
+        Votre navigateur ne supporte pas l'élément audio.
+    </audio>
+    
+    <!-- Bouton de contrôle audio -->
+    <button
+        id="musicToggle"
+        class="fixed bottom-4 right-4 z-50 bg-purple-600 text-white p-3 rounded-full shadow-lg hover:bg-purple-700 transition-all sm:bottom-6 sm:right-6 sm:p-4 md:top-64 md:bottom-auto md:right-6 md:p-4 lg:p-5"
+    >
+        <svg id="playIcon" class="w-5 h-5 hidden sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+        </svg>
+        <svg id="pauseIcon" class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+        </svg>
+    </button>
+    
+    <!-- En-tête avec progression -->
+    <header class="w-full max-w-md mb-6 mt-12">
+        <div class="flex items-center justify-between mb-4">
+            <div class="text-sm text-red-600">
+                <span id="currentStep">1</span>/<span id="totalSteps">8</span>
+            </div>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-2">
+            <div id="progressBar" class="progress-bar rounded-full" style="width: 12.5%"></div>
+        </div>
+        <p class="text-sm text-violet-500 mt-2 text-center">Composez une lettre personnalisée en quelques étapes</p>
+    </header>
+    
+    <!-- Conteneur des questions -->
+    <main class="w-full max-w-md flex-1 relative overflowX-hidden">
+        <div id="questionsContainer" class="relative">
+            <!-- Question 1 -->
+            <div id="question1" class="question-transition absolute inset-0 w-full">
+                <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+                    <div class="flex items-center mb-4 text-purple-600">
+                        <div class="bg-purple-100 rounded-full p-2 mr-3">
+                            <i class="fas fa-user text-lg"></i>
+                        </div>
+                        <h2 class="text-xl font-bold">À qui veux-tu adresser la lettre ?</h2>
+                    </div>
+                    
+                    <p class="text-gray-600 mb-6">Cette personne recevra votre lettre personnalisée.</p>
+                    
+                    <div class="mb-6">
+                        <label for="destinataire" class="block text-gray-700 font-medium mb-2">Destinataire</label>
+                        <input type="text" id="destinataire" placeholder="Ex: À ma mère, à mon ami, à mon partenaire" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-purple-500 transition-colors">
+                        <p class="text-sm text-gray-500 mt-2">Exemple : À ma mère, à mon ami, à mon partenaire</p>
+                    </div>
+                    
+                    <div class="flex justify-end mt-8">
+                        <button onclick="nextQuestion()" id="nextBtn1" 
+                                class="bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-6 rounded-xl btn-pulse transition-colors flex items-center">
+                            Suivant <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Question 2 -->
+            <div id="question2" class="question-transition absolute inset-0 w-full opacity-0 translate-x-full">
+                <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+                    <div class="flex items-center mb-4 text-purple-600">
+                        <div class="bg-purple-100 rounded-full p-2 mr-3">
+                            <i class="fas fa-signature text-lg"></i>
+                        </div>
+                        <h2 class="text-xl font-bold">Quel est le nom de la personne ?</h2>
+                    </div>
+                    
+                    <p class="text-gray-600 mb-6">Le prénom ou le nom de votre destinataire.</p>
+                    
+                    <div class="mb-6">
+                        <label for="nomPersonne" class="block text-gray-700 font-medium mb-2">Nom de la personne</label>
+                        <input type="text" id="nomPersonne" placeholder="Ex: Marie, Jean, Alex" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-purple-500 transition-colors">
+                        <p class="text-sm text-gray-500 mt-2">Exemple : Marie, Jean, Alex</p>
+                    </div>
+                    
+                    <div class="flex justify-between mt-8">
+                        <button onclick="prevQuestion()" 
+                                class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-3 px-6 rounded-xl transition-colors flex items-center">
+                            <i class="fas fa-arrow-left mr-2"></i> Précédent
+                        </button>
+                        <button onclick="nextQuestion()" id="nextBtn2" 
+                                class="bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-6 rounded-xl btn-pulse transition-colors flex items-center">
+                            Suivant <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Question 3 -->
+            <div id="question3" class="question-transition absolute inset-0 w-full opacity-0 translate-x-full">
+                <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+                    <div class="flex items-center mb-4 text-green-600">
+                        <div class="bg-green-100 rounded-full p-2 mr-3">
+                            <i class="fas fa-heart text-lg"></i>
+                        </div>
+                        <h2 class="text-xl font-bold">Quelle est votre relation ?</h2>
+                    </div>
+                    
+                    <p class="text-gray-600 mb-6">Décrivez le lien qui vous unit à cette personne.</p>
+                    
+                    <div class="mb-6">
+                        <label for="relation" class="block text-gray-700 font-medium mb-2">Votre relation</label>
+                        <input type="text" id="relation" placeholder="Ex: Mère et fils, amis, couple" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-green-500 transition-colors">
+                        <p class="text-sm text-gray-500 mt-2">Exemple : Mère et fils, amis, couple</p>
+                    </div>
+                    
+                    <div class="flex justify-between mt-8">
+                        <button onclick="prevQuestion()" 
+                                class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-3 px-6 rounded-xl transition-colors flex items-center">
+                            <i class="fas fa-arrow-left mr-2"></i> Précédent
+                        </button>
+                        <button onclick="nextQuestion()" id="nextBtn3" 
+                                class="bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-6 rounded-xl btn-pulse transition-colors flex items-center">
+                            Suivant <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Question 4 -->
+            <div id="question4" class="question-transition absolute inset-0 w-full opacity-0 translate-x-full">
+                <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+                    <div class="flex items-center mb-4 text-blue-600">
+                        <div class="bg-blue-100 rounded-full p-2 mr-3">
+                            <i class="fas fa-calendar-alt text-lg"></i>
+                        </div>
+                        <h2 class="text-xl font-bold">Pour quelle occasion ?</h2>
+                    </div>
+                    
+                    <p class="text-gray-600 mb-6">Le motif ou l'événement spécial pour cette lettre.</p>
+                    
+                    <div class="mb-6">
+                        <label for="occasion" class="block text-gray-700 font-medium mb-2">Occasion</label>
+                        <input type="text" id="occasion" placeholder="Ex: Anniversaire, pardon, déclaration, remerciement" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-blue-500 transition-colors">
+                        <p class="text-sm text-gray-500 mt-2">Exemple : Anniversaire, pardon, déclaration, remerciement</p>
+                    </div>
+                    
+                    <div class="flex justify-between mt-8">
+                        <button onclick="prevQuestion()" 
+                                class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-3 px-6 rounded-xl transition-colors flex items-center">
+                            <i class="fas fa-arrow-left mr-2"></i> Précédent
+                        </button>
+                        <button onclick="nextQuestion()" id="nextBtn4" 
+                                class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-xl btn-pulse transition-colors flex items-center">
+                            Suivant <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Question 5 -->
+            <div id="question5" class="question-transition absolute inset-0 w-full opacity-0 translate-x-full">
+                <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+                    <div class="flex items-center mb-4 text-yellow-600">
+                        <div class="bg-yellow-100 rounded-full p-2 mr-3">
+                            <i class="fas fa-pen-fancy text-lg"></i>
+                        </div>
+                        <h2 class="text-xl font-bold">Quelle est ta lettre ?</h2>
+                    </div>
+                    
+                    <p class="text-gray-600 mb-6">Écrivez votre message personnel (optionnel).</p>
+                    
+                    <div class="mb-4">
+                        <label for="lettre" class="block text-gray-700 font-medium mb-2">Votre lettre</label>
+                        <textarea id="lettre" rows="6" placeholder="Écrivez votre message ici..." 
+                                  class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-yellow-500 transition-colors resize-none"></textarea>
+                        <p class="text-sm text-gray-500 mt-2">
+                            <i class="fas fa-info-circle mr-1"></i> Si tu n'as pas encore écrit la lettre, nous pouvons t'en créer une.
+                        </p>
+                    </div>
+                    
+                    <div class="flex justify-between mt-8">
+                        <button onclick="prevQuestion()" 
+                                class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-3 px-6 rounded-xl transition-colors flex items-center">
+                            <i class="fas fa-arrow-left mr-2"></i> Précédent
+                        </button>
+                        <button onclick="nextQuestion()" id="nextBtn5" 
+                                class="bg-yellow-600 hover:bg-yellow-700 text-white font-medium py-3 px-6 rounded-xl btn-pulse transition-colors flex items-center">
+                            Suivant <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Question 6 -->
+            <div id="question6" class="question-transition absolute inset-0 w-full opacity-0 translate-x-full">
+                <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+                    <div class="flex items-center mb-4 text-purple-600">
+                        <div class="bg-purple-100 rounded-full p-2 mr-3">
+                            <i class="fas fa-user-edit text-lg"></i>
+                        </div>
+                        <h2 class="text-xl font-bold">Quel est ton nom ?</h2>
+                    </div>
+                    
+                    <p class="text-gray-600 mb-6">Votre nom ou prénom (l'auteur de la lettre).</p>
+                    
+                    <div class="mb-6">
+                        <label for="auteur" class="block text-gray-700 font-medium mb-2">Votre nom</label>
+                        <input type="text" id="auteur" placeholder="Ex: Paul" 
+                               class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-purple-500 transition-colors">
+                        <p class="text-sm text-gray-500 mt-2">Exemple : Paul</p>
+                    </div>
+                    
+                    <div class="flex justify-between mt-8">
+                        <button onclick="prevQuestion()" 
+                                class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-3 px-6 rounded-xl transition-colors flex items-center">
+                            <i class="fas fa-arrow-left mr-2"></i> Précédent
+                        </button>
+                        <button onclick="nextQuestion()" id="nextBtn6" 
+                                class="bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 px-6 rounded-xl btn-pulse transition-colors flex items-center">
+                            Suivant <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Question 7 (Anonymat) -->
+            <div id="question7" class="question-transition absolute inset-0 w-full opacity-0 translate-x-full">
+                <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+                    <div class="flex items-center mb-4 text-red-500">
+                        <div class="bg-red-100 rounded-full p-2 mr-3">
+                            <i class="fas fa-user-secret text-lg"></i>
+                        </div>
+                        <h2 class="text-xl font-bold">Souhaites-tu que la lettre soit anonyme ?</h2>
+                    </div>
+                    
+                    <p class="text-gray-600 mb-6">Choisissez si vous voulez révéler ou non votre identité.</p>
+                    
+                    <div class="mb-8">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <input type="radio" id="anonymeOui" name="anonyme" value="Oui" class="hidden radio-input">
+                                <label for="anonymeOui" class="radio-label block border-2 border-gray-200 rounded-xl p-4 text-center cursor-pointer transition-all hover:border-red-300">
+                                    <div class="text-2xl mb-2">👤</div>
+                                    <div class="font-medium">Oui</div>
+                                    <p class="text-sm text-gray-600 mt-1">Garder mon anonymat</p>
+                                </label>
+                            </div>
+                            <div>
+                                <input type="radio" id="anonymeNon" name="anonyme" value="Non" class="hidden radio-input" checked>
+                                <label for="anonymeNon" class="radio-label block border-2 border-red-200 rounded-xl p-4 text-center cursor-pointer transition-all hover:border-red-300">
+                                    <div class="text-2xl mb-2">📝</div>
+                                    <div class="font-medium">Non</div>
+                                    <p class="text-sm text-gray-600 mt-1">Signer avec mon nom</p>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between mt-8">
+                        <button onclick="prevQuestion()" 
+                                class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-3 px-6 rounded-xl transition-colors flex items-center">
+                            <i class="fas fa-arrow-left mr-2"></i> Précédent
+                        </button>
+                       <!-- Dans la question 7 (anonymat), remettez "Suivant" : -->
+<button onclick="nextQuestion()" id="nextBtn7" 
+        class="bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-6 rounded-xl btn-pulse transition-colors flex items-center">
+    Suivant <i class="fas fa-arrow-right ml-2"></i>
+</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Question 8 (Plan tarifaire) -->
+            <div id="question8" class="question-transition absolute inset-0 w-full opacity-0 translate-x-full">
+                <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+                    <div class="flex items-center mb-4 text-indigo-600">
+                        <div class="bg-indigo-100 rounded-full p-2 mr-3">
+                            <i class="fas fa-crown text-lg"></i>
+                        </div>
+                        <h2 class="text-xl font-bold">Choisissez votre plan</h2>
+                    </div>
+                    
+                    <p class="text-gray-600 mb-6">Sélectionnez le type de lettre qui correspond à vos besoins.</p>
+                    
+                    <div class="mb-8 space-y-4">
+                        <!-- Plan Essentiel -->
+                        <div>
+                            <input type="radio" id="planEssentiel" name="plan" value="Essentiel - 250 Gdes" class="hidden radio-input">
+                            <label for="planEssentiel" class="radio-label block border-2 border-gray-200 rounded-xl p-5 cursor-pointer transition-all hover:border-indigo-300">
+                                <div class="flex justify-between items-center mb-2">
+                                    <div>
+                                        <div class="font-bold text-lg text-gray-800">Essentiel</div>
+                                        <div class="text-2xl font-bold text-indigo-600">250 Gdes</div>
+                                    </div>
+                                    <div class="text-3xl">📝</div>
+                                </div>
+                                <ul class="text-sm text-gray-600 mt-3 space-y-1">
+                                    <li class="flex items-center">
+                                        <i class="fas fa-check text-green-500 mr-2 text-xs"></i>
+                                        Lettre basique personnalisée
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fas fa-check text-green-500 mr-2 text-xs"></i>
+                                        Format texte standard
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fas fa-check text-green-500 mr-2 text-xs"></i>
+                                        Délai de 24h
+                                    </li>
+                                </ul>
+                            </label>
+                        </div>
+                        
+                        <!-- Plan Créatif -->
+                        <div>
+                            <input type="radio" id="planCreatif" name="plan" value="Créatif - 1000 Gdes" class="hidden radio-input">
+                            <label for="planCreatif" class="radio-label block border-2 border-gray-200 rounded-xl p-5 cursor-pointer transition-all hover:border-purple-300">
+                                <div class="flex justify-between items-center mb-2">
+                                    <div>
+                                        <div class="font-bold text-lg text-gray-800">Créatif</div>
+                                        <div class="text-2xl font-bold text-purple-600">1000 Gdes</div>
+                                    </div>
+                                    <div class="text-3xl">🎨</div>
+                                </div>
+                                <ul class="text-sm text-gray-600 mt-3 space-y-1">
+                                    <li class="flex items-center">
+                                        <i class="fas fa-check text-green-500 mr-2 text-xs"></i>
+                                        Lettre créative avec style unique
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fas fa-check text-green-500 mr-2 text-xs"></i>
+                                        Design personnalisé
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fas fa-check text-green-500 mr-2 text-xs"></i>
+                                        Illustrations incluses
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fas fa-check text-green-500 mr-2 text-xs"></i>
+                                        Délai de 12h
+                                    </li>
+                                </ul>
+                                <div class="mt-3">
+                                    <span class="inline-block bg-purple-100 text-purple-800 text-xs font-semibold px-2 py-1 rounded-full">
+                                        Populaire
+                                    </span>
+                                </div>
+                            </label>
+                        </div>
+                        
+                        <!-- Plan Inoubliable -->
+                        <div>
+                            <input type="radio" id="planInoubliable" name="plan" value="Inoubliable - 2500 Gdes" class="hidden radio-input">
+                            <label for="planInoubliable" class="radio-label block border-2 border-gray-200 rounded-xl p-5 cursor-pointer transition-all hover:border-yellow-300">
+                                <div class="flex justify-between items-center mb-2">
+                                    <div>
+                                        <div class="font-bold text-lg text-gray-800">Inoubliable</div>
+                                        <div class="text-2xl font-bold text-yellow-600">2500 Gdes</div>
+                                    </div>
+                                    <div class="text-3xl">✨</div>
+                                </div>
+                                <ul class="text-sm text-gray-600 mt-3 space-y-1">
+                                    <li class="flex items-center">
+                                        <i class="fas fa-check text-green-500 mr-2 text-xs"></i>
+                                        Lettre premium sur mesure
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fas fa-check text-green-500 mr-2 text-xs"></i>
+                                        Design luxueux avec animations
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fas fa-check text-green-500 mr-2 text-xs"></i>
+                                        Musique personnalisée incluse
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fas fa-check text-green-500 mr-2 text-xs"></i>
+                                        Support vocal optionnel
+                                    </li>
+                                    <li class="flex items-center">
+                                        <i class="fas fa-check text-green-500 mr-2 text-xs"></i>
+                                        Délai express de 6h
+                                    </li>
+                                </ul>
+                                <div class="mt-3">
+                                    <span class="inline-block bg-yellow-100 text-yellow-800 text-xs font-semibold px-2 py-1 rounded-full">
+                                        Premium
+                                    </span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="flex justify-between mt-8">
+                        <button onclick="prevQuestion()" 
+                                class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-3 px-6 rounded-xl transition-colors flex items-center">
+                            <i class="fas fa-arrow-left mr-2"></i> Précédent
+                        </button>
+                      <!-- Dans la question 8 (plan tarifaire), modifiez le bouton : -->
+<button onclick="nextQuestion()" id="nextBtn8" 
+        class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-6 rounded-xl btn-pulse transition-colors flex items-center">
+    Voir l'aperçu <i class="fas fa-eye ml-2"></i>
+</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Récapitulatif -->
+                    
+         <div id="summary" class="question-transition absolute inset-0 w-full opacity-0 translate-x-full">
+    <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
+        <div class="flex items-center mb-6 text-purple-600">
+            <div class="bg-purple-100 rounded-full p-2 mr-3">
+                <i class="fas fa-envelope-open-text text-xl"></i>
+            </div>
+            <h2 class="text-2xl font-bold">Récapitulatif artistique</h2>
+        </div>
+        
+        <p class="text-gray-600 mb-8 text-center italic">Votre lettre personnalisée, présentée avec élégance</p>
+        
+        <div class="mb-8">
+            <!-- Carte de présentation artistique -->
+            <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6 mb-6 shadow-inner border border-purple-100">
+                <div class="text-center mb-4">
+                    <div class="inline-block bg-purple-600 text-white px-4 py-2 rounded-full mb-2">
+                        <i class="fas fa-feather-alt mr-2"></i>Lettre Numérique
+                    </div>
+                    <h3 class="font-bold text-xl mb-3 text-purple-800 handwriting mt-2" style="font-size: 2rem;">
+                        Votre Message Spécial
+                    </h3>
+                </div>
+                
+                <!-- Présentation artistique des réponses -->
+                <div class="space-y-4">
+                    <!-- Question 1 - Destinataire -->
+                    <div class="bg-white/70 backdrop-blur-sm rounded-xl p-4 shadow-sm border-l-4 border-purple-400">
+                        <div class="flex items-center mb-2">
+                            <div class="bg-purple-100 p-2 rounded-lg mr-3">
+                                <i class="fas fa-user text-purple-600"></i>
+                            </div>
+                            <h4 class="font-bold text-gray-800">À qui ?</h4>
+                        </div>
+                        <div class="pl-12">
+                            <p class="text-lg text-gray-900" id="summaryDestinataire">-</p>
+                            <p class="text-sm text-gray-500 mt-1">Destinataire de votre cœur</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 2 - Nom -->
+                    <div class="bg-white/70 backdrop-blur-sm rounded-xl p-4 shadow-sm border-l-4 border-blue-400">
+                        <div class="flex items-center mb-2">
+                            <div class="bg-blue-100 p-2 rounded-lg mr-3">
+                                <i class="fas fa-signature text-blue-600"></i>
+                            </div>
+                            <h4 class="font-bold text-gray-800">Pour</h4>
+                        </div>
+                        <div class="pl-12">
+                            <p class="text-xl text-gray-900 font-semibold" id="summaryNom">-</p>
+                            <p class="text-sm text-gray-500 mt-1">Le nom qui résonne en vous</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 3 - Relation -->
+                    <div class="bg-white/70 backdrop-blur-sm rounded-xl p-4 shadow-sm border-l-4 border-green-400">
+                        <div class="flex items-center mb-2">
+                            <div class="bg-green-100 p-2 rounded-lg mr-3">
+                                <i class="fas fa-heart text-green-600"></i>
+                            </div>
+                            <h4 class="font-bold text-gray-800">Votre lien</h4>
+                        </div>
+                        <div class="pl-12">
+                            <p class="text-lg text-gray-900" id="summaryRelation">-</p>
+                            <p class="text-sm text-gray-500 mt-1">La relation qui vous unit</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 4 - Occasion -->
+                    <div class="bg-white/70 backdrop-blur-sm rounded-xl p-4 shadow-sm border-l-4 border-yellow-400">
+                        <div class="flex items-center mb-2">
+                            <div class="bg-yellow-100 p-2 rounded-lg mr-3">
+                                <i class="fas fa-calendar-alt text-yellow-600"></i>
+                            </div>
+                            <h4 class="font-bold text-gray-800">Pour cette occasion</h4>
+                        </div>
+                        <div class="pl-12">
+                            <p class="text-lg text-gray-900" id="summaryOccasion">-</p>
+                            <p class="text-sm text-gray-500 mt-1">Le moment spécial</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 5 - Lettre -->
+                    <div class="bg-white/70 backdrop-blur-sm rounded-xl p-4 shadow-sm border-l-4 border-indigo-400">
+                        <div class="flex items-center mb-2">
+                            <div class="bg-indigo-100 p-2 rounded-lg mr-3">
+                                <i class="fas fa-pen-fancy text-indigo-600"></i>
+                            </div>
+                            <h4 class="font-bold text-gray-800">Votre message</h4>
+                        </div>
+                        <div class="pl-12">
+                            <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                                <p class="text-gray-700 italic" id="summaryLettre">-</p>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-2">Les mots qui viennent du cœur</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 6 - Auteur -->
+                    <div class="bg-white/70 backdrop-blur-sm rounded-xl p-4 shadow-sm border-l-4 border-pink-400">
+                        <div class="flex items-center mb-2">
+                            <div class="bg-pink-100 p-2 rounded-lg mr-3">
+                                <i class="fas fa-user-edit text-pink-600"></i>
+                            </div>
+                            <h4 class="font-bold text-gray-800">Signé par</h4>
+                        </div>
+                        <div class="pl-12">
+                            <p class="text-lg text-gray-900" id="summaryAuteur">-</p>
+                            <p class="text-sm text-gray-500 mt-1">L'auteur de ces mots</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 7 - Anonymat -->
+                    <div class="bg-white/70 backdrop-blur-sm rounded-xl p-4 shadow-sm border-l-4 border-red-400">
+                        <div class="flex items-center mb-2">
+                            <div class="bg-red-100 p-2 rounded-lg mr-3">
+                                <i class="fas fa-user-secret text-red-600"></i>
+                            </div>
+                            <h4 class="font-bold text-gray-800">Confidentialité</h4>
+                        </div>
+                        <div class="pl-12">
+                            <div class="flex items-center">
+                                <span id="summaryAnonyme" class="text-lg text-gray-900">-</span>
+                                <span class="ml-2 text-sm px-2 py-1 rounded-full" 
+                                      id="anonymeBadge" 
+                                      style="display: none;">
+                                </span>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-1">Votre choix de révélation</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Question 8 - Plan -->
+                    <div class="bg-white/70 backdrop-blur-sm rounded-xl p-4 shadow-sm border-l-4 border-amber-500">
+                        <div class="flex items-center mb-2">
+                            <div class="bg-amber-100 p-2 rounded-lg mr-3">
+                                <i class="fas fa-crown text-amber-600"></i>
+                            </div>
+                            <h4 class="font-bold text-gray-800">Votre sélection</h4>
+                        </div>
+                        <div class="pl-12">
+                            <div class="flex items-center justify-between">
+                                <p class="text-lg font-semibold text-gray-900" id="summaryPlan">-</p>
+                                <span class="ml-2 text-xs px-3 py-1 rounded-full" 
+                                      id="planBadge" 
+                                      style="display: none;">
+                                </span>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-1">L'expérience choisie</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Signature artistique -->
+                <div class="mt-6 pt-4 border-t border-purple-200 text-center">
+                    <div class="handwriting text-purple-700 text-lg">
+                        <i class="fas fa-heart text-red-400 mr-1"></i>
+                        Une création unique, juste pour vous
+                        <i class="fas fa-heart text-red-400 ml-1"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Note informative -->
+            <div class="bg-gradient-to-r from-yellow-50 to-amber-50 border border-amber-200 rounded-2xl p-5">
+                <div class="flex items-start">
+                    <div class="bg-amber-100 p-2 rounded-lg mr-3">
+                        <i class="fas fa-info-circle text-amber-600"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-amber-800 mb-1">Prêt à envoyer !</h4>
+                        <p class="text-sm text-amber-700">
+                            Votre lettre est prête. En cliquant sur "Envoyer sur WhatsApp", vous serez redirigé pour partager cette création unique avec votre destinataire.
+                        </p>
+                        <div class="mt-3 flex items-center text-xs text-amber-600">
+                            <i class="fas fa-magic mr-2"></i>
+                            <span>Chaque lettre est une œuvre unique, créée avec soin et attention</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Boutons d'action -->
+        <div class="flex flex-col sm:flex-row justify-between gap-4 mt-8">
+            <button onclick="prevQuestion()" 
+                    class="bg-gradient-to-r from-gray-200 to-gray-300 hover:from-gray-300 hover:to-gray-400 text-gray-800 font-medium py-3 px-6 rounded-xl transition-all duration-300 flex items-center justify-center shadow-sm hover:shadow">
+                <i class="fas fa-edit mr-2"></i> Modifier la création
+            </button>
+            
+            <button onclick="sendToWhatsApp()" id="sendBtn" 
+                    class="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-3 px-8 rounded-xl btn-pulse transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                <i class="fab fa-whatsapp text-xl mr-3"></i>
+                <div>
+                    <div class="text-lg">Envoyer sur WhatsApp</div>
+                    <div class="text-xs font-normal opacity-90">Partager cette œuvre</div>
+                </div>
+                <i class="fas fa-paper-plane ml-3"></i>
+            </button>
+        </div>
+        
+        <!-- Note finale -->
+        <div class="mt-6 text-center text-xs text-gray-500">
+            <p>
+                <i class="fas fa-star text-yellow-400 mr-1"></i>
+                Votre lettre sera créée par nos artistes en moins de 24h
+                <i class="fas fa-star text-yellow-400 ml-1"></i>
+            </p>
+        </div>
+    </div>
+</div>
+        </div>
+    </main>
+    
+   <script>
+    // Configuration
+    const CONFIG = {
+        totalQuestions: 8,
+        whatsappNumber: "+50935601379",
+        defaultAnswers: {
+            destinataire: "",
+            nomPersonne: "",
+            relation: "",
+            occasion: "",
+            lettre: "",
+            auteur: "",
+            anonyme: "Non",
+            plan: ""
+        }
+    };
+
+    // État global
+    const state = {
+        currentQuestion: 1,
+        answers: { ...CONFIG.defaultAnswers },
+        isPlaying: false
+    };
+
+    // Cache des éléments DOM
+    const elements = {
+        progressBar: null,
+        currentStep: null,
+        totalSteps: null,
+        backgroundMusic: null,
+        musicToggle: null,
+        playIcon: null,
+        pauseIcon: null
+    };
+
+    // Initialisation
+    document.addEventListener('DOMContentLoaded', initApp);
+
+    function initApp() {
+        cacheElements();
+        setupElements();
+        setupEventListeners();
+        animateOnLoad();
+    }
+
+    function cacheElements() {
+        elements.progressBar = document.getElementById('progressBar');
+        elements.currentStep = document.getElementById('currentStep');
+        elements.totalSteps = document.getElementById('totalSteps');
+        elements.backgroundMusic = document.getElementById('backgroundMusic');
+        elements.musicToggle = document.getElementById('musicToggle');
+        elements.playIcon = document.getElementById('playIcon');
+        elements.pauseIcon = document.getElementById('pauseIcon');
+    }
+
+    function setupElements() {
+        elements.totalSteps.textContent = CONFIG.totalQuestions;
+        updateProgressBar();
+        updateNextButtons();
+        setupMusicControl();
+    }
+
+    function setupEventListeners() {
+        // Validation en temps réel
+        document.getElementById('destinataire')?.addEventListener('input', updateNextButtons);
+        document.getElementById('nomPersonne')?.addEventListener('input', updateNextButtons);
+        document.getElementById('relation')?.addEventListener('input', updateNextButtons);
+        document.getElementById('occasion')?.addEventListener('input', updateNextButtons);
+        document.getElementById('auteur')?.addEventListener('input', updateNextButtons);
+
+        // Boutons radio anonyme
+        document.querySelectorAll('input[name="anonyme"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                state.answers.anonyme = e.target.value;
+                updateNextButtons();
+            });
+        });
+
+        // Boutons radio plan
+        document.querySelectorAll('input[name="plan"]').forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                state.answers.plan = e.target.value;
+                updateNextButtons();
+            });
+        });
+
+        // Gestion de la musique
+        elements.musicToggle?.addEventListener('click', toggleMusic);
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+    }
+
+    function updateAnswers() {
+        state.answers.destinataire = getValue('destinataire');
+        state.answers.nomPersonne = getValue('nomPersonne');
+        state.answers.relation = getValue('relation');
+        state.answers.occasion = getValue('occasion');
+        state.answers.lettre = getValue('lettre');
+        state.answers.auteur = getValue('auteur');
+    }
+
+    function getValue(id) {
+        const element = document.getElementById(id);
+        return element ? element.value.trim() : '';
+    }
+
+    function updateNextButtons() {
+        updateAnswers();
+        
+        const nextBtn = document.getElementById(`nextBtn${state.currentQuestion}`);
+        if (!nextBtn) return;
+
+        const isDisabled = isCurrentQuestionDisabled();
+        
+        nextBtn.disabled = isDisabled;
+        nextBtn.classList.toggle('btn-pulse', !isDisabled);
+        nextBtn.classList.toggle('opacity-50', isDisabled);
+        nextBtn.classList.toggle('cursor-not-allowed', isDisabled);
+    }
+
+    function isCurrentQuestionDisabled() {
+        switch(state.currentQuestion) {
+            case 1: return !state.answers.destinataire;
+            case 2: return !state.answers.nomPersonne;
+            case 3: return !state.answers.relation;
+            case 4: return !state.answers.occasion;
+            case 5: return false; // Optionnel
+            case 6: return !state.answers.auteur;
+            case 7: return !document.querySelector('input[name="anonyme"]:checked');
+            case 8: return !document.querySelector('input[name="plan"]:checked');
+            default: return true;
+        }
+    }
+
+    // Navigation
+    function nextQuestion() {
+        if (state.currentQuestion === CONFIG.totalQuestions) {
+            showSummary();
+            return;
+        }
+
+        if (isCurrentQuestionDisabled()) return;
+
+        animateQuestionOut();
+        state.currentQuestion++;
+        updateProgressBar();
+        
+        setTimeout(() => {
+            animateQuestionIn();
+            updateNextButtons();
+        }, 300);
+    }
+
+    function prevQuestion() {
+        const summary = document.getElementById('summary');
+        const isSummaryVisible = window.getComputedStyle(summary).opacity === '1' || summary.style.opacity === '1';
+        
+        if (isSummaryVisible) {
+            state.currentQuestion = CONFIG.totalQuestions;
+            hideSummary();
+            return;
+        }
+
+        if (state.currentQuestion <= 1) return;
+
+        animateQuestionOut('left');
+        state.currentQuestion--;
+        updateProgressBar();
+        
+        setTimeout(() => {
+            animateQuestionIn('left');
+            updateNextButtons();
+        }, 300);
+    }
+
+    // Gestion de la musique
+    function setupMusicControl() {
+        elements.backgroundMusic.play().then(() => {
+            elements.playIcon.classList.add('hidden');
+            elements.pauseIcon.classList.remove('hidden');
+            state.isPlaying = true;
+        }).catch(() => {
+            // Auto-play bloqué
+            elements.playIcon.classList.remove('hidden');
+            elements.pauseIcon.classList.add('hidden');
+            state.isPlaying = false;
+        });
+    }
+
+    function toggleMusic() {
+        if (elements.backgroundMusic.paused) {
+            elements.backgroundMusic.play();
+            elements.playIcon.classList.add('hidden');
+            elements.pauseIcon.classList.remove('hidden');
+            state.isPlaying = true;
+        } else {
+            elements.backgroundMusic.pause();
+            elements.playIcon.classList.remove('hidden');
+            elements.pauseIcon.classList.add('hidden');
+            state.isPlaying = false;
+        }
+    }
+
+    function handleVisibilityChange() {
+        if (document.hidden && state.isPlaying) {
+            elements.backgroundMusic.pause();
+            elements.playIcon.classList.remove('hidden');
+            elements.pauseIcon.classList.add('hidden');
+            state.isPlaying = false;
+        }
+    }
+
+    // Récapitulatif
+    function showSummary() {
+        updateSummaryDisplay();
+        
+        const lastQuestion = document.getElementById(`question${CONFIG.totalQuestions}`);
+        const summary = document.getElementById('summary');
+        
+        // Cacher dernière question
+        anime({
+            targets: lastQuestion,
+            opacity: 0,
+            translateX: '-100%',
+            duration: 500,
+            easing: 'easeInOutSine',
+            complete: () => lastQuestion.style.display = 'none'
+        });
+        
+        // Afficher récapitulatif
+        setTimeout(() => {
+            summary.style.display = 'block';
+            anime({
+                targets: summary,
+                opacity: [0, 1],
+                translateX: ['100%', '0%'],
+                duration: 500,
+                easing: 'easeInOutSine'
+            });
+            
+            elements.progressBar.style.width = '100%';
+            elements.currentStep.textContent = "Récap";
+        }, 300);
+    }
+
+    function updateSummaryDisplay() {
+        const mappings = {
+            'summaryDestinataire': state.answers.destinataire || "-",
+            'summaryNom': state.answers.nomPersonne || "-",
+            'summaryRelation': state.answers.relation || "-",
+            'summaryOccasion': state.answers.occasion || "-",
+            'summaryLettre': state.answers.lettre || "Aucun texte fourni (nous pouvons créer une lettre)",
+            'summaryAuteur': state.answers.auteur || "-",
+            'summaryAnonyme': state.answers.anonyme || "-",
+            'summaryPlan': state.answers.plan || "-"
+        };
+
+        Object.entries(mappings).forEach(([id, value]) => {
+            const element = document.getElementById(id);
+            if (element) element.textContent = value;
+        });
+    }
+
+    function hideSummary() {
+        const summary = document.getElementById('summary');
+        const lastQuestion = document.getElementById(`question${CONFIG.totalQuestions}`);
+        
+        anime({
+            targets: summary,
+            opacity: 0,
+            translateX: '100%',
+            duration: 500,
+            easing: 'easeInOutSine',
+            complete: () => summary.style.display = 'none'
+        });
+        
+        setTimeout(() => {
+            lastQuestion.style.display = 'block';
+            anime({
+                targets: lastQuestion,
+                opacity: [0, 1],
+                translateX: ['-100%', '0%'],
+                duration: 500,
+                easing: 'easeInOutSine'
+            });
+            updateProgressBar();
+        }, 300);
+    }
+
+    // Progress Bar
+    function updateProgressBar() {
+        const progressPercentage = (state.currentQuestion / CONFIG.totalQuestions) * 100;
+        elements.progressBar.style.width = `${progressPercentage}%`;
+        elements.currentStep.textContent = state.currentQuestion;
+        
+        anime({
+            targets: elements.progressBar,
+            width: `${progressPercentage}%`,
+            duration: 500,
+            easing: 'easeOutExpo'
+        });
+    }
+
+    // Animations
+    function animateQuestionIn(direction = 'right') {
+        const currentQuestionEl = document.getElementById(`question${state.currentQuestion}`);
+        if (!currentQuestionEl) return;
+
+        const startX = direction === 'right' ? '100%' : '-100%';
+        currentQuestionEl.style.opacity = '0';
+        currentQuestionEl.style.transform = `translateX(${startX})`;
+        currentQuestionEl.style.display = 'block';
+
+        anime({
+            targets: currentQuestionEl,
+            opacity: [0, 1],
+            translateX: [startX, '0%'],
+            duration: 500,
+            easing: 'easeOutExpo',
+            complete: () => hideOtherElements()
+        });
+    }
+
+    function hideOtherElements() {
+        // Cacher autres questions
+        for (let i = 1; i <= CONFIG.totalQuestions; i++) {
+            if (i !== state.currentQuestion) {
+                const el = document.getElementById(`question${i}`);
+                if (el) el.style.display = 'none';
+            }
+        }
+        // Cacher récapitulatif
+        document.getElementById('summary').style.display = 'none';
+    }
+
+    function animateQuestionOut(direction = 'right') {
+        const currentQuestionEl = document.getElementById(`question${state.currentQuestion}`);
+        const endX = direction === 'right' ? '-100%' : '100%';
+        
+        anime({
+            targets: currentQuestionEl,
+            opacity: [1, 0],
+            translateX: ['0%', endX],
+            duration: 300,
+            easing: 'easeInExpo'
+        });
+    }
+
+    // WhatsApp
+    function sendToWhatsApp() {
+        const message = formatWhatsAppMessage();
+        const encodedMessage = encodeURIComponent(message);
+        const whatsappURL = `https://wa.me/${CONFIG.whatsappNumber}?text=${encodedMessage}`;
+        
+        window.open(whatsappURL, '_blank');
+        animateSendButton();
+    }
+
+    function formatWhatsAppMessage() {
+        return `
+Lettre numérique :
+
+Destinataire : ${state.answers.destinataire}
+Nom : ${state.answers.nomPersonne}
+Relation : ${state.answers.relation}
+Occasion : ${state.answers.occasion}
+Lettre : ${state.answers.lettre || "Aucun texte fourni (nous pouvons créer une lettre)"}
+Auteur : ${state.answers.auteur}
+Anonyme : ${state.answers.anonyme}
+Plan choisi : ${state.answers.plan}
+        `.trim();
+    }
+
+    function animateSendButton() {
+        const sendBtn = document.getElementById('sendBtn');
+        
+        anime({
+            targets: sendBtn,
+            scale: [1, 1.1, 1],
+            duration: 300,
+            easing: 'easeInOutSine',
+            complete: () => {
+                sendBtn.innerHTML = '<i class="fas fa-check mr-2"></i> Envoyé !';
+                sendBtn.classList.replace('bg-green-600', 'bg-green-700');
+                sendBtn.classList.remove('hover:bg-green-700');
+                
+                setTimeout(() => {
+                    sendBtn.innerHTML = '<i class="fab fa-whatsapp mr-2"></i> Envoyer sur WhatsApp';
+                    sendBtn.classList.replace('bg-green-700', 'bg-green-600');
+                    sendBtn.classList.add('hover:bg-green-700');
+                }, 3000);
+            }
+        });
+    }
+
+    // Animation initiale
+    function animateOnLoad() {
+        anime({
+            targets: 'header, main',
+            opacity: [0, 1],
+            translateY: [20, 0],
+            duration: 800,
+            delay: anime.stagger(100),
+            easing: 'easeOutExpo'
+        });
+    }
+</script>
+</body>
+</html>

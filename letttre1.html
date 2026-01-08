@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Une Déclaration Spéciale</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Anime.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .dancing-script {
+            font-family: 'Dancing Script', cursive;
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .heartbeat {
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .love-gradient {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 50%, #ff8a80 100%);
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFloat 4s infinite ease-in-out;
+        }
+        
+        @keyframes particleFloat {
+            0%, 100% { 
+                transform: translateY(0px) rotate(0deg);
+                opacity: 0;
+            }
+            10%, 90% {
+                opacity: 1;
+            }
+            50% { 
+                transform: translateY(-100px) rotate(180deg);
+                opacity: 0.7;
+            }
+        }
+        
+        .typewriter {
+            overflow: hidden;
+            border-right: .15em solid #ff6b6b;
+            white-space: nowrap;
+            letter-spacing: .15em;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+        
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #ff6b6b; }
+        }
+        
+        .section {
+            min-height: 100vh;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 2rem;
+        }
+        
+        .active-section {
+            display: flex;
+        }
+        
+        .hidden-section {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease-out;
+        }
+        
+        .visible-section {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .music-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .music-toggle:hover {
+            background: white;
+            color: gray;
+        }
+        
+        #particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        #floatingHearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .choice-btn {
+            transition: all 0.3s;
+        }
+        
+        .choice-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .nav-btn {
+            position: fixed;
+            bottom: 30px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        #prevBtn {
+            left: 30px;
+        }
+        
+        #nextBtn {
+            right: 30px;
+        }
+        
+        .nav-btn.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Fond étoilé -->
+    <div class="stars" id="stars"></div>
+    
+    <!-- Bouton musique -->
+    <button id="musicToggle" class="music-toggle">
+        <i class="fas fa-volume-mute" id="musicIcon"></i>
+    </button>
+    
+    <!-- Boutons de navigation -->
+    <button id="prevBtn" class="nav-btn hidden">
+        <i class="fas fa-chevron-left"></i>
+    </button>
+    
+    <button id="nextBtn" class="nav-btn">
+        <i class="fas fa-chevron-right"></i>
+    </button>
+    
+    <!-- Audio -->
+    <audio id="backgroundMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
+    </audio>
+
+    <!-- Section 1: Écran d'accueil -->
+    <section id="welcome" class="section gradient-bg active-section">
+        <div class="text-center text-white z-10 relative px-4">
+            <div id="welcomeContent" class="space-y-8">
+                <h1 class="text-5xl md:text-7xl dancing-script font-bold opacity-0" id="welcomeTitle">
+                    💌 Une Lettre Spéciale 💌
+                </h1>
+                <p class="text-xl md:text-2xl max-w-2xl mx-auto opacity-0" id="welcomeText">
+                    Avant que tu lises... promets-moi de lire jusqu'à la fin.
+                </p>
+                <button id="startBtn" class="bg-white text-pink-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-pink-50 transform hover:scale-105 transition-all duration-300 opacity-0">
+                    <i class="fas fa-heart mr-2"></i>
+                    Je le promets
+                </button>
+            </div>
+        </div>
+        
+        <!-- Particules flottantes -->
+        <div id="particles" class="absolute inset-0"></div>
+    </section>
+
+    <!-- Section 2: Notre rencontre -->
+    <section id="meeting" class="section bg-gradient-to-br from-pink-50 to-purple-50 hidden-section">
+        <div class="container mx-auto px-6 text-center">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl md:text-5xl dancing-script font-bold text-gray-800 mb-8">
+                    ✨ Quand nos chemins se sont croisés ✨
+                </h2>
+                
+                <div class="bg-white rounded-3xl shadow-2xl p-8 md:p-12 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-1 love-gradient"></div>
+                    
+                    <div class="floating mb-8">
+                        <div class="w-32 h-32 mx-auto bg-gradient-to-r from-pink-400 to-purple-500 rounded-full flex items-center justify-center text-4xl text-white">
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    
+                    <p class="text-lg md:text-xl text-gray-700 leading-relaxed mb-6">
+                        Ce jour-là, quelque chose a changé dans ma vie. Ton sourire a illuminé ma journée d'une manière que je n'avais jamais connue auparavant. C'était comme si l'univers avait conspiré pour que nos regards se croisent à ce moment précis.
+                    </p>
+                    
+                    <blockquote class="text-2xl dancing-script text-pink-600 italic">
+                        "On ne se rencontre jamais par hasard."
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Ce que je ressens -->
+    <section id="feelings" class="section bg-gradient-to-br from-purple-900 to-pink-900 text-white hidden-section">
+        <div class="container mx-auto px-6 text-center relative">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-4xl md:text-5xl dancing-script font-bold mb-12">
+                    💭 Quand je pense à toi...
+                </h2>
+                
+                <div class="space-y-8">
+                    <div class="feeling-text opacity-0 transform translate-y-10">
+                        <p class="text-2xl md:text-3xl font-light mb-4">
+                            Tu fais naître un calme dans mon chaos.
+                        </p>
+                        <div class="w-20 h-1 bg-pink-400 mx-auto rounded"></div>
+                    </div>
+                    
+                    <div class="feeling-text opacity-0 transform translate-y-10">
+                        <p class="text-2xl md:text-3xl font-light mb-4">
+                            Ton sourire est un repère dans mes journées.
+                        </p>
+                        <div class="w-20 h-1 bg-purple-400 mx-auto rounded"></div>
+                    </div>
+                    
+                    <div class="feeling-text opacity-0 transform translate-y-10">
+                        <p class="text-2xl md:text-3xl font-light mb-4">
+                            Tu es la mélodie qui donne du sens à ma musique.
+                        </p>
+                        <div class="w-20 h-1 bg-pink-400 mx-auto rounded"></div>
+                    </div>
+
+                    <div class="feeling-text opacity-0 transform translate-y-10">
+                        <p class="text-2xl md:text-3xl font-light mb-4">
+                            Être avec toi, c'est comme rentrer à la maison après un long voyage — tout devient enfin simple, doux, évident.
+                        </p>
+                        <div class="w-20 h-1 bg-purple-400 mx-auto rounded"></div>
+                    </div>
+                </div>
+                
+                <div class="mt-16">
+                    <div class="heartbeat text-6xl">❤️</div>
+                </div>
+            </div>
+            
+            <!-- Cœurs flottants -->
+            <div id="floatingHearts" class="absolute inset-0 pointer-events-none"></div>
+        </div>
+    </section>
+
+    <!-- Section 4: Déclaration -->
+    <section id="declaration" class="section bg-black text-white hidden-section">
+        <div class="container mx-auto px-6 text-center">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-light mb-16 opacity-80">
+                    Je veux être sincère avec toi
+                </h2>
+                
+                <div class="space-y-12">
+                    <div id="loveDeclaration" class="text-6xl md:text-8xl dancing-script font-bold text-pink-500">
+                        <!-- Le texte sera ajouté par JavaScript avec effet typewriter -->
+                    </div>
+                    
+                    <div id="loveSubtext" class="text-2xl md:text-3xl font-light opacity-0">
+                        Simplement. Sincèrement. Entièrement.
+                    </div>
+                </div>
+                
+                <div class="mt-16 heartbeat">
+                    <div class="text-8xl">💖</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Choix final -->
+ <section id="choice" class="section bg-gradient-to-br from-pink-400 to-purple-600 text-white hidden-section">
+    <div class="container mx-auto px-6 text-center">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-4xl md:text-5xl dancing-script font-bold mb-12">
+                💌 J’ai longtemps hésité à t’écrire ces mots…
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-8 mt-16">
+                <button id="talkBtn" class="choice-btn bg-white text-pink-600 p-8 rounded-3xl shadow-2xl">
+                    <div class="text-4xl mb-4">❤️</div>
+                    <h3 class="text-2xl font-bold mb-4">Mon cœur bat pour toi</h3>
+                    <p class="text-gray-600">Chaque regard, chaque silence, me rapproche un peu plus de toi.</p>
+                </button>
+                
+                <button id="laterBtn" class="choice-btn bg-purple-800 bg-opacity-50 backdrop-blur-sm border-2 border-white border-opacity-30 text-white p-8 rounded-3xl shadow-2xl">
+                    <div class="text-4xl mb-4">🌙</div>
+                    <h3 class="text-2xl font-bold mb-4">Je respecterai ton silence</h3>
+                    <p class="text-purple-100">Même si tu n’es pas prête à entendre mon cœur, il battra toujours avec tendresse pour toi.</p>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 text-center">
+        <p class="dancing-script text-xl">
+            Page créée spécialement pour toi... parce que tu es spéciale. ✨
+        </p>
+    </footer>
+
+    <!-- Modal de réponse -->
+    <div id="responseModal" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full mx-4 text-center">
+            <div id="modalContent">
+                <!-- Le contenu sera ajouté par JavaScript -->
+            </div>
+            <button id="closeModal" class="mt-6 bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-pink-600 transition-colors">
+                Fermer
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let currentSection = 0;
+        const sections = ['welcome', 'meeting', 'feelings', 'declaration', 'choice'];
+        let music = document.getElementById('backgroundMusic');
+        let musicPlaying = false;
+        let typewriterInterval;
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', function() {
+            createStars();
+            createParticles();
+            initializeAnimations();
+            setupEventListeners();
+            updateNavButtons();
+            
+            // Masquer toutes les sections sauf la première
+            sections.forEach((section, index) => {
+                if (index > 0) {
+                    document.getElementById(section).style.display = 'none';
+                }
+            });
+        });
+
+        function setupEventListeners() {
+            // Gestion du bouton de démarrage
+            document.getElementById('startBtn').addEventListener('click', nextSection);
+            
+            // Gestion des boutons de choix
+            document.getElementById('talkBtn').addEventListener('click', () => showModal('talk'));
+            document.getElementById('laterBtn').addEventListener('click', () => showModal('later'));
+            
+            // Gestion de la musique
+            document.getElementById('musicToggle').addEventListener('click', toggleMusic);
+            
+            // Fermeture du modal
+            document.getElementById('closeModal').addEventListener('click', () => {
+                document.getElementById('responseModal').classList.add('hidden');
+            });
+            
+            // Boutons de navigation
+            document.getElementById('prevBtn').addEventListener('click', prevSection);
+            document.getElementById('nextBtn').addEventListener('click', nextSection);
+        }
+
+        // Création des étoiles
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.width = Math.random() * 3 + 1 + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        // Création des particules
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.bottom = '-10px';
+                particle.style.width = Math.random() * 4 + 2 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = Math.random() * 4 + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Création des cœurs flottants
+        function createFloatingHearts() {
+            const heartsContainer = document.getElementById('floatingHearts');
+            const hearts = ['💖', '💕', '💗', '💓', '💘'];
+            
+            // Nettoyer les cœurs existants
+            heartsContainer.innerHTML = '';
+            
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.position = 'absolute';
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.top = Math.random() * 100 + '%';
+                heart.style.fontSize = Math.random() * 20 + 20 + 'px';
+                heart.style.animation = `float ${3 + Math.random() * 2}s ease-in-out infinite`;
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                heart.style.opacity = '0.7';
+                heartsContainer.appendChild(heart);
+            }
+        }
+
+        // Animations initiales
+        function initializeAnimations() {
+            // Animation de l'écran d'accueil
+            anime.timeline()
+                .add({
+                    targets: '#welcomeTitle',
+                    opacity: [0, 1],
+                    translateY: [50, 0],
+                    duration: 1500,
+                    easing: 'easeOutQuad'
+                })
+                .add({
+                    targets: '#welcomeText',
+                    opacity: [0, 1],
+                    translateY: [30, 0],
+                    duration: 1000,
+                    easing: 'easeOutQuad'
+                }, '-=500')
+                .add({
+                    targets: '#startBtn',
+                    opacity: [0, 1],
+                    scale: [0.8, 1],
+                    duration: 800,
+                    easing: 'easeOutBack'
+                }, '-=300');
+        }
+
+        // Navigation entre sections
+        function nextSection() {
+            if (currentSection < sections.length - 1) {
+                // Masquer la section actuelle
+                document.getElementById(sections[currentSection]).style.display = 'none';
+                
+                // Passer à la section suivante
+                currentSection++;
+                
+                // Afficher la nouvelle section
+                showSection(sections[currentSection]);
+                updateNavButtons();
+            }
+        }
+
+        function prevSection() {
+            if (currentSection > 0) {
+                // Masquer la section actuelle
+                document.getElementById(sections[currentSection]).style.display = 'none';
+                
+                // Passer à la section précédente
+                currentSection--;
+                
+                // Afficher la nouvelle section
+                showSection(sections[currentSection]);
+                updateNavButtons();
+            }
+        }
+
+        function updateNavButtons() {
+            // Bouton précédent
+            if (currentSection === 0) {
+                document.getElementById('prevBtn').classList.add('hidden');
+            } else {
+                document.getElementById('prevBtn').classList.remove('hidden');
+            }
+            
+            // Bouton suivant
+            if (currentSection === sections.length - 1) {
+                document.getElementById('nextBtn').classList.add('hidden');
+            } else {
+                document.getElementById('nextBtn').classList.remove('hidden');
+            }
+        }
+
+        function showSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            
+            // Afficher la section
+            section.style.display = 'flex';
+            section.classList.add('active-section');
+            
+            // Activer l'animation d'apparition
+            setTimeout(() => {
+                section.classList.remove('hidden-section');
+                section.classList.add('visible-section');
+                
+                // Lancer les animations spécifiques
+                switch(sectionId) {
+                    case 'meeting':
+                        animateMeetingSection();
+                        break;
+                    case 'feelings':
+                        animateFeelingsSection();
+                        break;
+                    case 'declaration':
+                        animateDeclarationSection();
+                        break;
+                    case 'choice':
+                        animateChoiceSection();
+                        break;
+                }
+            }, 50);
+        }
+
+        // Animations des sections
+        function animateMeetingSection() {
+            anime({
+                targets: '#meeting .floating',
+                translateY: [50, 0],
+                opacity: [0, 1],
+                duration: 1500,
+                easing: 'easeOutQuad',
+                delay: 500
+            });
+        }
+
+        function animateFeelingsSection() {
+            createFloatingHearts();
+            
+            anime({
+                targets: '#feelings .feeling-text',
+                opacity: [0, 1],
+                translateY: [50, 0],
+                duration: 1000,
+                delay: anime.stagger(800),
+                easing: 'easeOutQuad'
+            });
+        }
+
+        function animateDeclarationSection() {
+            // Effet typewriter pour "Je t'aime"
+            const text = "Je t'aime";
+            const element = document.getElementById('loveDeclaration');
+            element.textContent = ''; // Effacer le contenu existant
+            
+            let i = 0;
+            
+            // Nettoyer tout intervalle existant
+            if (typewriterInterval) clearInterval(typewriterInterval);
+            
+            typewriterInterval = setInterval(() => {
+                element.textContent += text.charAt(i);
+                i++;
+                if (i >= text.length) {
+                    clearInterval(typewriterInterval);
+                    
+                    // Animer le sous-texte après
+                    setTimeout(() => {
+                        anime({
+                            targets: '#loveSubtext',
+                            opacity: [0, 1],
+                            translateY: [30, 0],
+                            duration: 1500,
+                            easing: 'easeOutQuad'
+                        });
+                    }, 500);
+                }
+            }, 200);
+        }
+
+        function animateChoiceSection() {
+            anime({
+                targets: '.choice-btn',
+                scale: [0.8, 1],
+                opacity: [0, 1],
+                duration: 800,
+                delay: anime.stagger(300),
+                easing: 'easeOutBack'
+            });
+        }
+
+        // Modal de réponse
+        function showModal(choice) {
+            const modal = document.getElementById('responseModal');
+            const content = document.getElementById('modalContent');
+            
+            if (choice === 'talk') {
+                content.innerHTML = `
+                    <div class="text-6xl mb-4">💕</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Merci pour ton courage !</h3>
+                    <p class="text-gray-600 mb-4">Tu peux me contacter sur WhatsApp ou par message. J'ai hâte de connaître tes sentiments.</p>
+                    <div class="space-y-2">
+                        <a href="https://wa.me/1234567890" class="inline-block bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition-colors">
+                            <i class="fab fa-whatsapp mr-2"></i>WhatsApp
+                        </a>
+                    </div>
+                `;
+            } else {
+                content.innerHTML = `
+                    <div class="text-6xl mb-4">🌸</div>
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Je comprends parfaitement</h3>
+                    <p class="text-gray-600">Prends tout le temps qu'il te faut. Cette page restera ici, comme mes sentiments pour toi.</p>
+                `;
+            }
+            
+            modal.classList.remove('hidden');
+            
+            anime({
+                targets: '#responseModal > div',
+                scale: [0.8, 1],
+                opacity: [0, 1],
+                duration: 500,
+                easing: 'easeOutBack'
+            });
+        }
+
+        // Gestion de la musique
+        function toggleMusic() {
+            const icon = document.getElementById('musicIcon');
+            
+            if (musicPlaying) {
+                music.pause();
+                icon.className = 'fas fa-volume-mute';
+                musicPlaying = false;
+            } else {
+                music.play().catch(e => console.log('Autoplay prevented'));
+                icon.className = 'fas fa-volume-up';
+                musicPlaying = true;
+            }
+        }
+    </script>
+</body>
+</html>

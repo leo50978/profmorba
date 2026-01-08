@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lettre d'Amour Éternelle</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- Anime.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <style>
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        .letter-text {
+            font-family: 'Dancing Script', cursive;
+            line-height: 1.8;
+        }
+        
+        .scroll-container {
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .letter-content {
+            position: absolute;
+            width: 100%;
+        }
+        
+        .heart {
+            position: absolute;
+            background-color: rgba(192, 132, 252, 0.3);
+            display: inline-block;
+            height: 30px;
+            width: 30px;
+            transform: rotate(-45deg);
+        }
+        
+        .heart:before,
+        .heart:after {
+            content: "";
+            background-color: rgba(192, 132, 252, 0.3);
+            border-radius: 50%;
+            height: 30px;
+            position: absolute;
+            width: 30px;
+        }
+        
+        .heart:before {
+            top: -15px;
+            left: 0;
+        }
+        
+        .heart:after {
+            left: 15px;
+            top: 0;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+        
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+        
+        .control-btn {
+            background: rgba(139, 92, 246, 0.9);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .control-btn:hover {
+            background: rgba(124, 58, 237, 0.9);
+            transform: scale(1.05);
+        }
+        
+        .scroll-direction {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(139, 92, 246, 0.9);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-b from-purple-50 to-purple-100 p-4">
+    <!-- Élément Audio -->
+
+    <!-- Indication de direction -->
+    <div id="directionIndicator" class="scroll-direction">
+        Défilement: ↑ Haut
+    </div>
+
+    <!-- Bouton de contrôle audio -->
+    <button id="musicToggle" class="fixed top-6 right-6 z-50 bg-purple-600 text-white p-3 rounded-full shadow-lg hover:bg-purple-700 transition-all duration-300 transform hover:scale-110">
+        <svg id="playIcon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+        </svg>
+        <svg id="pauseIcon" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+        </svg>
+    </button>
+     
+   
+    <!-- Conteneur principal -->
+    <div class="scroll-container w-full max-w-2xl mx-auto">
+        <div id="letterContent" class="letter-content bg-white/90 backdrop-blur-sm p-8 rounded-2xl shadow-2xl border border-purple-200">
+            <h1 class="text-4xl font-bold text-center mb-8 text-purple-800 letter-text">Vide</h1>
+     
+<div class="letter-text text-xl text-purple-900 space-y-6">
+    <div class="poem-text space-y-8">
+        <p>Je vis sans témoin.<br>
+        Pas dans le secret.<br>
+        Dans quelque chose de plus définitif.</p>
+        
+        <p>Il n’y a personne autour de ce que je traverse.<br>
+        Pas parce que je me cache,<br>
+        mais parce que ce que je vis ne se raconte pas sans déplacer les gens de leur place.<br>
+        Certaines souffrances ne provoquent pas de questions,<br>
+        seulement un malaise.<br>
+        Alors on apprend très tôt à ne pas les dire.</p>
+        
+        <p>Je n’ai pas gardé le silence par pudeur.<br>
+        Je l’ai gardé parce que j’ai compris que personne ne pourrait tenir ça longtemps<br>
+        sans s’effondrer un peu.<br>
+        Alors je l’ai tenu seule.<br>
+        Calmement.<br>
+        Jour après jour.</p>
+        
+        <p>Au début, je pensais que ça finirait par passer.<br>
+        Je ne sais plus quand j’ai cessé de l’attendre.</p>
+        
+        <p>Avec le temps, ce n’est même plus devenu une douleur.<br>
+        C’est devenu un fond.<br>
+        Une présence continue, discrète, presque polie.<br>
+        Quelque chose qui ne surprend plus,<br>
+        mais qui ne part jamais.</p>
+        
+        <p>Ma vie ne m’a jamais demandé ce que j’en pensais.<br>
+        Elle s’est installée sur moi, lentement,<br>
+        sans explication, sans logique, sans pause possible.<br>
+        Je ne suis pas devenue quelqu’un par choix.<br>
+        Je suis devenue quelqu’un par résistance.</p>
+        
+        <p>Je vis, mais pas pour vivre.<br>
+        Je vis pour que ça continue.</p>
+        
+        <p>Comme on laisse une lumière allumée dans une pièce<br>
+        où personne n’entre plus.<br>
+        Non par espoir.<br>
+        Par habitude.<br>
+        Parce qu’éteindre serait reconnaître<br>
+        qu’il n’y a vraiment rien à regarder.</p>
+        
+        <p>Il n’y a rien de spectaculaire.<br>
+        Je ne tombe pas.<br>
+        Je ne crie pas.<br>
+        Je tiens.</p>
+        
+        <p>Et parfois, c’est ça qui fait le plus mal.</p>
+        
+        <p>Il y a juste cette fatigue qui ne dort jamais.<br>
+        Une fatigue qui se glisse dans chaque geste,<br>
+        chaque réponse,<br>
+        chaque sourire réussi.<br>
+        Une fatigue si ancienne<br>
+        qu’elle finit par ressembler à moi.</p>
+        
+        <p>Je souris quand il le faut.<br>
+        Je réponds quand on m’adresse la parole.<br>
+        Je fais exactement ce qu’on attend d’une personne qui va bien.</p>
+        
+        <p>Quelqu’un m’a déjà dit :<br>
+        « Tu es fort. »</p>
+        
+        <p>J’ai souri.<br>
+        Parce que corriger aurait été trop long.<br>
+        Et parce que je savais<br>
+        qu’il n’aurait pas su quoi faire<br>
+        de la vérité.</p>
+        
+        <p>Tout fonctionne.<br>
+        Tout est à sa place.</p>
+        
+        <p>Sauf moi.</p>
+        
+        <p>À l’intérieur, tout est déjà passé.<br>
+        Comme si la vie avait traversé mon corps<br>
+        sans jamais vraiment s’y arrêter.<br>
+        Comme si j’avais été un lieu de passage,<br>
+        pas une destination.</p>
+        
+        <p>Il m’arrive de rester debout dans une pièce<br>
+        sans savoir pourquoi j’y suis entrée.<br>
+        Je regarde mes mains.<br>
+        Elles font leur travail.</p>
+        
+        <p>Parfois je me dis qu’elles ont tout fait pour survivre.<br>
+        Et qu’elles n’ont jamais été prises<br>
+        juste pour ça.</p>
+        
+        <p>Je suis seule dans un endroit<br>
+        où même moi je ne vais plus.<br>
+        Un espace intérieur sans voix,<br>
+        sans contours,<br>
+        où je me cherche sans jamais me trouver.<br>
+        Ce que je ressens n’a pas de langage simple.<br>
+        Chaque phrase possible l’abîme un peu.</p>
+        
+        <p>Alors je me tais.<br>
+        Pas par courage.<br>
+        Par impossibilité.</p>
+        
+        <p>Il y a des jours où je m’observe vivre<br>
+        comme si ce n’était pas moi.<br>
+        Comme si quelqu’un d’autre occupait ma place<br>
+        et faisait de son mieux<br>
+        avec ce qui reste.</p>
+        
+        <p>Je marche.<br>
+        Je parle.<br>
+        Je fais ce qu’il faut.</p>
+        
+        <p>Mais je ne suis pas là.</p>
+        
+        <p>Je ne manque à personne.<br>
+        Je suis présente, fiable, correcte.<br>
+        Je suis exactement ce qu’il faut être<br>
+        pour ne pas inquiéter.</p>
+        
+        <p>Une fois, j’aurais voulu inquiéter.<br>
+        Juste un peu.<br>
+        Assez pour que quelqu’un reste.<br>
+        Mais même ça,<br>
+        je n’ai pas su le faire.</p>
+        
+        <p>Je me manque à moi-même.<br>
+        D’une manière profonde, irrattrapable.<br>
+        Comme quelque chose qu’on a perdu trop tôt<br>
+        pour savoir comment le retrouver.</p>
+        
+        <p>J’ai appris que tenir debout n’est pas vivre.<br>
+        Que survivre peut devenir une habitude.<br>
+        Qu’on peut durer très longtemps<br>
+        sans jamais vraiment être.</p>
+        
+        <p>Il y avait des choses que j’aimais, avant.<br>
+        Je sais que je les aimais.<br>
+        Je n’éprouve plus rien en y pensant.</p>
+        
+        <p>Et ce n’est pas la perte qui fait le plus mal.<br>
+        C’est de savoir<br>
+        que j’ai quand même continué à attendre.</p>
+        
+        <p>Je continue.<br>
+        Sans élan.<br>
+        Sans attente.<br>
+        Sans promesse.</p>
+        
+        <p>Je suis là parce que je n’ai jamais appris<br>
+        comment ne pas l’être.<br>
+        Parce que personne ne m’a montré<br>
+        une autre façon d’exister<br>
+        que cette endurance silencieuse.</p>
+        
+        <p>Ce n’est pas une plainte.<br>
+        C’est un état.</p>
+        
+        <p>Une solitude qui ne demande plus de compagnie.<br>
+        Ni de consolation.<br>
+        Juste un endroit où se poser<br>
+        sans avoir à expliquer<br>
+        pourquoi tout pèse autant.</p>
+        
+        <p>Je ne demande rien.<br>
+        Je ne fuis rien.<br>
+        Je traverse.</p>
+        
+        <p>Encore.</p>
+        
+        <p>Et si personne ne voit ce que je porte,<br>
+        ce n’est pas grave.<br>
+        Certaines vies se déroulent entièrement à l’intérieur.<br>
+        Dans un espace que personne ne visite jamais.</p>
+        
+        <p>Certaines douleurs ne cherchent pas à être comprises.<br>
+        Elles existent.<br>
+        Elles creusent.</p>
+        
+        <p>Et parfois,<br>
+        dans le silence,<br>
+        elles pleurent à notre place.</p>
+    </div>
+</div>
+            <div class="mt-10 text-center">
+                <div class="inline-block heart opacity-70 mx-2"></div>
+                <div class="inline-block heart opacity-70 mx-2"></div>
+                <div class="inline-block heart opacity-70 mx-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contrôles de défilement -->
+    <div class="controls">
+        <button id="pauseBtn" class="control-btn">
+            <svg class="w-5 h-5 inline mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+            </svg>
+            Pause
+        </button>
+        <button id="playBtn" class="control-btn hidden">
+            <svg class="w-5 h-5 inline mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+            </svg>
+            Play
+        </button>
+    </div>
+
+    <!-- Élément Audio -->
+    <audio id="backgroundMusic" loop>
+        <!-- Remplacez cette URL par le lien vers votre fichier audio -->
+        <source src="musique.m4a" type="audio/mpeg">
+        Votre navigateur ne supporte pas l'élément audio.
+    </audio>
+
+    <script>
+        // Variables globales
+        let scrollAnimation = null;
+        let isScrollingUp = true;
+        let isPaused = false;
+
+        // Gestion de la musique de fond
+        const music = document.getElementById('backgroundMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        const playIcon = document.getElementById('playIcon');
+        const pauseIcon = document.getElementById('pauseIcon');
+        const directionIndicator = document.getElementById('directionIndicator');
+
+        // Fonction pour basculer entre lecture et pause de la musique
+        function toggleMusic() {
+            if (music.paused) {
+                music.play().then(() => {
+                    playIcon.classList.add('hidden');
+                    pauseIcon.classList.remove('hidden');
+                }).catch(error => {
+                    console.error("Erreur de lecture:", error);
+                });
+            } else {
+                music.pause();
+                playIcon.classList.remove('hidden');
+                pauseIcon.classList.add('hidden');
+            }
+        }
+
+        // Fonction pour démarrer le défilement
+        function startScrolling() {
+            if (scrollAnimation) {
+                scrollAnimation.restart();
+                return;
+            }
+
+            const letterContent = document.getElementById('letterContent');
+            const containerHeight = document.querySelector('.scroll-container').offsetHeight;
+            const letterHeight = letterContent.offsetHeight;
+            
+            scrollAnimation = anime({
+                targets: '#letterContent',
+                translateY: isScrollingUp ? [containerHeight, -letterHeight] : [-letterHeight, containerHeight],
+                duration: 180000, // Durée plus longue pour votre belle lettre
+                easing: 'linear',
+                complete: function() {
+                    // Inverser la direction
+                    isScrollingUp = !isScrollingUp;
+                    directionIndicator.textContent = isScrollingUp ? 'Défilement: ↑ Haut' : 'Défilement: ↓ Bas';
+                    
+                    // Redémarrer l'animation dans la nouvelle direction
+                    startScrolling();
+                }
+            });
+        }
+
+        // Fonction pour mettre en pause le défilement
+        function pauseScrolling() {
+            if (scrollAnimation) {
+                scrollAnimation.pause();
+                isPaused = true;
+                document.getElementById('pauseBtn').classList.add('hidden');
+                document.getElementById('playBtn').classList.remove('hidden');
+            }
+        }
+
+        // Fonction pour reprendre le défilement
+        function resumeScrolling() {
+            if (scrollAnimation) {
+                scrollAnimation.play();
+                isPaused = false;
+                document.getElementById('playBtn').classList.add('hidden');
+                document.getElementById('pauseBtn').classList.remove('hidden');
+            }
+        }
+
+        // Initialisation au chargement de la page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Démarrer le défilement automatique
+            startScrolling();
+
+            // Animation des cœurs flottants
+            const hearts = document.querySelectorAll('.heart');
+            hearts.forEach(heart => {
+                const size = Math.random() * 20 + 10;
+                const duration = Math.random() * 20 + 20;
+                const delay = Math.random() * 10;
+                
+                heart.style.width = `${size}px`;
+                heart.style.height = `${size}px`;
+                
+                heart.style.animation = `float ${duration}s linear ${delay}s infinite`;
+            });
+
+            // Tentative de lecture automatique de la musique
+            music.play().then(() => {
+                playIcon.classList.add('hidden');
+                pauseIcon.classList.remove('hidden');
+            }).catch(error => {
+                console.log("Lecture automatique bloquée, attente d'interaction utilisateur.");
+                playIcon.classList.remove('hidden');
+                pauseIcon.classList.add('hidden');
+            });
+
+            // Événements pour les boutons de contrôle
+            document.getElementById('pauseBtn').addEventListener('click', pauseScrolling);
+            document.getElementById('playBtn').addEventListener('click', resumeScrolling);
+        });
+
+        // Événement de clic sur le bouton de musique
+        musicToggle.addEventListener('click', toggleMusic);
+    </script>
+</body>
+</html>
