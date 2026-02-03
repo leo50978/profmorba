@@ -1,1142 +1,1920 @@
 <!DOCTYPE html>
-<html lang="fr" class="scroll-smooth">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart cut services - E-commerce Premium</title>
-    <meta name="description" content="Boutique en ligne premium pour des produits d'exception">
+    <title>CAOH - Centre d'Affaires et d'Orientation HOSSOBE</title>
+    <meta name="description" content="Votre partenaire de voyage, de formation et d'orientation au Burkina Faso">
     
-    <!-- Tailwind CSS via CDN -->
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        primary: '#5F748A',    // Bleu principal (soft)
-                        secondary: '#2E3440',  // Bleu foncé élégant
-                        accent: '#F59E0B',     // Accent doré (conservé pour les boutons)
-                        dark: '#1E1E1E',       // Noir doux (texte)
-                        light: '#FAFAF8'       // Blanc cassé
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 3s ease-in-out infinite',
+                        primary: '#1a365d',
+                        secondary: '#d4af37',
+                        accent: '#2d3748',
                     },
                     fontFamily: {
-                        'heading': ['Bebas Neue', 'sans-serif'],
-                        'body': ['Merriweather', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
+                        'slide-up': 'slideUp 0.7s ease-out forwards',
+                        'scale-up': 'scaleUp 0.7s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(100px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        scaleUp: {
+                            '0%': { transform: 'scale(0.9)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' },
+                        },
                     }
                 }
             }
         }
     </script>
-    <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-    <link rel="shortcut icon" href="favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
-    <link rel="manifest" href="site.webmanifest" />
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
-    
     <!-- Anime.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    
     <style>
+        /* Styles personnalisés */
+        :root {
+            --primary: #1a365d;
+            --secondary: #d4af37;
+            --accent: #2d3748;
+        }
+        
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
         
         body {
-            font-family: 'Merriweather', serif;
+            font-family: 'Inter', sans-serif;
+            color: #333;
             overflow-x: hidden;
-            color: #1E1E1E;
-            background-color: #FAFAF8;
+            scroll-behavior: smooth;
         }
         
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Bebas Neue', sans-serif;
-            letter-spacing: 0.5px;
-            color: #2E3440;
+        h1, h2, h3, h4, h5 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
         }
         
-        /* Reduce motion preferences */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
+        /* Animation d'ouverture */
+        .splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a365d 0%, #2d3748 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease-out;
         }
         
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: #5F748A;
-            border-radius: 5px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: #2E3440;
-        }
-        
-        /* Animations personnalisées */
-        .fade-in {
+        .splash-logo {
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 1rem;
             opacity: 0;
             transform: translateY(20px);
         }
         
-        .fade-in-left {
+        .splash-slogan {
+            color: #d4af37;
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 2rem;
             opacity: 0;
-            transform: translateX(-20px);
+            transform: translateY(20px);
         }
         
-        .fade-in-right {
-            opacity: 0;
-            transform: translateX(20px);
-        }
-        
-        .scale-in {
-            opacity: 0;
-            transform: scale(0.9);
-        }
-        
-        /* Animations pour les cartes produits */
-        .product-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background-color: #FAFAF8;
-            border: 1px solid rgba(95, 116, 138, 0.1);
-        }
-        
-        .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(46, 52, 64, 0.1);
-            border-color: rgba(95, 116, 138, 0.3);
-        }
-        
-        /* Skeleton loading */
-        .skeleton {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-            border-radius: 0.5rem;
-        }
-        
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-        
-        /* Boutons */
-        .btn-primary {
-            background-color: #5F748A;
-            color: #FAFAF8;
+        .skip-btn {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
             transition: all 0.3s ease;
-            border: none;
-            font-family: 'Bebas Neue', sans-serif;
-            letter-spacing: 0.5px;
         }
         
-        .btn-primary:hover {
-            background-color: #2E3440;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(95, 116, 138, 0.3);
-        }
-        
-        .btn-hero {
-            background-color: #F59E0B;
-            color: #2E3440;
-            transition: all 0.3s ease;
-            border: none;
-            font-family: 'Bebas Neue', sans-serif;
-            letter-spacing: 0.5px;
-        }
-        
-        .btn-hero:hover {
-            background-color: #D97706;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(245, 158, 11, 0.3);
+        .skip-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
         }
         
         /* Header */
-        header {
-            background-color: #FAFAF8;
-            border-bottom: 1px solid rgba(95, 116, 138, 0.1);
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .header.scrolled {
+            padding: 0.7rem 2rem;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+        }
+        
+        .logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--secondary);
+        }
+        
+        .cta-button {
+            background: var(--secondary);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            background: #c19a2d;
+            transform: translateY(-2px);
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary);
+            cursor: pointer;
+        }
+        
+        .whatsapp-float {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 990;
+            transition: all 0.3s ease;
+        }
+        
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1548&q=80') no-repeat center center/cover;
+            color: white;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .hero h3 {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .search-bar {
+            background: white;
+            padding: 1rem;
+            border-radius: 50px;
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 0 1rem;
+            font-size: 1rem;
+        }
+        
+        .search-button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 0.7rem 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .search-button:hover {
+            background: #c19a2d;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .scroll-down {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0) translateX(-50%);
+            }
+            40% {
+                transform: translateY(-20px) translateX(-50%);
+            }
+            60% {
+                transform: translateY(-10px) translateX(-50%);
+            }
+        }
+        
+        /* Sections générales */
+        .section {
+            padding: 5rem 2rem;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--primary);
+        }
+        
+        /* Services Section */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .service-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .service-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .service-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .service-content {
+            padding: 1.5rem;
+        }
+        
+        .service-icon {
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .service-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .service-description {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+        
+        .other-services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .other-service {
+            text-align: center;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        
+        .other-service.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .other-service:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .other-service-icon {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .other-service-title {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+        
+        /* Why Choose Us Section */
+        .why-choose-us {
+            background: linear-gradient(rgba(26, 54, 93, 0.9), rgba(26, 54, 93, 0.9)), url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80') no-repeat center center/cover;
+            color: white;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .feature {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .feature.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .about-text {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s ease;
+        }
+        
+        .about-text.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .about-image {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .about-image.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .timeline.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: var(--secondary);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+        
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+        
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+        
+        .timeline-item:nth-child(even) {
+            left: 50%;
+        }
+        
+        .timeline-content {
+            padding: 20px;
+            background-color: white;
+            position: relative;
+            border-radius: 6px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .timeline-date {
+            font-weight: bold;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-icon {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            z-index: 1;
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-icon {
+            right: -25px;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-icon {
+            left: -25px;
+        }
+        
+        .quote {
+            text-align: center;
+            font-style: italic;
+            font-size: 1.2rem;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: #f9f9f9;
+            border-left: 4px solid var(--secondary);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .quote.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Success Section */
+        .filters {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1.5rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .gallery-item {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 250px;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.8s ease;
+        }
+        
+        .gallery-item.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .gallery-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .gallery-item:hover .gallery-image {
+            transform: scale(1.1);
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 1rem;
+            text-align: center;
+            color: white;
+        }
+        
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+        
+        .counters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .counter {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .counter.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .counter-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .counter-text {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+        
+        /* Testimonials Section */
+        .testimonials-slider {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        
+        .testimonials {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        
+        .testimonial {
+            min-width: 100%;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .testimonial.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .testimonial-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1rem;
+            border: 4px solid var(--secondary);
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+            color: #555;
+        }
+        
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .testimonial-role {
+            color: #777;
+            font-size: 0.9rem;
+        }
+        
+        .slider-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .slider-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .slider-btn:hover {
+            background: var(--secondary);
+        }
+        
+        /* CTA Section */
+        .cta-banner {
+            background: linear-gradient(135deg, var(--primary) 0%, #2d3748 100%);
+            color: white;
+            text-align: center;
+            padding: 4rem 2rem;
+            border-radius: 10px;
+            margin: 0 auto;
+            max-width: 1200px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .cta-banner.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .cta-banner h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        /* Chatbot */
+        .chatbot {
+            position: fixed;
+            bottom: 7rem;
+            right: 2rem;
+            width: 300px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            z-index: 980;
+            overflow: hidden;
+            transform: translateY(20px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .chatbot.active {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .chatbot-header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        
+        .chatbot-body {
+            padding: 1rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .chatbot-message {
+            background: #f1f1f1;
+            padding: 0.7rem 1rem;
+            border-radius: 18px 18px 18px 0;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .chatbot-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+        }
+        
+        .chatbot-option {
+            padding: 0.7rem 1rem;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .chatbot-option:hover {
+            background: #c19a2d;
+        }
+        
+        /* Contact Section */
+        .contact-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .contact-info {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s ease;
+        }
+        
+        .contact-info.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            margin-right: 1rem;
+        }
+        
+        .contact-text {
+            color: #555;
+        }
+        
+        .contact-form {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .contact-form.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            border-color: var(--secondary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+        }
+        
+        .form-textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .map {
+            height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .map.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .map iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--accent);
+            color: white;
+            padding: 4rem 2rem 2rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-slogan {
+            color: #ccc;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-link {
+            margin-bottom: 0.7rem;
+        }
+        
+        .footer-link a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-link a:hover {
+            color: var(--secondary);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ccc;
+            font-size: 0.9rem;
         }
         
         /* Responsive */
         @media (max-width: 768px) {
-            #hero h1 {
+            .hero h1 {
                 font-size: 2.5rem;
             }
             
-            #cta .flex {
-                flex-direction: column;
-                width: 100%;
+            .hero h3 {
+                font-size: 1.2rem;
             }
             
-            #cta .flex a {
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .nav-menu {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background: white;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                transition: right 0.3s ease;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+                z-index: 999;
+            }
+            
+            .nav-menu.active {
+                right: 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                z-index: 1000;
+            }
+            
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
                 width: 100%;
-                margin-bottom: 1rem;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+            
+            .timeline-item:nth-child(odd) .timeline-icon {
+                left: 15px;
+                right: auto;
+            }
+            
+            .timeline-item:nth-child(even) .timeline-icon {
+                left: 15px;
+            }
+            
+            .chatbot {
+                width: calc(100% - 4rem);
+                right: 2rem;
+                left: 2rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
             }
         }
         
-        @media (max-width: 640px) {
-            .container {
-                padding-left: 1rem;
-                padding-right: 1rem;
-            }
-        }
-        
-        /* Modal overlay */
-        .image-modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(30, 30, 30, 0.95);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            padding: 1rem;
-            animation: fadeIn 0.25s ease-out;
-        }
-
-        /* Hidden state */
-        .image-modal.hidden {
-            display: none;
-        }
-
-        /* Image responsive */
-        .image-modal img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            border-radius: 12px;
-            animation: zoomIn 0.25s ease-out;
-        }
-
-        /* Close button */
-        .image-modal .close-btn {
+        /* Accessibilité */
+        .sr-only {
             position: absolute;
-            top: 16px;
-            right: 16px;
-            font-size: 32px;
-            color: #FAFAF8;
-            background: none;
-            border: none;
-            cursor: pointer;
-            line-height: 1;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes zoomIn {
-            from { transform: scale(0.95); }
-            to { transform: scale(1); }
-        }
-        
-        /* Section backgrounds */
-        section {
-            background-color: #FAFAF8;
-        }
-        
-        .bg-gray-50 {
-            background-color: rgba(95, 116, 138, 0.05);
-        }
-        
-        /* Hero section redesign */
-        #hero {
-            position: relative;
-            background-color: #FAFAF8;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
             overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
         
-        .hero-content-container {
-            background-color: rgba(250, 250, 248, 0.95);
-            border-radius: 16px;
-            border: 1px solid rgba(95, 116, 138, 0.1);
-            box-shadow: 0 20px 60px rgba(46, 52, 64, 0.1);
+        /* Focus visible pour l'accessibilité */
+        button:focus,
+        a:focus,
+        input:focus,
+        textarea:focus {
+            outline: 2px solid var(--secondary);
+            outline-offset: 2px;
         }
         
-        /* Footer */
-        footer {
-            background-color: #2E3440;
-            color: #FAFAF8;
+        /* Animation des éléments au scroll */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
         }
         
-        footer a {
-            color: #5F748A;
-        }
-        
-        footer a:hover {
-            color: #FAFAF8;
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
-<body class="antialiased">
-    <!-- 🎬 1️⃣ OPENING / LOADER -->
-    <div id="loader" class="fixed hidden inset-0 z-50 flex items-center justify-center bg-secondary transition-all duration-500">
-        <div class="text-center">
-            <div id="loader-logo" class="text-light text-5xl font-bold mb-4 opacity-0 scale-in"><img src="logo.jpeg" width="300px" height="300px" alt=""></div>
-            <div class="w-16 h-1 bg-light/50 mx-auto rounded-full overflow-hidden">
-                <div id="loader-progress" class="h-full bg-light w-0"></div>
-            </div>
-        </div>
+<body>
+    <!-- 0. OPENING (Splash Screen) -->
+    <div class="splash-screen" id="splash">
+        <div class="splash-logo">CENTRE D'AFFAIRES ET D'ORIENTATION HOSSOBE</div>
+        <div class="splash-slogan">Votre avenir professionnel commence ici !</div>
+        <div class="skip-btn" id="skipSplash">Skip</div>
     </div>
 
-    <!-- 🧭 2️⃣ HEADER / NAVBAR -->
-    <header id="header" class="sticky top-0 z-40 bg-light/5 backdrop-blur-md shadow-sm opacity-0">
-        <nav class="container mx-auto px-4 py-3">
-            <div class="flex items-center justify-between">
-                <!-- Logo -->
-                <a href="index.html" > <img src="logo.png" width="50px" height="50px"   alt="" ></a>
-                
-                <!-- Desktop Navigation -->
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-dark hover:text-primary transition-colors duration-300 font-body">Accueil</a>
-                    <a href="catalogue.html" class="text-dark hover:text-primary transition-colors duration-300 font-body">Catalogue</a>
-                    <a href="about.html" class="text-dark hover:text-primary transition-colors duration-300 font-body">About</a>
-                    <a href="catalogue.html#panier" id="cart-icon" class="text-dark hover:text-primary transition-colors duration-300 relative">
-                        <i class="fas fa-shopping-cart text-xl"></i>
-                        <span id="cart-count" class="absolute -top-2 -right-2 bg-accent text-secondary text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
-                    </a>
-                </div>
-                
-                <!-- Mobile Navigation -->
-                <div class="flex md:hidden items-center space-x-4">
-                    <a href="catalogue.html#panier" id="mobile-cart-icon" class="text-dark relative">
-                        <i class="fas fa-shopping-cart text-xl"></i>
-                        <span id="mobile-cart-count" class="absolute -top-2 -right-2 bg-accent text-secondary text-xs rounded-full w-5 h-5 flex items-center justify-center hidden">0</span>
-                    </a>
-                    <button id="mobile-menu-toggle" class="text-dark">
-                        <i class="fas fa-bars text-2xl"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Mobile Menu -->
-            <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4 border-t border-gray-100">
-                <div class="flex flex-col space-y-3 mt-3">
-                    <a href="#home" class="text-dark hover:text-primary py-2 font-body">Accueil</a>
-                    <a href="catalogue.html" class="text-dark hover:text-primary py-2 font-body">Catalogue</a>
-                    <a href="about.html" class="text-dark hover:text-primary py-2 font-body">About</a>
-                </div>
-            </div>
+    <!-- 1. HEADER -->
+    <header class="header" id="header">
+        <a href="#" class="logo"><img src="logoprof.png" width="45px" height="35px" alt=""></a>
+        
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <nav class="nav-menu" id="navMenu">
+            <a href="#" class="nav-link">Accueil</a>
+            <a href="#services" class="nav-link">Services</a>
+            <a href="#about" class="nav-link">À propos</a>
+            <a href="#success" class="nav-link">Réussites</a>
+            <a href="#testimonials" class="nav-link">Témoignages</a>
+            <a href="#contact" class="nav-link">Contact</a>
         </nav>
+        <a href="#contact" class="cta-button">Réserver maintenant</a>
     </header>
 
-    <main id="main-content" class="opacity-0">
-        <div>
-            <!-- Bannière de livraison (marquee) -->
-            <marquee class="custom-marquee bg-secondary text-light py-3" id="marquee-banner" behavior="scroll" direction="left" scrollamount="3">
-                <div class="contenu personnalisé de la bannière inline-block">
-                    <span class="text-sm md:text-base font-body">
-                        <span id="marquee-text">Chargement du message...</span>
-                    </span>
-                </div>
-            </marquee>
+    <a href="https://wa.me/22604127172" class="whatsapp-float" aria-label="Contactez-nous sur WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
-            <!-- Script Firebase pour la bannière marquee (unique) -->
-            <script type="module">
-                document.addEventListener('DOMContentLoaded', function() {
-                    console.log('Initialisation de la bannière marquee...');
-                    
-                    if (typeof firebase === 'undefined') {
-                        console.error('Firebase n\'est pas chargé');
-                        document.getElementById('marquee-text').textContent = 'Erreur de chargement Firebase';
-                        return;
-                    }
-                    
-                    try {
-                        if (!firebase.apps.length) {
-                           const firebaseConfig = {
-  apiKey: "AIzaSyBQsG8DzaxT1t6KOTGvUEdJpjbDgfUk7KY",
-  authDomain: "smart-415e7.firebaseapp.com",
-  projectId: "smart-415e7",
-  storageBucket: "smart-415e7.firebasestorage.app",
-  messagingSenderId: "905226910088",
-  appId: "1:905226910088:web:03c20ee6926d5a74f5e23d",
-  measurementId: "G-D8L1DKTFDE"
-};
-                            firebase.initializeApp(firebaseConfig);
-                        }
-                        
-                        const db = firebase.firestore();
-                        const marqueeRef = db.collection('marquee').doc('currentMessage');
-                        
-                        console.log('Écoute des changements sur le document marquee...');
-                        
-                        marqueeRef.onSnapshot({
-                            includeMetadataChanges: true
-                        }, (doc) => {
-                            if (doc.exists) {
-                                const data = doc.data();
-                                console.log('Données reçues:', data);
-                                
-                                const marqueeText = document.getElementById('marquee-text');
-                                if (marqueeText) {
-                                    if (data.message && typeof data.message === 'string') {
-                                        marqueeText.innerHTML = data.message;
-                                    } else if (data.message) {
-                                        marqueeText.textContent = data.message;
-                                    } else {
-                                        marqueeText.innerHTML = '<i class="fas fa-truck mr-2"></i>Livraison gratuite disponible !';
-                                    }
-                                    
-                                    console.log('Message mis à jour dans la bannière');
-                                }
-                            } else {
-                                console.log('Document marquee non trouvé, création...');
-                                marqueeRef.set({
-                                    message: '<i class="fas fa-truck mr-2"></i>Livraison gratuite sur toutes les commandes !',
-                                    lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
-                                    created: new Date().toISOString()
-                                }).then(() => {
-                                    console.log('Document marquee créé avec succès');
-                                }).catch(error => {
-                                    console.error('Erreur création document:', error);
-                                });
-                            }
-                        }, (error) => {
-                            console.error('Erreur écoute Firestore:', error);
-                            const marqueeText = document.getElementById('marquee-text');
-                            if (marqueeText) {
-                                marqueeText.innerHTML = '<i class="fas fa-exclamation-triangle mr-2"></i>Service temporairement indisponible';
-                            }
-                        });
-                        
-                    } catch (error) {
-                        console.error('Erreur initialisation Firebase:', error);
-                        const marqueeText = document.getElementById('marquee-text');
-                        if (marqueeText) {
-                            marqueeText.textContent = 'Bienvenue dans notre boutique !';
-                        }
+    <!-- 2. HERO SECTION -->
+    <section class="hero" id="home">
+        <h1>Votre partenaire de voyage, de formation et d'orientation</h1>
+        <h3>Voyages, visas, études, transferts, services financiers</h3>
+        <div class="search-bar">
+            <input type="text" class="search-input" placeholder="Où voulez-vous aller ?">
+            <button class="search-button">Rechercher</button>
+        </div>
+        <div class="hero-buttons">
+            <a href="#contact" class="cta-button">Réserver maintenant</a>
+            <a href="#services" class="cta-button" style="background: transparent; border: 2px solid white;">Découvrir nos services</a>
+        </div>
+        <div class="scroll-down">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- 3. SECTION : SERVICES PHARES -->
+    <section class="section" id="services">
+        <h2 class="section-title">Nos services principaux</h2>
+        <div class="services-grid">
+            <div class="service-card animate-on-scroll">
+                <div class="service-image" style="background-image: url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1548&q=80');"></div>
+                <div class="service-content">
+                    <div class="service-icon"><i class="fas fa-plane"></i></div>
+                    <h3 class="service-title">Réservation de billets</h3>
+                    <p class="service-description">Billets d'avion et réservations d'hôtels aux meilleurs prix garantis.</p>
+                    <a href="#contact" class="cta-button" style="padding: 0.5rem 1rem; font-size: 0.9rem;">En savoir plus</a>
+                </div>
+            </div>
+            
+            <div class="service-card animate-on-scroll">
+                <div class="service-image" style="background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
+                <div class="service-content">
+                    <div class="service-icon"><i class="fas fa-globe"></i></div>
+                    <h3 class="service-title">Assistance visa & placement étudiant</h3>
+                    <p class="service-description">Accompagnement complet pour vos démarches de visa et études à l'étranger.</p>
+                    <a href="#contact" class="cta-button" style="padding: 0.5rem 1rem; font-size: 0.9rem;">En savoir plus</a>
+                </div>
+            </div>
+            
+            <div class="service-card animate-on-scroll">
+                <div class="service-image" style="background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80');"></div>
+                <div class="service-content">
+                    <div class="service-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <h3 class="service-title">Formations en langues & informatique</h3>
+                    <p class="service-description">Formations certifiantes pour développer vos compétences linguistiques et digitales.</p>
+                    <a href="#contact" class="cta-button" style="padding: 0.5rem 1rem; font-size: 0.9rem;">En savoir plus</a>
+                </div>
+            </div>
+        </div>
+        
+        <h3 style="text-align: center; margin-bottom: 2rem; color: var(--primary);">Autres services</h3>
+        <div class="other-services">
+            <div class="other-service animate-on-scroll">
+                <div class="other-service-icon"><i class="fas fa-car"></i></div>
+                <h4 class="other-service-title">Location de voiture</h4>
+            </div>
+            
+            <div class="other-service animate-on-scroll">
+                <div class="other-service-icon"><i class="fas fa-money-bill-wave"></i></div>
+                <h4 class="other-service-title">Mobile Money & change</h4>
+            </div>
+            
+            <div class="other-service animate-on-scroll">
+                <div class="other-service-icon"><i class="fas fa-box"></i></div>
+                <h4 class="other-service-title">Envoi de colis</h4>
+            </div>
+            
+            <div class="other-service animate-on-scroll">
+                <div class="other-service-icon"><i class="fas fa-print"></i></div>
+                <h4 class="other-service-title">Impression / photocopie</h4>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="#contact" class="cta-button">Explorer tous nos services</a>
+        </div>
+    </section>
+
+    <!-- 4. SECTION : POURQUOI NOUS CHOISIR ? -->
+    <section class="section why-choose-us">
+        <h2 class="section-title">Pourquoi nous faire confiance ?</h2>
+        <div class="features-grid">
+            <div class="feature animate-on-scroll">
+                <div class="feature-icon"><i class="fas fa-star"></i></div>
+                <h3 class="feature-title">Expertise locale & internationale</h3>
+                <p>Notre équipe combine connaissance du terrain et expertise internationale.</p>
+            </div>
+            
+            <div class="feature animate-on-scroll">
+                <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                <h3 class="feature-title">Rapidité et fiabilité</h3>
+                <p>Des services rapides et fiables pour répondre à vos urgences.</p>
+            </div>
+            
+            <div class="feature animate-on-scroll">
+                <div class="feature-icon"><i class="fas fa-handshake"></i></div>
+                <h3 class="feature-title">Accompagnement personnalisé</h3>
+                <p>Un suivi individualisé pour chaque client selon ses besoins spécifiques.</p>
+            </div>
+            
+            <div class="feature animate-on-scroll">
+                <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                <h3 class="feature-title">Sécurité garantie</h3>
+                <p>Vos transactions et données sont sécurisées avec les meilleurs standards.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. SECTION : À PROPOS -->
+    <section class="section" id="about">
+        <h2 class="section-title">Notre histoire</h2>
+        <div class="about-content">
+            <div class="about-text animate-on-scroll">
+                <p>Fondé en 2025, le Centre d'Affaires et d'Orientation HOSSOBE est né de la volonté d'accompagner les Burkinabè dans la réalisation de leurs projets à l'international.</p>
+                <p>Notre mission est de faciliter l'accès aux opportunités éducatives, professionnelles et entrepreneuriales à travers le monde, en offrant des services complets et personnalisés.</p>
+                <p>Nos valeurs : intégrité, excellence, innovation et service client. Nous croyons en la puissance de l'éducation et de la mobilité internationale pour transformer des vies et construire un avenir meilleur.</p>
+            </div>
+            <div class="about-image animate-on-scroll">
+                <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Équipe CAOH">
+            </div>
+        </div>
+        
+        <div class="timeline animate-on-scroll">
+            <div class="timeline-item">
+                <div class="timeline-icon"><i class="fas fa-rocket"></i></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">2025</div>
+                    <p>Création de l'agence avec pour mission d'accompagner les étudiants</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-icon"><i class="fas fa-graduation-cap"></i></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">2026</div>
+                    <p>Premiers étudiants orientés avec succès vers des universités internationales</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-icon"><i class="fas fa-money-bill-wave"></i></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">2027</div>
+                    <p>Extension des services avec l'ajout des services financiers et de transfert</p>
+                </div>
+            </div>
+            
+            <div class="timeline-item">
+                <div class="timeline-icon"><i class="fas fa-handshake"></i></div>
+                <div class="timeline-content">
+                    <div class="timeline-date">2028</div>
+                    <p>Partenariats conclus avec plus de 50 institutions éducatives à travers le monde</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="quote animate-on-scroll">
+            "Nous accompagnons les Burkinabè vers leur réussite, quels que soient leurs projets et ambitions."
+        </div>
+    </section>
+
+    <!-- 6. SECTION : RÉUSSITES / PORTFOLIO -->
+    <section class="section" id="success">
+        <h2 class="section-title">Nos réussites</h2>
+        
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">Tous</button>
+            <button class="filter-btn" data-filter="travel">Voyages</button>
+            <button class="filter-btn" data-filter="students">Étudiants placés</button>
+            <button class="filter-btn" data-filter="partnerships">Partenariats</button>
+        </div>
+        
+        <div class="gallery">
+            <div class="gallery-item animate-on-scroll" data-category="travel">
+                <img src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1500&q=80" alt="Voyage réussi" class="gallery-image">
+                <div class="gallery-overlay">
+                    <h3>Voyage d'affaires à Paris</h3>
+                    <p>Organisation complète pour une délégation d'entrepreneurs</p>
+                </div>
+            </div>
+            
+            <div class="gallery-item animate-on-scroll" data-category="students">
+                <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Étudiant placé" class="gallery-image">
+                <div class="gallery-overlay">
+                    <h3>Placement universitaire au Canada</h3>
+                    <p>Admission et obtention de visa pour étudiant en informatique</p>
+                </div>
+            </div>
+            
+            <div class="gallery-item animate-on-scroll" data-category="partnerships">
+                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Partenariat" class="gallery-image">
+                <div class="gallery-overlay">
+                    <h3>Partenariat avec l'Université de Montréal</h3>
+                    <p>Accord de collaboration pour faciliter les admissions</p>
+                </div>
+            </div>
+            
+            <div class="gallery-item animate-on-scroll" data-category="travel">
+                <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1548&q=80" alt="Voyage réussi" class="gallery-image">
+                <div class="gallery-overlay">
+                    <h3>Voyage de groupe vers Dubaï</h3>
+                    <p>Organisation logistique pour 25 participants</p>
+                </div>
+            </div>
+            
+            <div class="gallery-item animate-on-scroll" data-category="students">
+                <img src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Étudiant placé" class="gallery-image">
+                <div class="gallery-overlay">
+                    <h3>Bourse d'études en France</h3>
+                    <p>Obtention d'une bourse complète pour études en ingénierie</p>
+                </div>
+            </div>
+            
+            <div class="gallery-item animate-on-scroll" data-category="partnerships">
+                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Partenariat" class="gallery-image">
+                <div class="gallery-overlay">
+                    <h3>Collaboration avec Campus France</h3>
+                    <p>Partenaire privilégié pour les études en France</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="counters">
+            <div class="counter animate-on-scroll">
+                <div class="counter-number" data-target="500">0</div>
+                <div class="counter-text">Étudiants orientés</div>
+            </div>
+            
+            <div class="counter animate-on-scroll">
+                <div class="counter-number" data-target="1000">0</div>
+                <div class="counter-text">Billets réservés</div>
+            </div>
+            
+            <div class="counter animate-on-scroll">
+                <div class="counter-number" data-target="50">0</div>
+                <div class="counter-text">Partenariats internationaux</div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="#contact" class="cta-button">Découvrir plus de réussites</a>
+        </div>
+    </section>
+
+    <!-- 7. SECTION : TÉMOIGNAGES -->
+    <section class="section" id="testimonials">
+        <h2 class="section-title">Ils témoignent</h2>
+        
+        <div class="testimonials-slider">
+            <div class="testimonials" id="testimonialsContainer">
+                <div class="testimonial animate-on-scroll">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Client" class="testimonial-image">
+                    <p class="testimonial-text">"Grâce à CAOH, j'ai obtenu mon visa étudiant pour le Canada en seulement 3 semaines ! Leur accompagnement personnalisé a fait toute la différence."</p>
+                    <div class="testimonial-author">Amadou S.</div>
+                    <div class="testimonial-role">Étudiant en informatique</div>
+                </div>
+                
+                <div class="testimonial animate-on-scroll">
+                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80" alt="Client" class="testimonial-image">
+                    <p class="testimonial-text">"J'ai pu réaliser mon rêve d'étudier en France grâce à l'expertise de l'équipe CAOH. Ils m'ont guidé à chaque étape, du choix de l'université à l'obtention du visa."</p>
+                    <div class="testimonial-author">Fatou K.</div>
+                    <div class="testimonial-role">Étudiante en médecine</div>
+                </div>
+                
+                <div class="testimonial animate-on-scroll">
+                    <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80" alt="Client" class="testimonial-image">
+                    <p class="testimonial-text">"Service rapide et professionnel pour mes réservations de vol urgentes. Je recommande vivement leurs services à tous les voyageurs."</p>
+                    <div class="testimonial-author">Jean B.</div>
+                    <div class="testimonial-role">Homme d'affaires</div>
+                </div>
+            </div>
+            
+            <div class="slider-controls">
+                <div class="slider-btn prev-btn" id="prevTestimonial"><i class="fas fa-chevron-left"></i></div>
+                <div class="slider-btn next-btn" id="nextTestimonial"><i class="fas fa-chevron-right"></i></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. SECTION : CALL TO ACTION -->
+    <section class="section">
+        <div class="cta-banner animate-on-scroll">
+            <h2>Prêt à voyager, étudier ou réussir vos projets ?</h2>
+            <div class="cta-buttons">
+                <a href="#contact" class="cta-button">Réservez en ligne</a>
+                <a href="https://wa.me/22604127172" class="cta-button" style="background: #25D366;">Contactez-nous sur WhatsApp</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. SECTION : CHATBOT / ASSISTANT -->
+    <div class="chatbot" id="chatbot">
+        <div class="chatbot-header">
+            <div>Assistant CAOH</div>
+            <button class="chatbot-close" id="closeChatbot"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="chatbot-body">
+            <div class="chatbot-message">Bonjour 👋 Besoin d'aide pour réserver ou demander un visa ?</div>
+            <div class="chatbot-options">
+                <button class="chatbot-option">Réserver un billet</button>
+                <button class="chatbot-option">Assistance visa</button>
+                <button class="chatbot-option">Formation</button>
+                <button class="chatbot-option">Autre question</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 10. SECTION : CONTACT -->
+    <section class="section" id="contact">
+        <h2 class="section-title">Restons en contact</h2>
+        
+        <div class="contact-content">
+            <div class="contact-info animate-on-scroll">
+                <div class="contact-item">
+                    <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                    <div class="contact-text">+226 04 12 71 72</div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                    <div class="contact-text">caohbfagencedevoyage@gmail.com</div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="contact-text">Ouagadougou, Burkina Faso</div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon"><i class="fas fa-share-alt"></i></div>
+                    <div class="contact-text">
+                        <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
+                            <a href="#" class="social-link" style="width: 40px; height: 40px;"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://wa.me/22604127172" class="social-link" style="width: 40px; height: 40px;"><i class="fab fa-whatsapp"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <form class="contact-form animate-on-scroll" id="contactForm">
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="Votre nom" required>
+                </div>
+                
+                <div class="form-group">
+                    <input type="email" class="form-input" placeholder="Votre email ou téléphone" required>
+                </div>
+                
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="Sujet" required>
+                </div>
+                
+                <div class="form-group">
+                    <textarea class="form-input form-textarea" placeholder="Votre message" required></textarea>
+                </div>
+                
+                <button type="submit" class="cta-button" style="width: 100%;">Envoyer</button>
+            </form>
+        </div>
+        
+        <div class="map animate-on-scroll">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15584.344452422422!2d-1.55482372233712!3d12.371225399999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xe2eb58a3e143c0b%3A0xd9510a39a48bda31!2sOuagadougou%2C%20Burkina%20Faso!5e0!3m2!1sen!2sus!4v1685360383011!5m2!1sen!2sus" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </section>
+
+    <!-- 11. FOOTER -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div>
+                <div class="footer-logo">CAOH</div>
+                <div class="footer-slogan">Votre partenaire de voyage, de formation et d'orientation</div>
+            </div>
+            
+            <div>
+                <h3 style="margin-bottom: 1rem; color: white;">Liens rapides</h3>
+                <ul class="footer-links">
+                    <li class="footer-link"><a href="#">Accueil</a></li>
+                    <li class="footer-link"><a href="#services">Services</a></li>
+                    <li class="footer-link"><a href="#about">À propos</a></li>
+                    <li class="footer-link"><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h3 style="margin-bottom: 1rem; color: white;">Suivez-nous</h3>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
+                    <a href="https://wa.me/22604127172" class="social-link"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2025 – CAOH Burkina Faso. Tous droits réservés.</p>
+            <p><a href="#" style="color: #ccc; text-decoration: underline;">Mentions légales</a> | <a href="#" style="color: #ccc; text-decoration: underline;">Politique de confidentialité</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Animation de la splash screen
+        document.addEventListener('DOMContentLoaded', function() {
+            const splash = document.getElementById('splash');
+            const skipBtn = document.getElementById('skipSplash');
+            
+            // Animation d'entrée
+            anime({
+                targets: '.splash-logo',
+                opacity: 1,
+                translateY: 0,
+                duration: 1500,
+                easing: 'easeOutQuad'
+            });
+            
+            anime({
+                targets: '.splash-slogan',
+                opacity: 1,
+                translateY: 0,
+                delay: 500,
+                duration: 1500,
+                easing: 'easeOutQuad'
+            });
+            
+            // Fermeture automatique après 3 secondes
+            const autoClose = setTimeout(() => {
+                closeSplash();
+            }, 3000);
+            
+            // Fermeture manuelle
+            skipBtn.addEventListener('click', () => {
+                clearTimeout(autoClose);
+                closeSplash();
+            });
+            
+            function closeSplash() {
+                anime({
+                    targets: splash,
+                    opacity: 0,
+                    duration: 800,
+                    easing: 'easeInOutQuad',
+                    complete: function() {
+                        splash.style.display = 'none';
                     }
                 });
-            </script>
-        </div>
-        
-        <!-- 🟢 3️⃣ HERO SECTION REDESIGNÉE -->
-        <section id="hero" class="relative min-h-[80vh] lg:min-h-screen overflow-hidden flex items-center">
-            <!-- Background slider -->
-            <div id="hero-slider" class="absolute inset-0 z-0">
-                <!-- Les slides seront générés dynamiquement par JavaScript -->
-            </div>
+            }
             
-            <!-- Overlay léger sur les images -->
+            // Header scroll effect
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
             
-            <!-- Contenu Hero -->
-            <div class="container mx-auto px-4 z-20 relative">
-                <div class="flex flex-col lg:flex-row items-center justify-between">
-                    <!-- Contenu texte (à gauche sur PC) -->
-                    <div class="lg:w-1/2 mb-12 lg:mb-0 lg:pr-12 fade-in-left">
-                        <div class="hero-content-container p-8 lg:p-12">
-                            <div id="hero-content">
-                                <!-- Contenu généré dynamiquement par JavaScript -->
-                                <div class="text-center lg:text-left">
-                                    <h1 class="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-heading text-secondary mb-4">
-                                        Smart Cut Services
-                                    </h1>
-                                    <p class="text-lg md:text-xl text-dark mb-8 font-body leading-relaxed">
-                                        Boutique en ligne premium pour des produits d'exception. Découvrez notre collection soigneusement sélectionnée.
-                                    </p>
-                                    <a href="catalogue.html" class="btn-hero inline-flex items-center px-8 py-4 rounded-lg text-lg font-heading">
-                                        <i class="fas fa-store mr-3"></i>
-                                        Découvrir le catalogue
-                                    </a>
-                                </div>
-                            </div>
-                            
-                            <!-- Indicateurs slider (sur mobile, en bas) -->
-                            <div id="slide-indicators" class="flex justify-center lg:justify-start space-x-3 mt-8">
-                                <!-- Généré dynamiquement -->
-                            </div>
-                            
-                            <!-- Contrôles slider (sur mobile, en bas) -->
-                            <div class="mt-6 flex justify-center lg:justify-start space-x-4">
-                                <button id="prev-slide" class="p-3 rounded-full bg-secondary text-light hover:bg-primary transition-colors">
-                                    <i class="fas fa-chevron-left"></i>
-                                </button>
-                                <button id="next-slide" class="p-3 rounded-full bg-secondary text-light hover:bg-primary transition-colors">
-                                    <i class="fas fa-chevron-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+            // Menu mobile
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const navMenu = document.getElementById('navMenu');
+            
+            if (mobileMenuBtn && navMenu) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    navMenu.classList.toggle('active');
+                    mobileMenuBtn.innerHTML = navMenu.classList.contains('active') 
+                        ? '<i class="fas fa-times"></i>' 
+                        : '<i class="fas fa-bars"></i>';
+                });
+            }
+            
+            // Animation hero section
+            anime({
+                targets: '.hero h1',
+                opacity: 1,
+                translateY: 0,
+                delay: 300,
+                duration: 1200,
+                easing: 'easeOutQuad'
+            });
+            
+            anime({
+                targets: '.hero h3',
+                opacity: 1,
+                translateY: 0,
+                delay: 600,
+                duration: 1200,
+                easing: 'easeOutQuad'
+            });
+            
+            anime({
+                targets: '.search-bar',
+                opacity: 1,
+                translateY: 0,
+                delay: 900,
+                duration: 1200,
+                easing: 'easeOutQuad'
+            });
+            
+            anime({
+                targets: '.hero-buttons',
+                opacity: 1,
+                translateY: 0,
+                delay: 1200,
+                duration: 1200,
+                easing: 'easeOutQuad'
+            });
+            
+            // Animation au scroll
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+            
+            function checkScroll() {
+                animatedElements.forEach(element => {
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.3;
                     
-                    <!-- Espace pour l'image (droite sur PC) -->
-                    <div class="lg:w-1/2 fade-in-right">
-                        <!-- L'image du slider sera ici mais en background -->
+                    if (elementPosition < screenPosition) {
+                        element.classList.add('visible');
+                    }
+                });
+                
+                // Vérifier aussi les sections principales
+                document.querySelectorAll('.section').forEach(section => {
+                    const sectionPosition = section.getBoundingClientRect().top;
+                    const screenPosition = window.innerHeight / 1.3;
+                    
+                    if (sectionPosition < screenPosition) {
+                        section.classList.add('visible');
+                    }
+                });
+            }
+            
+            window.addEventListener('scroll', checkScroll);
+            checkScroll(); // Vérifier au chargement initial
+            
+            // Compteurs animés
+            const counters = document.querySelectorAll('.counter-number');
+            let counted = false;
+            
+            function animateCounters() {
+                const countersSection = document.querySelector('.counters');
+                if (!countersSection) return;
+                
+                const sectionPosition = countersSection.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if (sectionPosition < screenPosition && !counted) {
+                    counted = true;
+                    
+                    counters.forEach(counter => {
+                        const target = +counter.getAttribute('data-target');
+                        const count = +counter.innerText;
+                        const duration = 2000; // en ms
+                        const frameDuration = 1000 / 60; // ~60 fps
+                        const totalFrames = Math.round(duration / frameDuration);
+                        const easeOutQuad = t => t * (2 - t);
                         
-                    </div>
-                </div>
-            </div>
+                        let frame = 0;
+                        const counterInterval = setInterval(() => {
+                            frame++;
+                            const progress = easeOutQuad(frame / totalFrames);
+                            const currentCount = Math.round(target * progress);
+                            
+                            if (parseInt(counter.innerText) !== currentCount) {
+                                counter.innerText = currentCount;
+                            }
+                            
+                            if (frame === totalFrames) {
+                                clearInterval(counterInterval);
+                            }
+                        }, frameDuration);
+                    });
+                }
+            }
             
-            <!-- Pour mobile, le contenu reste en bas (grâce au flex-col) -->
-        </section>
-<!-- 🎨 SECTION GALERIE ARTISTIQUE - RESPONSIVE COMPLÈTE -->
-<section id="gallery" class="py-8 md:py-20 bg-light overflow-hidden">
-    <div class="container mx-auto px-4">
-        <!-- Titre Section -->
-        <div class="text-center mb-12 md:mb-16 fade-in">
-            <h2 class="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-heading text-secondary mb-4 md:mb-6">
-                Galerie Exclusive
-            </h2>
-           
-        </div>
-
-        <!-- Conteneur Galerie Responsive -->
-        <div id="gallery-container-responsive" class="relative">
-            <!-- Grille pour mobile (1 par ligne) -->
-            <div id="gallery-mobile" class="block md:hidden space-y-6">
-                <!-- Chargé dynamiquement -->
-                <div class="text-center py-12">
-                    <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mb-4"></div>
-                    <p class="text-dark/60 font-body">Chargement de la galerie mobile...</p>
-                </div>
-            </div>
+            window.addEventListener('scroll', animateCounters);
+            animateCounters(); // Vérifier au chargement initial
             
-            <!-- Grille pour tablette (2 par ligne) -->
-            <div id="gallery-tablet" class="hidden md:block lg:hidden">
-                <div class="grid grid-cols-2 gap-6">
-                    <!-- Chargé dynamiquement -->
-                    <div class="col-span-2 text-center py-12">
-                        <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mb-4"></div>
-                        <p class="text-dark/60 font-body">Chargement de la galerie tablette...</p>
-                    </div>
-                </div>
-            </div>
+            // Slider témoignages
+            const testimonialsContainer = document.getElementById('testimonialsContainer');
+            const testimonialItems = document.querySelectorAll('.testimonial');
+            const prevBtn = document.getElementById('prevTestimonial');
+            const nextBtn = document.getElementById('nextTestimonial');
+            let currentIndex = 0;
             
-            <!-- Grille pour desktop (3-4 par ligne) -->
-            <div id="gallery-desktop" class="hidden lg:block">
-                <div class="grid grid-cols-3 xl:grid-cols-4 gap-8">
-                    <!-- Chargé dynamiquement -->
-                    <div class="col-span-3 xl:col-span-4 text-center py-12">
-                        <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mb-4"></div>
-                        <p class="text-dark/60 font-body">Chargement de la galerie desktop...</p>
-                    </div>
-                </div>
-            </div>
+            function showTestimonial(index) {
+                if (!testimonialsContainer) return;
+                
+                // Ajuster l'index si hors limites
+                if (index < 0) index = testimonialItems.length - 1;
+                if (index >= testimonialItems.length) index = 0;
+                
+                currentIndex = index;
+                
+                anime({
+                    targets: testimonialsContainer,
+                    translateX: `${-index * 100}%`,
+                    duration: 600,
+                    easing: 'easeInOutQuad'
+                });
+            }
             
-            <!-- Contrôles mobile (seulement sur mobile) -->
-          
-        </div>
-
-        <!-- Bouton Voir Plus (Desktop et Tablet seulement) -->
-        <div class="text-center mt-12 fade-in hidden md:block">
-            <button id="load-more-gallery" class="btn-primary px-8 py-4 rounded-lg font-heading text-lg opacity-0 hidden">
-                <i class="fas fa-images mr-3"></i>
-                Charger plus d'images
-            </button>
-        </div>
-    </div>
-</section>
-
-<!-- Styles pour les clip-paths artistiques - Responsive -->
-<style>
-    /* Classes de clip-path pour les formes géométriques */
-    .clip-diagonal-right {
-        clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
-    }
-    
-    .clip-diagonal-left {
-        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 85%);
-    }
-    
-    .clip-trapeze {
-        clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
-    }
-    
-    .clip-parallelogram {
-        clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
-    }
-    
-    .clip-hexagon {
-        clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-    }
-    
-    .clip-chamfered {
-        clip-path: polygon(0 20%, 20% 0, 100% 0, 100% 80%, 80% 100%, 0 100%);
-    }
-    
-    .clip-asymmetric {
-        clip-path: polygon(0 0, 100% 0, 100% 70%, 80% 100%, 0 100%);
-    }
-    
-    .clip-angled {
-        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 80%);
-    }
-    
-    .clip-circle {
-        clip-path: circle(50% at 50% 50%);
-    }
-    
-    .clip-pentagon {
-        clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
-    }
-    
-    .clip-ellipse {
-        clip-path: ellipse(50% 40% at 50% 50%);
-    }
-    
-    .clip-triangle {
-        clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-    }
-    
-    .clip-star {
-        clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-    }
-    
-    /* ==================== STYLES RESPONSIVE ==================== */
-    
-    /* ITEM DE GALERIE DE BASE */
-    .gallery-item {
-        position: relative;
-        overflow: hidden;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        cursor: pointer;
-        background-color: #2E3440;
-    }
-    
-    .gallery-item img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    .gallery-item:hover img {
-        transform: scale(1.05);
-    }
-    
-    /* OVERLAY */
-    .gallery-overlay {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        padding: 1.5rem;
-        background: linear-gradient(to top, rgba(46, 52, 64, 0.9), transparent 50%);
-        z-index: 2;
-        pointer-events: none;
-    }
-    
-    /* ============ MOBILE (1 par ligne) ============ */
-    .gallery-item-mobile {
-        height: 70vh;
-        min-height: 500px;
-        max-height: 600px;
-        width: 100%;
-        margin-bottom: 1.5rem;
-    }
-    
-    /* ============ TABLETTE (2 par ligne) ============ */
-    .gallery-item-tablet {
-        height: 40vh;
-        min-height: 300px;
-        max-height: 400px;
-    }
-    
-    /* ============ DESKTOP (3-4 par ligne) ============ */
-    .gallery-item-desktop {
-        height: 35vh;
-        min-height: 250px;
-        max-height: 350px;
-    }
-    
-    /* Sur desktop, overlay apparaît au hover */
-    .gallery-item-desktop .gallery-overlay {
-        transform: translateY(100%);
-        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    .gallery-item-desktop:hover .gallery-overlay {
-        transform: translateY(0);
-    }
-    
-    /* ==================== ANIMATIONS ==================== */
-    @keyframes galleryItemAppear {
-        from {
-            opacity: 0;
-            transform: scale(0.95) translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-        }
-    }
-    
-    .gallery-item-appear {
-        animation: galleryItemAppear 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
-    
-    @keyframes slideInRight {
-        from {
-            opacity: 0;
-            transform: translateX(50px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-    
-    @keyframes slideInLeft {
-        from {
-            opacity: 0;
-            transform: translateX(-50px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
-    
-    /* ==================== RESPONSIVE ADJUSTMENTS ==================== */
-    
-    /* Grands mobiles */
-    @media (min-width: 480px) and (max-width: 767px) {
-        .gallery-item-mobile {
-            height: 65vh;
-            min-height: 450px;
-        }
-    }
-    
-    /* Très petits mobiles */
-    @media (max-width: 479px) {
-        .gallery-item-mobile {
-            height: 60vh;
-            min-height: 400px;
-        }
-        
-        .gallery-overlay {
-            padding: 1rem;
-        }
-    }
-    
-    /* Tablettes portrait */
-    @media (min-width: 768px) and (max-width: 1023px) and (orientation: portrait) {
-        .gallery-item-tablet {
-            height: 35vh;
-        }
-    }
-    
-    /* Tablettes paysage */
-    @media (min-width: 768px) and (max-width: 1023px) and (orientation: landscape) {
-        .gallery-item-tablet {
-            height: 50vh;
-        }
-    }
-</style>
-
-<!-- Script pour la galerie responsive -->
-
-        <!-- 🟡 4️⃣ SECTION AVANTAGES -->
-        <section id="advantages" class="py-16 hidden">
-            <div class="container mx-auto px-4">
-                <h2 class="text-4xl md:text-5xl font-heading text-center text-secondary mb-12 fade-in">
-                    Pourquoi nous choisir ?
-                </h2>
+            if (prevBtn && nextBtn) {
+                prevBtn.addEventListener('click', () => {
+                    showTestimonial(currentIndex - 1);
+                });
                 
-                <div id="advantages-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <!-- Skeleton loader (4 cartes) -->
-                    <div class="text-center p-8 rounded-xl shadow-sm fade-in bg-light border border-primary/10">
-                        <div class="skeleton w-16 h-16 rounded-full mx-auto mb-4"></div>
-                        <div class="skeleton h-6 w-3/4 mx-auto mb-3"></div>
-                        <div class="skeleton h-4 w-full mb-2"></div>
-                        <div class="skeleton h-4 w-5/6 mx-auto"></div>
-                    </div>
-                    <div class="text-center p-8 rounded-xl shadow-sm fade-in bg-light border border-primary/10">
-                        <div class="skeleton w-16 h-16 rounded-full mx-auto mb-4"></div>
-                        <div class="skeleton h-6 w-3/4 mx-auto mb-3"></div>
-                        <div class="skeleton h-4 w-full mb-2"></div>
-                        <div class="skeleton h-4 w-5/6 mx-auto"></div>
-                    </div>
-                    <div class="text-center p-8 rounded-xl shadow-sm fade-in bg-light border border-primary/10">
-                        <div class="skeleton w-16 h-16 rounded-full mx-auto mb-4"></div>
-                        <div class="skeleton h-6 w-3/4 mx-auto mb-3"></div>
-                        <div class="skeleton h-4 w-full mb-2"></div>
-                        <div class="skeleton h-4 w-5/6 mx-auto"></div>
-                    </div>
-                    <div class="text-center p-8 rounded-xl shadow-sm fade-in bg-light border border-primary/10">
-                        <div class="skeleton w-16 h-16 rounded-full mx-auto mb-4"></div>
-                        <div class="skeleton h-6 w-3/4 mx-auto mb-3"></div>
-                        <div class="skeleton h-4 w-full mb-2"></div>
-                        <div class="skeleton h-4 w-5/6 mx-auto"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 🔵 5️⃣ PRODUITS POPULAIRES / NOUVEAUTÉS -->
-        <section id="featured-products" class="py-16">
-            <div class="container mx-auto px-4">
-                <div class="flex flex-col md:flex-row justify-between items-center mb-12">
-                    <h2 class="text-4xl md:text-5xl font-heading text-secondary mb-4 md:mb-0 fade-in">
-                        Produits populaires
-                    </h2>
-                    <a href="catalogue.html" class="btn-primary inline-flex items-center px-8 py-4 rounded-lg font-heading text-lg fade-in">
-                        Voir tout le catalogue
-                        <i class="fas fa-arrow-right ml-3"></i>
-                    </a>
-                </div>
-                
-                <div id="products-container" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    <!-- Carte produit / skeleton -->
-                    <div class="product-card bg-light rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition">
-                        <!-- Image -->
-                        <div class="w-full aspect-square overflow-hidden">
-                            <div class="skeleton w-full h-full"></div>
-                        </div>
-                        <!-- Contenu -->
-                        <div class="p-6 space-y-2">
-                            <div class="skeleton h-5 w-3/4"></div>
-                            <div class="skeleton h-4 w-1/2"></div>
-                            <div class="skeleton h-12 w-full rounded-lg mt-3"></div>
-                        </div>
-                    </div>
-
-                    <!-- Duplique la carte -->
-                    <div class="product-card bg-light rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition">
-                        <div class="w-full aspect-square overflow-hidden">
-                            <div class="skeleton w-full h-full"></div>
-                        </div>
-                        <div class="p-6 space-y-2">
-                            <div class="skeleton h-5 w-3/4"></div>
-                            <div class="skeleton h-4 w-1/2"></div>
-                            <div class="skeleton h-12 w-full rounded-lg mt-3"></div>
-                        </div>
-                    </div>
-
-                    <div class="product-card bg-light rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition">
-                        <div class="w-full aspect-square overflow-hidden">
-                            <div class="skeleton w-full h-full"></div>
-                        </div>
-                        <div class="p-6 space-y-2">
-                            <div class="skeleton h-5 w-3/4"></div>
-                            <div class="skeleton h-4 w-1/2"></div>
-                            <div class="skeleton h-12 w-full rounded-lg mt-3"></div>
-                        </div>
-                    </div>
-
-                    <div class="product-card bg-light rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition">
-                        <div class="w-full aspect-square overflow-hidden">
-                            <div class="skeleton w-full h-full"></div>
-                        </div>
-                        <div class="p-6 space-y-2">
-                            <div class="skeleton h-5 w-3/4"></div>
-                            <div class="skeleton h-4 w-1/2"></div>
-                            <div class="skeleton h-12 w-full rounded-lg mt-3"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 🟣 6️⃣ SECTION PROCESSUS -->
-        <section id="process" class="py-16 bg-light">
-            <div class="container mx-auto px-4">
-                <h2 class="text-4xl md:text-5xl font-heading text-center text-secondary mb-12 fade-in">
-                    Comment ça marche ?
-                </h2>
-                
-                <div id="process-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <!-- Le contenu est chargé dynamiquement si enabled === true -->
-                </div>
-            </div>
-        </section>
-
-        <!-- 🟠 7️⃣ OPTIONS DE LIVRAISON -->
-        <section id="delivery" class="py-16">
-            <div class="container mx-auto px-4">
-                <h2 class="text-4xl md:text-5xl font-heading text-center text-secondary mb-12 fade-in">
-                    Options de livraison
-                </h2>
-                
-                <div id="delivery-container" class="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Options de livraison chargées dynamiquement -->
-                </div>
-            </div>
-        </section>
-
-        <!-- 🔴 8️⃣ CTA FINAL -->
-        <section id="cta" class="py-20 bg-gradient-to-r from-primary to-secondary text-light">
-            <div class="container mx-auto px-4 text-center">
-                <div id="cta-container" class="scale-in">
-                    <h2 class="text-4xl md:text-5xl font-heading mb-6">
-                        Prêt à découvrir nos produits ?
-                    </h2>
-                    <p class="text-xl mb-10 max-w-2xl mx-auto font-body">
-                        Rejoignez des milliers de clients satisfaits
-                    </p>
+                nextBtn.addEventListener('click', () => {
+                    showTestimonial(currentIndex + 1);
+                });
+            }
+            
+            // Chatbot
+            const chatbot = document.getElementById('chatbot');
+            const whatsappFloat = document.querySelector('.whatsapp-float');
+            const closeChatbot = document.getElementById('closeChatbot');
+            
+            if (whatsappFloat && chatbot) {
+                whatsappFloat.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    chatbot.classList.toggle('active');
+                });
+            }
+            
+            if (closeChatbot) {
+                closeChatbot.addEventListener('click', () => {
+                    chatbot.classList.remove('active');
+                });
+            }
+            
+            // Filtrage galerie
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Retirer la classe active de tous les boutons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    // Ajouter la classe active au bouton cliqué
+                    button.classList.add('active');
                     
-                    <div class="flex flex-col sm:flex-row justify-center gap-4">
-                        <a href="catalogue.html" class="bg-light text-secondary px-8 py-4 rounded-lg font-heading text-lg hover:bg-light/90 transition-all duration-300 inline-flex items-center justify-center">
-                            <i class="fas fa-store mr-3"></i>
-                            Accéder au catalogue
-                        </a>
-                        <a href="catalogue.html#panier" id="cta-cart" class="bg-transparent border-2 border-light px-8 py-4 rounded-lg font-heading text-lg hover:bg-light/10 transition-all duration-300 inline-flex items-center justify-center">
-                            <i class="fas fa-shopping-cart mr-3"></i>
-                            Voir le panier
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- FOOTER -->
-        <div class="bg-secondary text-light font-body">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
-                <!-- Conteneur principal desktop -->
-                <div class="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-10">
+                    const filter = button.getAttribute('data-filter');
                     
-                    <!-- Section Identité -->
-                    <div class="space-y-4">
-                        <h3 class="text-lg font-heading text-light">Notre entreprise</h3>
-                        <p class="text-sm leading-relaxed text-primary">
-                            Votre boutique en ligne de confiance. Nous nous engageons à vous offrir la meilleure expérience d'achat.
-                        </p>
-                    </div>
-
-                    <!-- Section Navigation -->
-                    <div class="space-y-4">
-                        <h3 class="text-lg font-heading text-light">Navigation rapide</h3>
-                        <ul class="space-y-2 text-sm">
-                            <li><a href="index.html" class="text-primary hover:text-light transition-colors duration-200">Accueil</a></li>
-                            <li><a href="catalogue.html" class="text-primary hover:text-light transition-colors duration-200">Catalogue</a></li>
-                            <li><a href="catalogue.html#panier" class="text-primary hover:text-light transition-colors duration-200">Panier</a></li>
-                            <li><a href="about.html" class="text-primary hover:text-light transition-colors duration-200">À propos</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Section Réseaux sociaux et contact -->
-                    <div class="space-y-4">
-                        <h3 class="text-lg font-heading text-light">Réseaux sociaux & Contact</h3>
-                        <ul class="space-y-3 text-sm">
-                            <li class="flex items-center space-x-2">
-                                <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
-                                </svg>
-                                <a href="https://www.facebook.com/profile.php?id=61573890875251" target="_blank" class="text-primary hover:text-light transition-colors duration-200">Facebook</a>
-                            </li>
-                            <li class="flex items-center space-x-2">
-                                <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" />
-                                </svg>
-                                <a href="https://www.instagram.com/smart_cut_services?igsh=ajI4YzhhcnozY2pn&utm_source=qr" target="_blank" class="text-primary hover:text-light transition-colors duration-200">Instagram</a>
-                            </li>
-                            <li class="flex items-center space-x-2">
-                                <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
-                                </svg>
-                                <a href="https://www.tiktok.com/@smart.cut.service?is_from_webapp=1&sender_device=pc" target="_blank" class="text-primary hover:text-light transition-colors duration-200">TikTok</a>
-                            </li>
-                            <li class="flex items-center space-x-2">
-                                <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.76.982.998-3.675-.236-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.9 6.994c-.004 5.45-4.438 9.88-9.888 9.88m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.333.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.333 11.893-11.893 0-3.18-1.24-6.162-3.495-8.411"/>
-                                </svg>
-                                <a href="https://wa.me/50934913988" target="_blank" class="text-primary hover:text-light transition-colors duration-200">WhatsApp: +509 34 91 39 88</a>
-                            </li>
-                            <li class="flex items-center space-x-2">
-                                <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                                </svg>
-                                <a href="mailto:smartcutservices87@outlook.com" class="text-primary hover:text-light transition-colors duration-200">smartcutservices87@outlook.com</a>
-                            </li>
-                            <li class="flex items-center space-x-2">
-                                <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                                </svg>
-                                <span class="text-primary">Tel: +509 34 91 39 88</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Section Politiques -->
-                    <div class="space-y-4">
-                        <h3 class="text-lg font-heading text-light">Informations légales</h3>
-                        <ul class="space-y-2 text-sm">
-                            <li><a href="confi.html" class="text-primary hover:text-light transition-colors duration-200">Politique de confidentialité</a></li>
-                            <li><a href="livreson.html" class="text-primary hover:text-light transition-colors duration-200">Politique de livraison</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Version mobile -->
-                <div class="md:hidden space-y-6">
-                    <div class="space-y-4">
-                        <h3 class="text-base font-heading text-light">Notre entreprise</h3>
-                        <p class="text-sm leading-relaxed text-primary">
-                            Votre boutique en ligne de confiance. Nous nous engageons à vous offrir la meilleure expérience d'achat.
-                        </p>
-                    </div>
-
-                    <div class="space-y-4">
-                        <h3 class="text-base font-heading text-light">Navigation rapide</h3>
-                        <ul class="space-y-2 text-sm">
-                            <li><a href="index.html" class="text-primary hover:text-light transition-colors duration-200">Accueil</a></li>
-                            <li><a href="catalogue.html" class="text-primary hover:text-light transition-colors duration-200">Catalogue</a></li>
-                            <li><a href="catalogue.html#panier" class="text-primary hover:text-light transition-colors duration-200">Panier</a></li>
-                            <li><a href="about.html" class="text-primary hover:text-light transition-colors duration-200">À propos</a></li>
-                        </ul>
-                    </div>
-
-                    <!-- Section Réseaux sociaux et contact (mobile) -->
-                    <div class="space-y-4">
-                        <h3 class="text-base font-heading text-light">Réseaux sociaux & Contact</h3>
-                        <ul class="space-y-3 text-sm">
-                            <li class="flex items-center space-x-2">
-                                <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
-                                </svg>
-                                <a href="https://www.facebook.com/profile.php?id=61573890875251" target="_blank" class="text-primary hover:text-light transition-colors duration-200">Facebook</a>
-                            </li>
-                            <li class="flex items-center space-x-2">
-                                <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                    <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" />
-                                </svg>
-                                <a href="https://www.instagram.com/smart_cut_services?igsh=ajI4YzhhcnozY2pn&utm_source=qr" target="_blank" class="text-primary hover:text-light transition-colors duration-200">Instagram</a>
-                            </li>
-                            <li class="flex items-center space-x-2">
-                                <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
-                                </svg>
-                                <a href="https://www.tiktok.com/@smart.cut.service?is_from_webapp=1&sender_device=pc" target="_blank" class="text-primary hover:text-light transition-colors duration-200">TikTok</a>
-                            </li>
-                            <li class="flex items-center space-x-2">
-                                <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.76.982.998-3.675-.236-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.9 6.994c-.004 5.45-4.438 9.88-9.888 9.88m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.333.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.333 11.893-11.893 0-3.18-1.24-6.162-3.495-8.411"/>
-                                </svg>
-                                <a href="https://wa.me/50934913988" target="_blank" class="text-primary hover:text-light transition-colors duration-200">WhatsApp: +509 34 91 39 88</a>
-                            </li>
-                            <li class="flex items-center space-x-2">
-                                <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                                </svg>
-                                <a href="mailto:smartcutservices87@outlook.com" class="text-primary hover:text-light transition-colors duration-200">smartcutservices87@outlook.com</a>
-                            </li>
-                            <li class="flex items-center space-x-2">
-                                <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                                </svg>
-                                <span class="text-primary">Tel: +509 34 91 39 88</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="space-y-4">
-                        <h3 class="text-base font-heading text-light">Informations légales</h3>
-                        <ul class="space-y-2 text-sm">
-                            <li><a href="confi.html" class="text-primary hover:text-light transition-colors duration-200">Politique de confidentialité</a></li>
-                            <li><a href="livreson.html" class="text-primary hover:text-light transition-colors duration-200">Politique de livraison</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Copyright -->
-                <div class="mt-10 pt-6 border-t border-primary/20 text-center text-sm text-primary">
-                    <p>&copy; 2026 Smart cut services . Tous droits réservés.</p>
-                </div>
-            </div>
-        </div>
-        
-        <footer id="footer" class="bg-secondary hidden text-light py-12">
-            <div class="container mx-auto px-4">
-                <div id="footer-content">
-                    <!-- Contenu du footer chargé dynamiquement depuis Firestore -->
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                        <!-- Sections du footer -->
-                    </div>
-                </div>
-                
-                <div class="border-t border-primary/20 mt-8 pt-8 text-center text-primary">
-                    <p>&copy; <span id="current-year">2024</span> Smart cut services. Tous droits réservés.</p>
-                </div>
-            </div>
-        </footer>
-    </main>
-
-    <!-- Modals et autres éléments UI -->
-    
-    <!-- Modal panier -->
-    <div id="cart-modal" class="fixed inset-0 z-50 hidden">
-        <div class="absolute inset-0 bg-dark/50" id="cart-modal-backdrop"></div>
-        <div class="absolute right-0 top-0 h-full w-full md:w-96 bg-light shadow-xl transform translate-x-full transition-transform duration-300">
-            <div class="p-6 h-full flex flex-col">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl font-heading text-secondary">Votre panier</h3>
-                    <button id="close-cart" class="text-dark hover:text-primary">
-                        <i class="fas fa-times text-2xl"></i>
-                    </button>
-                </div>
-                
-                <div id="cart-items" class="flex-grow overflow-y-auto">
-                    <!-- Articles du panier -->
-                    <p class="text-dark text-center py-8 font-body">Votre panier est vide</p>
-                </div>
-                
-                <div class="border-t border-primary/10 pt-4">
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="font-heading text-lg text-secondary">Total:</span>
-                        <span id="cart-total" class="text-2xl font-heading text-secondary">0,00 HTG</span>
-                    </div>
-                    <button id="checkout-btn" class="btn-primary w-full py-4 rounded-lg font-heading text-lg">
-                        <i class="fas fa-lock mr-3"></i>
-                        Passer la commande
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Notification -->
-    <div id="notification" class="fixed top-4 right-4 z-50 bg-accent text-secondary px-6 py-3 rounded-lg shadow-lg transform translate-y-[-100px] transition-transform duration-300">
-        <div class="flex items-center">
-            <i class="fas fa-check-circle mr-3"></i>
-            <span id="notification-message" class="font-body">Produit ajouté au panier !</span>
-        </div>
-    </div>
-    
-    <!-- Image Fullscreen Slider Modal -->
-    <div id="imageModal" class="image-modal hidden">
-        <button class="close-btn" aria-label="Fermer">&times;</button>
-        <!-- Bouton gauche -->
-        <button id="modalPrev" class="absolute left-4 text-light text-4xl opacity-80 hover:opacity-100">
-            ‹
-        </button>
-        <!-- Image -->
-        <img id="modalImage" src="" alt="Aperçu produit">
-        <!-- Bouton droit -->
-        <button id="modalNext" class="absolute right-4 text-light text-4xl opacity-80 hover:opacity-100">
-            ›
-        </button>
-        <!-- Dots -->
-        <div id="modalDots" class="absolute bottom-6 flex gap-2"></div>
-    </div>
-    
-<script src="index.js"></script>
-<script src="indexgallery.js"></script>
+                    galleryItems.forEach(item => {
+                        if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                            item.style.display = 'block';
+                            // Réanimer les éléments qui sont filtrés
+                            setTimeout(() => {
+                                item.classList.add('visible');
+                            }, 50);
+                        } else {
+                            item.classList.remove('visible');
+                            setTimeout(() => {
+                                item.style.display = 'none';
+                            }, 300);
+                        }
+                    });
+                });
+            });
+            
+            // Formulaire de contact
+            const contactForm = document.getElementById('contactForm');
+            if (contactForm) {
+                contactForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    // Simulation d'envoi réussi
+                    alert('Merci pour votre message ! Nous vous répondrons très rapidement.');
+                    contactForm.reset();
+                });
+            }
+            
+            // Navigation smooth scroll
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        // Fermer le menu mobile si ouvert
+                        if (navMenu.classList.contains('active')) {
+                            navMenu.classList.remove('active');
+                            mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                        }
+                        
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Scroll down button
+            const scrollDownBtn = document.querySelector('.scroll-down');
+            if (scrollDownBtn) {
+                scrollDownBtn.addEventListener('click', () => {
+                    window.scrollTo({
+                        top: document.getElementById('services').offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+        });
+    </script>
 </body>
 </html>
